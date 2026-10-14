@@ -1,0 +1,7 @@
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--surface-page);color:var(--text-primary);font-family:var(--font-serif)}
+a{color:var(--text-primary);text-decoration:none;border-bottom:var(--border-w) solid var(--text-primary)}
+a:hover{color:var(--text-secondary);border-bottom-color:var(--text-secondary)}
+button{font-family:inherit;border-radius:0}
+img{display:block;max-width:100%}
+::selection{background:var(--black);color:var(--paper)}
