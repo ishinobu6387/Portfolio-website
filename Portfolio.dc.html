@@ -21,13 +21,21 @@ a:hover{color:var(--black)}
 input[type=range]{accent-color:#0a0a08}
 @keyframes peekFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(3px); } }
 @keyframes dcFade{from{opacity:0}to{opacity:1}}
+/* Phone: the project names don't fit the top bar, so it keeps only the name and Index. */
+@media (max-width:760px){[data-menu-proj]{display:none!important}}
+/* Phone sheet modes that size a sheet by its frame rather than the screen width. */
+[data-ph="pan"] [data-om-page],[data-ph="pan"] [data-plans],[data-ph="turned"] [data-om-page],[data-ph="turned"] [data-plans]{width:100%!important}
+[data-noscrollbar]::-webkit-scrollbar{display:none}
+/* Images fade in as they arrive instead of popping in. data-ld is set once the file has loaded. */
+img[data-src]{transition:opacity .7s ease}
+img[data-src]:not([data-ld]){opacity:0!important}
 </style>
 </helmet>
 
 <sc-if value="{{ isSplash }}" hint-placeholder-val="{{ true }}">
-<div style="width:100vw;height:100vh;background:#0a0a08;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center">
-<div style="position:absolute;inset:0">{{ bgLayers }}</div>
-<div style="position:absolute;inset:0;background:rgba(0,0,0,.28)"></div>
+<div style="width:100vw;height:100vh;background:var(--ash);position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center">
+<div style="position:absolute;inset:clamp(15px,1.65vw,24px);overflow:hidden;background:#0a0a08">{{ bgLayers }}</div>
+<div style="position:absolute;inset:clamp(15px,1.65vw,24px);background:rgba(0,0,0,.28)"></div>
 <div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:20px;color:#fff">
 <div style="font-family:var(--font-display);font-weight:600;text-transform:uppercase;letter-spacing:.14em;font-size:17px;line-height:1;text-align:center;white-space:nowrap;color:#fff">Nobuhisa Ishiguro</div>
 <div style="font-family:var(--font-display);font-weight:300;text-transform:uppercase;letter-spacing:.18em;font-size:12px;opacity:.85;color:#fff">Selected works</div>
@@ -40,7 +48,41 @@ input[type=range]{accent-color:#0a0a08}
 </div>
 </sc-if>
 
-<sc-if value="{{ isToc }}">
+<sc-if value="{{ tocPhone }}">
+<div style="{{ ph.screen }}">
+<div style="{{ ph.tabsStyle }}">
+<sc-for list="{{ ph.tabs }}" as="t" hint-placeholder-count="2">
+<div style="{{ t.style }}" onClick="{{ t.select }}">{{ t.name }}</div>
+</sc-for>
+</div>
+<div style="{{ ph.viewport }}" onTouchStart="{{ ph.touchStart }}" onTouchEnd="{{ ph.touchEnd }}">
+<div style="{{ ph.track }}">
+<sc-for list="{{ ph.courses }}" as="c" hint-placeholder-count="2">
+<div style="{{ c.style }}" data-noscrollbar="1">
+<sc-for list="{{ c.items }}" as="it" hint-placeholder-count="3">
+<div style="{{ it.style }}" role="link" tabindex="0" aria-label="{{ it.title }}" onClick="{{ it.open }}">
+<div style="{{ it.mediaStyle }}">
+<sc-if value="{{ it.hasCover }}">
+<img data-src="{{ it.cover }}" ref="{{ setSrc }}" alt="{{ it.title }}" style="{{ it.imgStyle }}">
+</sc-if>
+<sc-if value="{{ it.soon }}">
+<div style="{{ it.soonStyle }}">In progress</div>
+</sc-if>
+<sc-if value="{{ it.hasShade }}">
+<div style="{{ it.shadeStyle }}"></div>
+</sc-if>
+</div>
+<div style="{{ it.capStyle }}"><span style="{{ it.numStyle }}">{{ it.num }}</span><span style="{{ it.titleStyle }}">{{ it.title }}</span></div>
+</div>
+</sc-for>
+</div>
+</sc-for>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ tocDesk }}">
 <div ref="{{ tocScroller }}" style="{{ ix.outer }}">
 <sc-if value="{{ ix.isNumeral }}">
 <div style="{{ ix.numTitle }}"><span>Poiesis</span><span style="{{ ix.numBox }}"><span style="{{ ix.numReel }}">
@@ -96,24 +138,6 @@ input[type=range]{accent-color:#0a0a08}
 </sc-for>
 </sc-if>
 </div>
-<sc-if value="{{ ix.showTweaks }}">
-<div style="position:fixed;bottom:22px;right:24px;z-index:150;font-family:var(--font-display);font-weight:600;text-transform:uppercase;letter-spacing:.14em;font-size:11px;color:var(--paper);background:var(--black);padding:10px 14px;cursor:pointer;white-space:nowrap" style-hover="opacity:0.82" onClick="{{ ix.toggleTweaks }}">{{ ix.tweaksLabel }}</div>
-<sc-if value="{{ ix.tweaksOpen }}">
-<div style="position:fixed;bottom:66px;right:24px;z-index:150;width:300px;background:var(--black);color:var(--paper);padding:18px 18px 10px;box-sizing:border-box;animation:dcFade .25s ease both">
-<div style="font-family:var(--font-display);font-weight:600;text-transform:uppercase;letter-spacing:.18em;font-size:9px;color:var(--stone);margin-bottom:12px">Index layout</div>
-<sc-for list="{{ ix.switcher }}" as="s" hint-placeholder-count="5">
-<div style="{{ s.style }}" style-hover="opacity:1" onClick="{{ s.pick }}">
-<div style="display:flex;align-items:baseline;gap:10px">
-<span style="font-family:var(--font-display);font-weight:600;letter-spacing:.16em;font-size:9px;color:var(--stone)">{{ s.num }}</span>
-<span style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:11px">{{ s.name }}</span>
-</div>
-<div style="font-family:var(--font-serif);font-style:italic;font-size:13px;line-height:1.4;color:var(--ash);margin:4px 0 0 25px">{{ s.note }}</div>
-</div>
-</sc-for>
-<div style="font-family:var(--font-serif);font-style:italic;font-size:12px;line-height:1.4;color:var(--stone);margin:6px 0 4px">{{ ix.hint }}</div>
-</div>
-</sc-if>
-</sc-if>
 
 </sc-if>
 
@@ -169,7 +193,7 @@ input[type=range]{accent-color:#0a0a08}
 </sc-if>
 
 <sc-if value="{{ isProject }}">
-<div style="width:100vw;background:var(--paper);animation:dcFade .5s ease both">
+<div data-ph="{{ phMode }}" style="width:100vw;background:var(--paper);animation:dcFade .5s ease both">
 <div ref="{{ navPeek }}" onMouseEnter="{{ peekOn }}" style="position:fixed;top:0;left:0;width:100%;height:30px;z-index:139;display:flex;justify-content:center;align-items:flex-start;box-sizing:border-box;opacity:0;visibility:hidden;transition:opacity 340ms cubic-bezier(.22,1,.36,1);pointer-events:auto">
 <sc-if value="{{ tabPill }}">
 <div style="width:96px;height:8px;border-radius:0;background:rgba(255,255,255,.72);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 4px 14px rgba(0,0,0,.07);transition:background 220ms ease,width 260ms cubic-bezier(.22,1,.36,1)" style-hover="background:rgba(255,255,255,.94);width:130px"></div>
@@ -196,7 +220,7 @@ input[type=range]{accent-color:#0a0a08}
 <div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.16em;font-size:11px;color:var(--ink);white-space:nowrap;flex-shrink:0">Nobuhisa Ishiguro</div>
 <div style="display:flex;align-items:baseline;gap:20px;flex-wrap:nowrap;justify-content:center;overflow:hidden;min-width:0">
 <sc-for list="{{ menuProjects }}" as="m" hint-placeholder-count="3">
-<div style="display:flex;align-items:baseline;gap:6px;cursor:pointer;white-space:nowrap;flex-shrink:0" style-hover="opacity:0.5" onClick="{{ m.open }}">
+<div data-menu-proj="1" style="display:flex;align-items:baseline;gap:6px;cursor:pointer;white-space:nowrap;flex-shrink:0" style-hover="opacity:0.5" onClick="{{ m.open }}">
 <span style="font-family:var(--font-display);font-weight:600;letter-spacing:.14em;font-size:8px;color:var(--stone)">{{ m.num }}</span>
 <span style="font-family:var(--font-display);font-weight:600;text-transform:uppercase;letter-spacing:.08em;font-size:10px;color:var(--ink)">{{ m.short }}</span>
 </div>
@@ -208,8 +232,11 @@ input[type=range]{accent-color:#0a0a08}
 
 <div style="position:fixed;bottom:22px;left:24px;z-index:130;font-family:var(--font-display);font-weight:600;text-transform:uppercase;letter-spacing:.1em;font-size:11px;cursor:pointer;color:var(--paper);background:var(--black);padding:10px 14px;white-space:nowrap" style-hover="opacity:0.82" onClick="{{ toIndex }}">← Index<span style="opacity:.5;margin-left:10px">{{ counter }}</span></div>
 
+<div ref="{{ pageShift }}" style="transition:transform 460ms cubic-bezier(.22,1,.36,1)">
 <sc-for list="{{ blocks }}" as="b" hint-placeholder-count="0">
-<div>
+<div data-blk="{{ b.bi }}" style="{{ b.frameStyle }}" onClick="{{ b.tap }}">
+<div style="{{ b.clipStyle }}" data-noscrollbar="1">
+<div style="{{ b.boxStyle }}">
 
 <sc-if value="{{ b.isHero }}">
 <div style="position:relative;width:100vw;height:100vh;background:var(--paper);overflow:hidden">
@@ -282,7 +309,7 @@ input[type=range]{accent-color:#0a0a08}
 </sc-if>
 
 <sc-if value="{{ b.isPage }}">
-<div data-om-page="1" data-screen-label="{{ b.sheet }}" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div data-om-page="1" data-screen-label="{{ b.sheet }}" style="container-type:inline-size;position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
 <sc-for list="{{ b.frames }}" as="f" hint-placeholder-count="3">
 <div data-geo="{{ f.geo }}" style="position:absolute;overflow:hidden"><img data-src="{{ f.src }}" ref="{{ setSrc }}" data-img="{{ f.img }}" data-slot="{{ f.slotKey }}" alt="{{ f.alt }}" style="width:100%;height:100%;display:block" onMouseDown="{{ pickDom }}" onMouseEnter="{{ overDom }}"></div>
 </sc-for>
@@ -297,7 +324,7 @@ input[type=range]{accent-color:#0a0a08}
 </sc-if>
 
 <sc-if value="{{ b.isPlans }}">
-<div data-plans="{{ b.plansData }}" data-screen-label="{{ b.sheet }}" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div data-plans="{{ b.plansData }}" data-screen-label="{{ b.sheet }}" style="container-type:inline-size;position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
 <div data-pl="stage" style="position:absolute;left:6%;top:10.5%;width:88%;height:66.9%;overflow:hidden">
 <div data-pl="wrap" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)">
 <img data-pl="img" data-k="0" alt="Level 01" style="position:absolute;left:0;top:0;width:100%;height:100%;object-fit:contain">
@@ -307,60 +334,60 @@ input[type=range]{accent-color:#0a0a08}
 <img data-pl="img" data-k="4" alt="Level 05" style="position:absolute;left:0;top:0;width:100%;height:100%;object-fit:contain">
 </div>
 </div>
-<div style="position:absolute;left:2.93%;top:77.4%;display:flex;flex-direction:column;gap:.34vw;z-index:6">
-<div data-pl="lab" style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;line-height:1.5;color:var(--ink)">Level 01</div>
+<div style="position:absolute;left:2.93%;top:77.4%;display:flex;flex-direction:column;gap:.34cqw;z-index:6">
+<div data-pl="lab" style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763cqw;line-height:1.5;color:var(--ink)">Level 01</div>
 </div>
 <div data-pl="ticks" style="position:absolute;right:3.2%;top:0;height:100%;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:20px;z-index:7">
-<div data-pl="tick" data-i="0" style="font-family:var(--font-display);font-weight:600;letter-spacing:.16em;font-size:0.804vw;color:var(--ink);cursor:pointer;padding:.2vw .15vw;transition:opacity 240ms ease">01</div>
-<div data-pl="tick" data-i="1" style="font-family:var(--font-display);font-weight:600;letter-spacing:.16em;font-size:0.804vw;color:var(--ink);cursor:pointer;padding:.2vw .15vw;transition:opacity 240ms ease">02</div>
-<div data-pl="tick" data-i="2" style="font-family:var(--font-display);font-weight:600;letter-spacing:.16em;font-size:0.804vw;color:var(--ink);cursor:pointer;padding:.2vw .15vw;transition:opacity 240ms ease">03</div>
-<div data-pl="tick" data-i="3" style="font-family:var(--font-display);font-weight:600;letter-spacing:.16em;font-size:0.804vw;color:var(--ink);cursor:pointer;padding:.2vw .15vw;transition:opacity 240ms ease">04</div>
-<div data-pl="tick" data-i="4" style="font-family:var(--font-display);font-weight:600;letter-spacing:.16em;font-size:0.804vw;color:var(--ink);cursor:pointer;padding:.2vw .15vw;transition:opacity 240ms ease">05</div>
+<div data-pl="tick" data-i="0" style="font-family:var(--font-display);font-weight:600;letter-spacing:.16em;font-size:0.804cqw;color:var(--ink);cursor:pointer;padding:.2cqw .15cqw;transition:opacity 240ms ease">01</div>
+<div data-pl="tick" data-i="1" style="font-family:var(--font-display);font-weight:600;letter-spacing:.16em;font-size:0.804cqw;color:var(--ink);cursor:pointer;padding:.2cqw .15cqw;transition:opacity 240ms ease">02</div>
+<div data-pl="tick" data-i="2" style="font-family:var(--font-display);font-weight:600;letter-spacing:.16em;font-size:0.804cqw;color:var(--ink);cursor:pointer;padding:.2cqw .15cqw;transition:opacity 240ms ease">03</div>
+<div data-pl="tick" data-i="3" style="font-family:var(--font-display);font-weight:600;letter-spacing:.16em;font-size:0.804cqw;color:var(--ink);cursor:pointer;padding:.2cqw .15cqw;transition:opacity 240ms ease">04</div>
+<div data-pl="tick" data-i="4" style="font-family:var(--font-display);font-weight:600;letter-spacing:.16em;font-size:0.804cqw;color:var(--ink);cursor:pointer;padding:.2cqw .15cqw;transition:opacity 240ms ease">05</div>
 </div>
 </div>
 </sc-if>
 
 <sc-if value="{{ b.isHeroT }}">
-<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:transparent;overflow:hidden">
+<div data-om-page="1" style="container-type:inline-size;position:relative;width:100vw;aspect-ratio:2000/1294;background:transparent;overflow:hidden">
 <div style="position:absolute;left:-1px;top:-1px;width:calc(100% + 2px);height:calc(100% + 2px);overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
-<div style="position:absolute;left:{{ b.titleL }};top:11.5%;width:41%;display:flex;flex-direction:column;align-items:{{ b.titleAlign }};gap:.8vw;text-align:{{ b.titleText }}">
-<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:1.452vw;line-height:1.1;color:var(--ink)">{{ b.label }}</div>
-<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--charcoal)">{{ b.note }}</div>
-<div style="font-family:var(--font-serif);font-size:0.682vw;line-height:1.6;color:var(--ink);max-width:34vw">{{ b.p1 }}</div>
-<div style="font-family:var(--font-serif);font-size:0.638vw;line-height:1.6;color:var(--charcoal);margin-top:.5vw">{{ b.p2 }}</div>
+<div style="position:absolute;left:{{ b.titleL }};top:11.5%;width:41%;display:flex;flex-direction:column;align-items:{{ b.titleAlign }};gap:.8cqw;text-align:{{ b.titleText }}">
+<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:1.452cqw;line-height:1.1;color:var(--ink)">{{ b.label }}</div>
+<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763cqw;color:var(--charcoal)">{{ b.note }}</div>
+<div style="font-family:var(--font-serif);font-size:0.682cqw;line-height:1.6;color:var(--ink);max-width:34cqw">{{ b.p1 }}</div>
+<div style="font-family:var(--font-serif);font-size:0.638cqw;line-height:1.6;color:var(--charcoal);margin-top:.5cqw">{{ b.p2 }}</div>
 </div>
 </div>
 </sc-if>
 
 <sc-if value="{{ b.isCapR2 }}">
-<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div data-om-page="1" style="container-type:inline-size;position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
 <div style="position:absolute;left:0;top:0;width:50.05%;height:100%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
 <div style="position:absolute;left:50%;top:0;width:50%;height:50.05%;overflow:hidden"><img data-src="{{ b.bSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oB }};transform:{{ b.tB }};display:block" onMouseDown="{{ b.pickB }}" onMouseEnter="{{ b.overB }}"></div>
 <div style="position:absolute;left:50%;top:50%;width:50%;height:50%;overflow:hidden"><img data-src="{{ b.cSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oC }};transform:{{ b.tC }};display:block" onMouseDown="{{ b.pickC }}" onMouseEnter="{{ b.overC }}"></div>
-<div style="position:absolute;left:8%;top:25%;width:34%;display:flex;flex-direction:column;align-items:center;gap:.7vw;text-align:center">
-<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:0.792vw;color:var(--ink)">{{ b.label }}</div>
-<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--charcoal)">{{ b.note }}</div>
-<div style="font-family:var(--font-serif);font-size:0.55vw;letter-spacing:.06em;color:var(--charcoal);margin-top:.35vw">{{ b.scale }}</div>
+<div style="position:absolute;left:8%;top:25%;width:34%;display:flex;flex-direction:column;align-items:center;gap:.7cqw;text-align:center">
+<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:0.792cqw;color:var(--ink)">{{ b.label }}</div>
+<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763cqw;color:var(--charcoal)">{{ b.note }}</div>
+<div style="font-family:var(--font-serif);font-size:0.55cqw;letter-spacing:.06em;color:var(--charcoal);margin-top:.35cqw">{{ b.scale }}</div>
 </div>
 </div>
 </sc-if>
 
 <sc-if value="{{ b.isCapR3 }}">
-<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div data-om-page="1" style="container-type:inline-size;position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
 <div style="position:absolute;left:0;top:0;width:50.05%;height:100%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
 <div style="position:absolute;left:50%;top:0;width:50%;height:33.4%;overflow:hidden"><img data-src="{{ b.bSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oB }};transform:{{ b.tB }};display:block" onMouseDown="{{ b.pickB }}" onMouseEnter="{{ b.overB }}"></div>
 <div style="position:absolute;left:50%;top:33.33%;width:50%;height:33.4%;overflow:hidden"><img data-src="{{ b.cSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oC }};transform:{{ b.tC }};display:block" onMouseDown="{{ b.pickC }}" onMouseEnter="{{ b.overC }}"></div>
 <div style="position:absolute;left:50%;top:66.66%;width:50%;height:33.4%;overflow:hidden"><img data-src="{{ b.dSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oD }};transform:{{ b.tD }};display:block" onMouseDown="{{ b.pickD }}" onMouseEnter="{{ b.overD }}"></div>
-<div style="position:absolute;left:8%;top:20%;width:34%;display:flex;flex-direction:column;align-items:center;gap:.7vw;text-align:center">
-<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:0.792vw;color:var(--ink)">{{ b.label }}</div>
-<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--charcoal)">{{ b.note }}</div>
-<div style="font-family:var(--font-serif);font-size:0.55vw;letter-spacing:.06em;color:var(--charcoal);margin-top:.35vw">{{ b.scale }}</div>
+<div style="position:absolute;left:8%;top:20%;width:34%;display:flex;flex-direction:column;align-items:center;gap:.7cqw;text-align:center">
+<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:0.792cqw;color:var(--ink)">{{ b.label }}</div>
+<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763cqw;color:var(--charcoal)">{{ b.note }}</div>
+<div style="font-family:var(--font-serif);font-size:0.55cqw;letter-spacing:.06em;color:var(--charcoal);margin-top:.35cqw">{{ b.scale }}</div>
 </div>
 </div>
 </sc-if>
 
 <sc-if value="{{ b.isGrid4 }}">
-<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div data-om-page="1" style="container-type:inline-size;position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
 <div style="position:absolute;left:0;top:0;width:50.05%;height:50.05%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
 <div style="position:absolute;left:50%;top:0;width:50%;height:50.05%;overflow:hidden"><img data-src="{{ b.bSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oB }};transform:{{ b.tB }};display:block" onMouseDown="{{ b.pickB }}" onMouseEnter="{{ b.overB }}"></div>
 <div style="position:absolute;left:0;top:50%;width:50.05%;height:50%;overflow:hidden"><img data-src="{{ b.cSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oC }};transform:{{ b.tC }};display:block" onMouseDown="{{ b.pickC }}" onMouseEnter="{{ b.overC }}"></div>
@@ -369,89 +396,89 @@ input[type=range]{accent-color:#0a0a08}
 </sc-if>
 
 <sc-if value="{{ b.isDrawPair }}">
-<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div data-om-page="1" style="container-type:inline-size;position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
 <div style="position:absolute;left:2%;top:5%;width:46%;height:82%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
 <div style="position:absolute;left:52%;top:5%;width:46%;height:82%;overflow:hidden"><img data-src="{{ b.bSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oB }};transform:{{ b.tB }};display:block" onMouseDown="{{ b.pickB }}" onMouseEnter="{{ b.overB }}"></div>
-<div style="position:absolute;left:2.8%;top:90%;display:flex;flex-direction:column;gap:.35vw">
-<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">{{ b.label }}</div>
-<div style="font-family:var(--font-serif);font-size:0.506vw;letter-spacing:.06em;color:var(--charcoal)">{{ b.scale }}</div>
+<div style="position:absolute;left:2.8%;top:90%;display:flex;flex-direction:column;gap:.35cqw">
+<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763cqw;color:var(--ink)">{{ b.label }}</div>
+<div style="font-family:var(--font-serif);font-size:0.506cqw;letter-spacing:.06em;color:var(--charcoal)">{{ b.scale }}</div>
 </div>
-<div style="position:absolute;left:52.8%;top:90%;display:flex;flex-direction:column;gap:.35vw">
-<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">{{ b.note }}</div>
-<div style="font-family:var(--font-serif);font-size:0.506vw;letter-spacing:.06em;color:var(--charcoal)">{{ b.scale }}</div>
+<div style="position:absolute;left:52.8%;top:90%;display:flex;flex-direction:column;gap:.35cqw">
+<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763cqw;color:var(--ink)">{{ b.note }}</div>
+<div style="font-family:var(--font-serif);font-size:0.506cqw;letter-spacing:.06em;color:var(--charcoal)">{{ b.scale }}</div>
 </div>
 </div>
 </sc-if>
 
 <sc-if value="{{ b.isDrawQuad }}">
-<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div data-om-page="1" style="container-type:inline-size;position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
 <div style="position:absolute;left:3%;top:5%;width:44%;height:30%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="{{ b.l1 }}" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
-<div style="position:absolute;left:3%;top:37.5%;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">{{ b.l1 }}</div>
-<div style="position:absolute;left:3%;top:40.7%;font-family:var(--font-serif);font-size:0.506vw;letter-spacing:.06em;color:var(--charcoal)">{{ b.scale }}</div>
+<div style="position:absolute;left:3%;top:37.5%;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763cqw;color:var(--ink)">{{ b.l1 }}</div>
+<div style="position:absolute;left:3%;top:40.7%;font-family:var(--font-serif);font-size:0.506cqw;letter-spacing:.06em;color:var(--charcoal)">{{ b.scale }}</div>
 <div style="position:absolute;left:53%;top:5%;width:44%;height:30%;overflow:hidden"><img data-src="{{ b.bSrc }}" ref="{{ setSrc }}" alt="{{ b.l2 }}" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oB }};transform:{{ b.tB }};display:block" onMouseDown="{{ b.pickB }}" onMouseEnter="{{ b.overB }}"></div>
-<div style="position:absolute;left:53%;top:37.5%;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">{{ b.l2 }}</div>
-<div style="position:absolute;left:53%;top:40.7%;font-family:var(--font-serif);font-size:0.506vw;letter-spacing:.06em;color:var(--charcoal)">{{ b.scale }}</div>
-<div style="position:absolute;left:3%;top:52%;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">{{ b.l3 }}</div>
-<div style="position:absolute;left:3%;top:55.2%;font-family:var(--font-serif);font-size:0.506vw;letter-spacing:.06em;color:var(--charcoal)">{{ b.scale }}</div>
+<div style="position:absolute;left:53%;top:37.5%;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763cqw;color:var(--ink)">{{ b.l2 }}</div>
+<div style="position:absolute;left:53%;top:40.7%;font-family:var(--font-serif);font-size:0.506cqw;letter-spacing:.06em;color:var(--charcoal)">{{ b.scale }}</div>
+<div style="position:absolute;left:3%;top:52%;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763cqw;color:var(--ink)">{{ b.l3 }}</div>
+<div style="position:absolute;left:3%;top:55.2%;font-family:var(--font-serif);font-size:0.506cqw;letter-spacing:.06em;color:var(--charcoal)">{{ b.scale }}</div>
 <div style="position:absolute;left:3%;top:60%;width:44%;height:35%;overflow:hidden"><img data-src="{{ b.cSrc }}" ref="{{ setSrc }}" alt="{{ b.l3 }}" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oC }};transform:{{ b.tC }};display:block" onMouseDown="{{ b.pickC }}" onMouseEnter="{{ b.overC }}"></div>
-<div style="position:absolute;left:53%;top:52%;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">{{ b.l4 }}</div>
-<div style="position:absolute;left:53%;top:55.2%;font-family:var(--font-serif);font-size:0.506vw;letter-spacing:.06em;color:var(--charcoal)">{{ b.scale }}</div>
+<div style="position:absolute;left:53%;top:52%;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763cqw;color:var(--ink)">{{ b.l4 }}</div>
+<div style="position:absolute;left:53%;top:55.2%;font-family:var(--font-serif);font-size:0.506cqw;letter-spacing:.06em;color:var(--charcoal)">{{ b.scale }}</div>
 <div style="position:absolute;left:53%;top:60%;width:44%;height:35%;overflow:hidden"><img data-src="{{ b.dSrc }}" ref="{{ setSrc }}" alt="{{ b.l4 }}" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oD }};transform:{{ b.tD }};display:block" onMouseDown="{{ b.pickD }}" onMouseEnter="{{ b.overD }}"></div>
 </div>
 </sc-if>
 
 <sc-if value="{{ b.isStack2 }}">
-<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div data-om-page="1" style="container-type:inline-size;position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
 <div style="position:absolute;left:1.5%;top:2%;width:97%;height:32%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
-<div style="position:absolute;left:0;top:35.5%;width:100%;text-align:center;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">{{ b.label }}</div>
+<div style="position:absolute;left:0;top:35.5%;width:100%;text-align:center;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763cqw;color:var(--ink)">{{ b.label }}</div>
 <div style="position:absolute;left:1.5%;top:39.5%;width:97%;height:50%;overflow:hidden"><img data-src="{{ b.bSrc }}" ref="{{ setSrc }}" alt="{{ b.note }}" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oB }};transform:{{ b.tB }};display:block" onMouseDown="{{ b.pickB }}" onMouseEnter="{{ b.overB }}"></div>
-<div style="position:absolute;left:0;top:92%;width:100%;text-align:center;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">{{ b.note }}</div>
+<div style="position:absolute;left:0;top:92%;width:100%;text-align:center;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763cqw;color:var(--ink)">{{ b.note }}</div>
 </div>
 </sc-if>
 
 <sc-if value="{{ b.isTextImg }}">
-<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div data-om-page="1" style="container-type:inline-size;position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
 <div style="position:absolute;left:38%;top:4%;width:60%;height:92%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
-<div style="position:absolute;left:7%;top:14%;width:26%;display:flex;flex-direction:column;gap:1vw">
-<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">{{ b.label }}</div>
-<div style="font-family:var(--font-serif);font-size:0.616vw;line-height:1.62;color:var(--ink);text-align:justify">{{ b.p1 }}</div>
-<div style="font-family:var(--font-serif);font-size:0.616vw;line-height:1.62;color:var(--ink);text-align:justify">{{ b.p2 }}</div>
-<div style="font-family:var(--font-serif);font-size:0.616vw;line-height:1.62;color:var(--ink);text-align:justify">{{ b.p3 }}</div>
+<div style="position:absolute;left:7%;top:14%;width:26%;display:flex;flex-direction:column;gap:1cqw">
+<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763cqw;color:var(--ink)">{{ b.label }}</div>
+<div style="font-family:var(--font-serif);font-size:0.616cqw;line-height:1.62;color:var(--ink);text-align:justify">{{ b.p1 }}</div>
+<div style="font-family:var(--font-serif);font-size:0.616cqw;line-height:1.62;color:var(--ink);text-align:justify">{{ b.p2 }}</div>
+<div style="font-family:var(--font-serif);font-size:0.616cqw;line-height:1.62;color:var(--ink);text-align:justify">{{ b.p3 }}</div>
 </div>
 </div>
 </sc-if>
 
 <sc-if value="{{ b.isVerb5 }}">
-<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div data-om-page="1" style="container-type:inline-size;position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
 <div style="position:absolute;left:0;top:0;width:50%;height:45%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
 <div style="position:absolute;left:0;top:53%;width:50%;height:47%;overflow:hidden"><img data-src="{{ b.bSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oB }};transform:{{ b.tB }};display:block" onMouseDown="{{ b.pickB }}" onMouseEnter="{{ b.overB }}"></div>
 <div style="position:absolute;left:50%;top:0;width:34.3%;height:33.33%;overflow:hidden"><img data-src="{{ b.cSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oC }};transform:{{ b.tC }};display:block" onMouseDown="{{ b.pickC }}" onMouseEnter="{{ b.overC }}"></div>
 <div style="position:absolute;left:50%;top:33.33%;width:34.3%;height:33.33%;overflow:hidden"><img data-src="{{ b.dSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oD }};transform:{{ b.tD }};display:block" onMouseDown="{{ b.pickD }}" onMouseEnter="{{ b.overD }}"></div>
 <div style="position:absolute;left:50%;top:66.66%;width:34.3%;height:33.34%;overflow:hidden"><img data-src="{{ b.eSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oE }};transform:{{ b.tE }};display:block" onMouseDown="{{ b.pickE }}" onMouseEnter="{{ b.overE }}"></div>
 <div style="position:absolute;left:84.3%;top:1%;width:15.7%;height:98%;overflow:hidden"><img data-src="{{ b.fSrc }}" ref="{{ setSrc }}" alt="Massing sequence" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oF }};transform:{{ b.tF }};display:block" onMouseDown="{{ b.pickF }}" onMouseEnter="{{ b.overF }}"></div>
-<div style="position:absolute;left:6%;top:45.6%;width:38%;display:flex;flex-direction:column;align-items:center;gap:.6vw;text-align:center">
-<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:0.792vw;color:var(--ink)">{{ b.label }}</div>
-<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--charcoal)">{{ b.note }}</div>
+<div style="position:absolute;left:6%;top:45.6%;width:38%;display:flex;flex-direction:column;align-items:center;gap:.6cqw;text-align:center">
+<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:0.792cqw;color:var(--ink)">{{ b.label }}</div>
+<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763cqw;color:var(--charcoal)">{{ b.note }}</div>
 </div>
 </div>
 </sc-if>
 
 <sc-if value="{{ b.isRep4 }}">
-<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div data-om-page="1" style="container-type:inline-size;position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
 <div style="position:absolute;left:50%;top:22%;width:25%;height:28%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
 <div style="position:absolute;left:75%;top:22%;width:25%;height:28%;overflow:hidden"><img data-src="{{ b.bSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oB }};transform:{{ b.tB }};display:block" onMouseDown="{{ b.pickB }}" onMouseEnter="{{ b.overB }}"></div>
 <div style="position:absolute;left:0;top:50%;width:50%;height:50%;overflow:hidden"><img data-src="{{ b.cSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oC }};transform:{{ b.tC }};display:block" onMouseDown="{{ b.pickC }}" onMouseEnter="{{ b.overC }}"></div>
 <div style="position:absolute;left:50%;top:50%;width:50%;height:50%;overflow:hidden"><img data-src="{{ b.dSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oD }};transform:{{ b.tD }};display:block" onMouseDown="{{ b.pickD }}" onMouseEnter="{{ b.overD }}"></div>
-<div style="position:absolute;left:8%;top:21%;width:34%;display:flex;flex-direction:column;align-items:center;gap:.7vw;text-align:center">
-<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:0.792vw;color:var(--ink)">{{ b.label }}</div>
-<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--charcoal)">{{ b.note }}</div>
-<div style="font-family:var(--font-serif);font-size:0.55vw;letter-spacing:.06em;color:var(--charcoal);margin-top:.35vw">{{ b.scale }}</div>
+<div style="position:absolute;left:8%;top:21%;width:34%;display:flex;flex-direction:column;align-items:center;gap:.7cqw;text-align:center">
+<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:0.792cqw;color:var(--ink)">{{ b.label }}</div>
+<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763cqw;color:var(--charcoal)">{{ b.note }}</div>
+<div style="font-family:var(--font-serif);font-size:0.55cqw;letter-spacing:.06em;color:var(--charcoal);margin-top:.35cqw">{{ b.scale }}</div>
 </div>
 </div>
 </sc-if>
 
 <sc-if value="{{ b.isGrid5 }}">
-<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div data-om-page="1" style="container-type:inline-size;position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
 <div style="position:absolute;left:0;top:0;width:25.05%;height:50.05%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
 <div style="position:absolute;left:25%;top:0;width:25.05%;height:50.05%;overflow:hidden"><img data-src="{{ b.bSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oB }};transform:{{ b.tB }};display:block" onMouseDown="{{ b.pickB }}" onMouseEnter="{{ b.overB }}"></div>
 <div style="position:absolute;left:50%;top:0;width:50%;height:50.05%;overflow:hidden"><img data-src="{{ b.cSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oC }};transform:{{ b.tC }};display:block" onMouseDown="{{ b.pickC }}" onMouseEnter="{{ b.overC }}"></div>
@@ -461,112 +488,112 @@ input[type=range]{accent-color:#0a0a08}
 </sc-if>
 
 <sc-if value="{{ b.isStripText }}">
-<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div data-om-page="1" style="container-type:inline-size;position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
 <div style="position:absolute;left:5%;top:10%;width:90%;height:30%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
-<div style="position:absolute;left:30%;top:61%;width:40%;display:flex;flex-direction:column;align-items:center;gap:.7vw;text-align:center">
-<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">{{ b.label }}</div>
-<div style="font-family:var(--font-serif);font-size:0.55vw;letter-spacing:.06em;color:var(--charcoal)">{{ b.scale }}</div>
-<div style="font-family:var(--font-serif);font-size:0.616vw;line-height:1.62;color:var(--ink);margin-top:1vw;text-wrap:pretty">{{ b.p1 }}</div>
+<div style="position:absolute;left:30%;top:61%;width:40%;display:flex;flex-direction:column;align-items:center;gap:.7cqw;text-align:center">
+<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763cqw;color:var(--ink)">{{ b.label }}</div>
+<div style="font-family:var(--font-serif);font-size:0.55cqw;letter-spacing:.06em;color:var(--charcoal)">{{ b.scale }}</div>
+<div style="font-family:var(--font-serif);font-size:0.616cqw;line-height:1.62;color:var(--ink);margin-top:1cqw;text-wrap:pretty">{{ b.p1 }}</div>
 </div>
 </div>
 </sc-if>
 
 <sc-if value="{{ b.isImgText }}">
-<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div data-om-page="1" style="container-type:inline-size;position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
 <div style="position:absolute;left:1%;top:2%;width:52%;height:96%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
-<div style="position:absolute;left:57%;top:41%;width:36%;display:flex;flex-direction:column;align-items:center;gap:.7vw;text-align:center">
-<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">{{ b.label }}</div>
-<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--charcoal)">{{ b.note }}</div>
-<div style="font-family:var(--font-serif);font-size:0.616vw;line-height:1.62;color:var(--ink);margin-top:1vw;text-align:right;text-wrap:pretty">{{ b.p1 }}</div>
+<div style="position:absolute;left:57%;top:41%;width:36%;display:flex;flex-direction:column;align-items:center;gap:.7cqw;text-align:center">
+<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763cqw;color:var(--ink)">{{ b.label }}</div>
+<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763cqw;color:var(--charcoal)">{{ b.note }}</div>
+<div style="font-family:var(--font-serif);font-size:0.616cqw;line-height:1.62;color:var(--ink);margin-top:1cqw;text-align:right;text-wrap:pretty">{{ b.p1 }}</div>
 </div>
 </div>
 </sc-if>
 
 <sc-if value="{{ b.isPartiSite }}">
-<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div data-om-page="1" style="container-type:inline-size;position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
 <div style="position:absolute;left:6%;top:7%;width:41%;height:37%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="Parti diagram" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
-<div style="position:absolute;left:11.5%;top:46.5%;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">Parti diagram</div>
+<div style="position:absolute;left:11.5%;top:46.5%;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763cqw;color:var(--ink)">Parti diagram</div>
 <div style="position:absolute;left:5%;top:56%;width:41%;height:26%;overflow:hidden"><img data-src="{{ b.bSrc }}" ref="{{ setSrc }}" alt="Program diagram" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oB }};transform:{{ b.tB }};display:block" onMouseDown="{{ b.pickB }}" onMouseEnter="{{ b.overB }}"></div>
-<div style="position:absolute;left:5%;top:84.5%;width:41%;display:grid;grid-template-columns:repeat(3,1fr);font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">
+<div style="position:absolute;left:5%;top:84.5%;width:41%;display:grid;grid-template-columns:repeat(3,1fr);font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763cqw;color:var(--ink)">
 <div>Public</div>
 <div>Living</div>
 <div>Sleeping</div>
 </div>
-<div style="position:absolute;left:11.5%;top:92%;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">Program diagram</div>
+<div style="position:absolute;left:11.5%;top:92%;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763cqw;color:var(--ink)">Program diagram</div>
 <div style="position:absolute;left:50%;top:0;width:50%;height:71%;overflow:hidden"><img data-src="{{ b.cSrc }}" ref="{{ setSrc }}" alt="Site plan" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oC }};transform:{{ b.tC }};display:block" onMouseDown="{{ b.pickC }}" onMouseEnter="{{ b.overC }}"></div>
 <div style="position:absolute;left:50%;top:67%;width:50%;height:33%;overflow:hidden"><img data-src="{{ b.dSrc }}" ref="{{ setSrc }}" alt="Site section" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oD }};transform:{{ b.tD }};display:block" onMouseDown="{{ b.pickD }}" onMouseEnter="{{ b.overD }}"></div>
-<div style="position:absolute;right:2.6%;top:4.5%;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">{{ b.label }}</div>
+<div style="position:absolute;right:2.6%;top:4.5%;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763cqw;color:var(--ink)">{{ b.label }}</div>
 </div>
 </sc-if>
 
 <sc-if value="{{ b.isFull }}">
-<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:transparent;overflow:hidden">
+<div data-om-page="1" style="container-type:inline-size;position:relative;width:100vw;aspect-ratio:2000/1294;background:transparent;overflow:hidden">
 <div style="position:absolute;left:-1px;top:-1px;width:calc(100% + 2px);height:calc(100% + 2px);overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
-<div style="position:absolute;left:2.6%;top:7%;display:flex;flex-direction:column;gap:.55vw">
-<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:0.748vw;color:var(--ink)">{{ b.label }}</div>
-<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--charcoal)">{{ b.note }}</div>
+<div style="position:absolute;left:2.6%;top:7%;display:flex;flex-direction:column;gap:.55cqw">
+<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:0.748cqw;color:var(--ink)">{{ b.label }}</div>
+<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763cqw;color:var(--charcoal)">{{ b.note }}</div>
 </div>
 </div>
 </sc-if>
 
 <sc-if value="{{ b.isDuo }}">
-<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div data-om-page="1" style="container-type:inline-size;position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
 <div style="position:absolute;left:0;top:0;width:49.75%;height:100%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
 <div style="position:absolute;left:50.25%;top:0;width:49.75%;height:100%;overflow:hidden"><img data-src="{{ b.bSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oB }};transform:{{ b.tB }};display:block" onMouseDown="{{ b.pickB }}" onMouseEnter="{{ b.overB }}"></div>
-<div style="position:absolute;left:2.6%;bottom:4.5%;display:flex;align-items:baseline;gap:1.1vw">
-<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:0.682vw;color:var(--ink)">{{ b.label }}</div>
-<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--charcoal)">{{ b.note }}</div>
+<div style="position:absolute;left:2.6%;bottom:4.5%;display:flex;align-items:baseline;gap:1.1cqw">
+<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:0.682cqw;color:var(--ink)">{{ b.label }}</div>
+<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763cqw;color:var(--charcoal)">{{ b.note }}</div>
 </div>
 </div>
 </sc-if>
 
 <sc-if value="{{ b.isTrio }}">
-<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div data-om-page="1" style="container-type:inline-size;position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
 <div style="position:absolute;left:0;top:0;width:33.1%;height:100%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
 <div style="position:absolute;left:33.45%;top:0;width:33.1%;height:100%;overflow:hidden"><img data-src="{{ b.bSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oB }};transform:{{ b.tB }};display:block" onMouseDown="{{ b.pickB }}" onMouseEnter="{{ b.overB }}"></div>
 <div style="position:absolute;left:66.9%;top:0;width:33.1%;height:100%;overflow:hidden"><img data-src="{{ b.cSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oC }};transform:{{ b.tC }};display:block" onMouseDown="{{ b.pickC }}" onMouseEnter="{{ b.overC }}"></div>
-<div style="position:absolute;left:2.6%;bottom:4.5%;display:flex;align-items:baseline;gap:1.1vw">
-<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:0.682vw;color:var(--ink)">{{ b.label }}</div>
-<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--charcoal)">{{ b.note }}</div>
+<div style="position:absolute;left:2.6%;bottom:4.5%;display:flex;align-items:baseline;gap:1.1cqw">
+<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:0.682cqw;color:var(--ink)">{{ b.label }}</div>
+<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763cqw;color:var(--charcoal)">{{ b.note }}</div>
 </div>
 </div>
 </sc-if>
 
 <sc-if value="{{ b.isDraw }}">
-<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div data-om-page="1" style="container-type:inline-size;position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
 <div style="position:absolute;left:4%;top:7%;width:92%;height:84%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
-<div style="position:absolute;left:4%;top:3.4%;display:flex;align-items:baseline;gap:1.1vw">
-<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:0.682vw;color:var(--ink)">{{ b.label }}</div>
-<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--stone)">{{ b.note }}</div>
+<div style="position:absolute;left:4%;top:3.4%;display:flex;align-items:baseline;gap:1.1cqw">
+<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:0.682cqw;color:var(--ink)">{{ b.label }}</div>
+<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763cqw;color:var(--stone)">{{ b.note }}</div>
 </div>
 </div>
 </sc-if>
 
 <sc-if value="{{ b.isStatement }}">
-<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--paper);overflow:hidden">
-<div style="position:absolute;left:8%;top:16%;width:34%;display:flex;flex-direction:column;gap:1.1vw">
-<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:1.21vw;line-height:1.15;color:var(--ink)">{{ b.label }}</div>
-<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--stone)">{{ b.note }}</div>
+<div data-om-page="1" style="container-type:inline-size;position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--paper);overflow:hidden">
+<div style="position:absolute;left:8%;top:16%;width:34%;display:flex;flex-direction:column;gap:1.1cqw">
+<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:1.21cqw;line-height:1.15;color:var(--ink)">{{ b.label }}</div>
+<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763cqw;color:var(--stone)">{{ b.note }}</div>
 </div>
-<div style="position:absolute;left:50%;top:16%;width:42%;display:flex;flex-direction:column;gap:1.2vw">
-<div style="font-family:var(--font-serif);font-size:0.792vw;line-height:1.75;color:var(--ink);text-align:justify">{{ b.p1 }}</div>
-<div style="font-family:var(--font-serif);font-size:0.792vw;line-height:1.75;color:var(--ink);text-align:justify">{{ b.p2 }}</div>
+<div style="position:absolute;left:50%;top:16%;width:42%;display:flex;flex-direction:column;gap:1.2cqw">
+<div style="font-family:var(--font-serif);font-size:0.792cqw;line-height:1.75;color:var(--ink);text-align:justify">{{ b.p1 }}</div>
+<div style="font-family:var(--font-serif);font-size:0.792cqw;line-height:1.75;color:var(--ink);text-align:justify">{{ b.p2 }}</div>
 </div>
 </div>
 </sc-if>
 
 <sc-if value="{{ b.is31 }}">
-<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div data-om-page="1" style="container-type:inline-size;position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
 <div style="position:absolute;left:0;top:0;width:50%;height:100%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="Haus Gables, south facade" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
-<div style="position:absolute;left:0;top:0;width:19.8%;height:64.6%;background:transparent;box-sizing:border-box;padding:2.3vw 1.1vw 0 2.75vw;display:flex;flex-direction:column;align-items:flex-start">
-<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:1.452vw;line-height:1.1;color:var(--ink)">Precedent Study</div>
-<div style="margin-top:1.15vw;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">Haus Gables</div>
-<div style="margin-top:1vw;font-family:var(--font-serif);font-size:0.616vw;line-height:1.6;color:var(--ink)">Architect: Jennifer Bonner<br>Location: Atlanta, Georgia</div>
-<div style="margin-top:1.5vw;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">Project statement</div>
-<div style="margin-top:.85vw;font-family:var(--font-serif);font-size:0.638vw;line-height:1.55;color:var(--ink);text-align:justify">This study focuses on the spatial relationships within the building to understand how they define the spaces, and how this building adapts to its context. This building stood out to me in particular because of its unique gable roof, which with research of the architect's concept and intentions, which stemmed from her desire to oppose traditional southern architecture. Instead of using stick-frame construction, she utilized CLT to create spaces through planes. Instead of basing the interior walls off of the exterior walls, this building's interior walls are based off of its unique gable roof, resulting in angular walls. After further analysis, I realized how the random, chaotic appearance of the house was done purposefully. The seemingly random intersection of gable roofs created angular walls that defined private and public spaces, and the “random” placement of windows allowed the building to circulate air effectively despite its surroundings.</div>
-<div style="margin-top:1.9vw;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">Precedent analysis</div>
-<div style="margin-top:.95vw;font-family:var(--font-serif);font-size:0.638vw;line-height:1.55;color:var(--ink);text-align:justify">Haus Gables was designed by Jennifer Bonner, director of the architecture studio MALL (Mass Architectural Loopty Loops) in 2018. The practice is known for its experimental, graphic approach to architecture and for challenging traditional tectonic and material conventions.</div>
-<div style="margin-top:.8vw;font-family:var(--font-serif);font-size:0.638vw;line-height:1.55;color:var(--ink);text-align:justify">Haus Gables is located in the Old Fourth Ward neighborhood in Atlanta, Georgia, and was a self initiated development by Jennifer Bonner, designed to serve as a proof of concept for a single family house that makes the most out of the small urban lot.</div>
+<div style="position:absolute;left:0;top:0;width:19.8%;height:64.6%;background:transparent;box-sizing:border-box;padding:2.3cqw 1.1cqw 0 2.75cqw;display:flex;flex-direction:column;align-items:flex-start">
+<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:1.452cqw;line-height:1.1;color:var(--ink)">Precedent Study</div>
+<div style="margin-top:1.15cqw;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763cqw;color:var(--ink)">Haus Gables</div>
+<div style="margin-top:1cqw;font-family:var(--font-serif);font-size:0.616cqw;line-height:1.6;color:var(--ink)">Architect: Jennifer Bonner<br>Location: Atlanta, Georgia</div>
+<div style="margin-top:1.5cqw;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763cqw;color:var(--ink)">Project statement</div>
+<div style="margin-top:.85cqw;font-family:var(--font-serif);font-size:0.638cqw;line-height:1.55;color:var(--ink);text-align:justify">This study focuses on the spatial relationships within the building to understand how they define the spaces, and how this building adapts to its context. This building stood out to me in particular because of its unique gable roof, which with research of the architect's concept and intentions, which stemmed from her desire to oppose traditional southern architecture. Instead of using stick-frame construction, she utilized CLT to create spaces through planes. Instead of basing the interior walls off of the exterior walls, this building's interior walls are based off of its unique gable roof, resulting in angular walls. After further analysis, I realized how the random, chaotic appearance of the house was done purposefully. The seemingly random intersection of gable roofs created angular walls that defined private and public spaces, and the “random” placement of windows allowed the building to circulate air effectively despite its surroundings.</div>
+<div style="margin-top:1.9cqw;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763cqw;color:var(--ink)">Precedent analysis</div>
+<div style="margin-top:.95cqw;font-family:var(--font-serif);font-size:0.638cqw;line-height:1.55;color:var(--ink);text-align:justify">Haus Gables was designed by Jennifer Bonner, director of the architecture studio MALL (Mass Architectural Loopty Loops) in 2018. The practice is known for its experimental, graphic approach to architecture and for challenging traditional tectonic and material conventions.</div>
+<div style="margin-top:.8cqw;font-family:var(--font-serif);font-size:0.638cqw;line-height:1.55;color:var(--ink);text-align:justify">Haus Gables is located in the Old Fourth Ward neighborhood in Atlanta, Georgia, and was a self initiated development by Jennifer Bonner, designed to serve as a proof of concept for a single family house that makes the most out of the small urban lot.</div>
 </div>
 <div style="position:absolute;left:50.65%;top:.9%;width:24.35%;height:53.2%;overflow:hidden"><img data-src="{{ b.bSrc }}" ref="{{ setSrc }}" alt="Living room under the gables" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oB }};transform:{{ b.tB }};display:block" onMouseDown="{{ b.pickB }}" onMouseEnter="{{ b.overB }}"></div>
 <div style="position:absolute;left:75.6%;top:.9%;width:23.9%;height:53.2%;overflow:hidden"><img data-src="{{ b.cSrc }}" ref="{{ setSrc }}" alt="Upper landing" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oC }};transform:{{ b.tC }};display:block" onMouseDown="{{ b.pickC }}" onMouseEnter="{{ b.overC }}"></div>
@@ -575,65 +602,65 @@ input[type=range]{accent-color:#0a0a08}
 </sc-if>
 
 <sc-if value="{{ b.is32 }}">
-<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div data-om-page="1" style="container-type:inline-size;position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
 <div style="position:absolute;left:0;top:0;width:100%;height:31.1%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="Haus Gables, north east corner" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
-<div style="position:absolute;left:0;top:32.6%;width:100%;text-align:center;font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.2em;font-size:0.858vw;color:var(--ink)">Orthographic drawings</div>
+<div style="position:absolute;left:0;top:32.6%;width:100%;text-align:center;font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.2em;font-size:0.858cqw;color:var(--ink)">Orthographic drawings</div>
 <div style="position:absolute;left:2%;top:38.4%;height:58.6%;border-left:1px dashed rgba(22,21,19,.4)"></div>
 <div style="position:absolute;left:25%;top:38.4%;height:58.6%;border-left:1px dashed rgba(22,21,19,.4)"></div>
-<div style="position:absolute;left:2%;top:36.4%;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">Floor 01 / Basement</div>
+<div style="position:absolute;left:2%;top:36.4%;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763cqw;color:var(--ink)">Floor 01 / Basement</div>
 <div style="position:absolute;left:2%;top:38.4%;width:23%;height:12.1%;overflow:hidden"><img data-src="{{ b.bSrc }}" ref="{{ setSrc }}" alt="Basement plan" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oB }};transform:{{ b.tB }};display:block" onMouseDown="{{ b.pickB }}" onMouseEnter="{{ b.overB }}"></div>
-<div style="position:absolute;left:2%;top:51.9%;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">Floor 02 / Dining + sleeping</div>
+<div style="position:absolute;left:2%;top:51.9%;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763cqw;color:var(--ink)">Floor 02 / Dining + sleeping</div>
 <div style="position:absolute;left:2%;top:53.9%;width:23%;height:12.1%;overflow:hidden"><img data-src="{{ b.cSrc }}" ref="{{ setSrc }}" alt="Level two plan" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oC }};transform:{{ b.tC }};display:block" onMouseDown="{{ b.pickC }}" onMouseEnter="{{ b.overC }}"></div>
-<div style="position:absolute;left:2%;top:67.4%;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">Floor 03 / Living + sleeping</div>
+<div style="position:absolute;left:2%;top:67.4%;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763cqw;color:var(--ink)">Floor 03 / Living + sleeping</div>
 <div style="position:absolute;left:2%;top:69.4%;width:23%;height:12.1%;overflow:hidden"><img data-src="{{ b.dSrc }}" ref="{{ setSrc }}" alt="Level three plan" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oD }};transform:{{ b.tD }};display:block" onMouseDown="{{ b.pickD }}" onMouseEnter="{{ b.overD }}"></div>
-<div style="position:absolute;left:2%;top:82.9%;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">Roof plan</div>
+<div style="position:absolute;left:2%;top:82.9%;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763cqw;color:var(--ink)">Roof plan</div>
 <div style="position:absolute;left:2%;top:84.9%;width:23%;height:12.1%;overflow:hidden"><img data-src="{{ b.eSrc }}" ref="{{ setSrc }}" alt="Roof plan" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oE }};transform:{{ b.tE }};display:block" onMouseDown="{{ b.pickE }}" onMouseEnter="{{ b.overE }}"></div>
 <div style="position:absolute;left:28%;top:36.3%;width:67%;height:26.7%;overflow:hidden"><img data-src="{{ b.fSrc }}" ref="{{ setSrc }}" alt="West elevation and sections" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oF }};transform:{{ b.tF }};display:block" onMouseDown="{{ b.pickF }}" onMouseEnter="{{ b.overF }}"></div>
-<div style="position:absolute;left:31%;top:63%;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">West elevation + sections</div>
+<div style="position:absolute;left:31%;top:63%;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763cqw;color:var(--ink)">West elevation + sections</div>
 <div style="position:absolute;left:26.8%;top:67.5%;width:68.5%;height:26.7%;overflow:hidden"><img data-src="{{ b.gSrc }}" ref="{{ setSrc }}" alt="North elevation and sections" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oG }};transform:{{ b.tG }};display:block" onMouseDown="{{ b.pickG }}" onMouseEnter="{{ b.overG }}"></div>
-<div style="position:absolute;left:31%;top:94.5%;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">North elevation + sections</div>
+<div style="position:absolute;left:31%;top:94.5%;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763cqw;color:var(--ink)">North elevation + sections</div>
 </div>
 </sc-if>
 
 <sc-if value="{{ b.is33 }}">
-<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
-<div style="position:absolute;left:0;top:10%;width:100%;text-align:center;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">Isometric section</div>
+<div data-om-page="1" style="container-type:inline-size;position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div style="position:absolute;left:0;top:10%;width:100%;text-align:center;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763cqw;color:var(--ink)">Isometric section</div>
 <div style="position:absolute;left:0;top:-5%;width:100%;height:110%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="Isometric section" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
 </div>
 </sc-if>
 
 <sc-if value="{{ b.is34 }}">
-<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div data-om-page="1" style="container-type:inline-size;position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
 <div style="position:absolute;left:0;top:0;width:49.5%;height:76.5%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="Ventilation diagram" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
-<div style="position:absolute;left:0;top:78.2%;width:49.5%;text-align:center;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">Ventilation diagram</div>
-<div style="position:absolute;left:7%;top:80.9%;width:35.5%;text-align:center;font-family:var(--font-serif);font-size:0.616vw;line-height:1.55;color:var(--ink)">Since the precedent building was surrounded by structures obstructing the wind, this building recieves little direct wind. However, this diagram shows how the strategic placing of low and high windows allows this building to circulate cool air in and hot air out, effectively circulating and cooling down the building.</div>
+<div style="position:absolute;left:0;top:78.2%;width:49.5%;text-align:center;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763cqw;color:var(--ink)">Ventilation diagram</div>
+<div style="position:absolute;left:7%;top:80.9%;width:35.5%;text-align:center;font-family:var(--font-serif);font-size:0.616cqw;line-height:1.55;color:var(--ink)">Since the precedent building was surrounded by structures obstructing the wind, this building recieves little direct wind. However, this diagram shows how the strategic placing of low and high windows allows this building to circulate cool air in and hot air out, effectively circulating and cooling down the building.</div>
 <div style="position:absolute;left:50.5%;top:0;width:49.5%;height:76.5%;overflow:hidden"><img data-src="{{ b.bSrc }}" ref="{{ setSrc }}" alt="Isovist field diagram" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oB }};transform:{{ b.tB }};display:block" onMouseDown="{{ b.pickB }}" onMouseEnter="{{ b.overB }}"></div>
-<div style="position:absolute;left:50.5%;top:78.2%;width:49.5%;text-align:center;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">Isovist field diagram</div>
-<div style="position:absolute;left:57.4%;top:80.9%;width:36%;text-align:center;font-family:var(--font-serif);font-size:0.616vw;line-height:1.55;color:var(--ink)">The private bedroom on the first floor is not physically separated from the public space (dining + kitchen area) by a wall nor a door. However it is still implied to be a private space even without a physical separation from the public space via door/wall. Therefore this diagram aims to show how private places can be separated from public spaces without the presence of a physical border through two dimensional isovist fields.</div>
+<div style="position:absolute;left:50.5%;top:78.2%;width:49.5%;text-align:center;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763cqw;color:var(--ink)">Isovist field diagram</div>
+<div style="position:absolute;left:57.4%;top:80.9%;width:36%;text-align:center;font-family:var(--font-serif);font-size:0.616cqw;line-height:1.55;color:var(--ink)">The private bedroom on the first floor is not physically separated from the public space (dining + kitchen area) by a wall nor a door. However it is still implied to be a private space even without a physical separation from the public space via door/wall. Therefore this diagram aims to show how private places can be separated from public spaces without the presence of a physical border through two dimensional isovist fields.</div>
 </div>
 </sc-if>
 
 <sc-if value="{{ b.is35 }}">
-<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2600/1678;background:var(--white);overflow:hidden">
+<div data-om-page="1" style="container-type:inline-size;position:relative;width:100vw;aspect-ratio:2600/1678;background:var(--white);overflow:hidden">
 <div style="position:absolute;left:0;top:0;width:100%;height:100%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="Composite diagram" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
 <div style="position:absolute;left:3.4%;top:1.5%;width:7.2%;height:97%;overflow:hidden"><img data-src="{{ b.bSrc }}" ref="{{ setSrc }}" alt="Sequential diagram" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oB }};transform:{{ b.tB }};display:block" onMouseDown="{{ b.pickB }}" onMouseEnter="{{ b.overB }}"></div>
-<div style="position:absolute;left:58%;top:7.2%;width:40%;text-align:center;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">Sequential + composite diagram</div>
-<div style="position:absolute;left:59.5%;top:10.6%;width:37%;text-align:center;font-family:var(--font-serif);font-size:0.616vw;line-height:1.55;color:var(--ink)">The sequential diagram on the left, paired with the composite diagram on the right focus on the intersecting spaces created by the 6 gable roof construction of Haus Gables.</div>
+<div style="position:absolute;left:58%;top:7.2%;width:40%;text-align:center;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763cqw;color:var(--ink)">Sequential + composite diagram</div>
+<div style="position:absolute;left:59.5%;top:10.6%;width:37%;text-align:center;font-family:var(--font-serif);font-size:0.616cqw;line-height:1.55;color:var(--ink)">The sequential diagram on the left, paired with the composite diagram on the right focus on the intersecting spaces created by the 6 gable roof construction of Haus Gables.</div>
 </div>
 </sc-if>
 
 <sc-if value="{{ b.is36 }}">
-<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:transparent;overflow:hidden">
+<div data-om-page="1" style="container-type:inline-size;position:relative;width:100vw;aspect-ratio:2000/1294;background:transparent;overflow:hidden">
 <div style="position:absolute;left:-1px;top:-1px;width:calc(100% + 2px);height:calc(100% + 2px);overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="Physical model" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
-<div style="position:absolute;left:20.7%;top:8.3%;display:flex;flex-direction:column;gap:.6vw">
-<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:0.715vw;color:var(--ink)">Physical model</div>
-<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--charcoal)">Museum board + foam board</div>
+<div style="position:absolute;left:20.7%;top:8.3%;display:flex;flex-direction:column;gap:.6cqw">
+<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:0.715cqw;color:var(--ink)">Physical model</div>
+<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763cqw;color:var(--charcoal)">Museum board + foam board</div>
 </div>
 </div>
 </sc-if>
 
 <sc-if value="{{ b.is37 }}">
-<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div data-om-page="1" style="container-type:inline-size;position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
 <div style="position:absolute;left:0;top:0;width:50%;height:100%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="Model, roof removed" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
 <div style="position:absolute;left:6.5%;top:1.5%;width:36%;height:24%;overflow:hidden"><img data-src="{{ b.bSrc }}" ref="{{ setSrc }}" alt="Roof plate" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oB }};transform:{{ b.tB }};display:block" onMouseDown="{{ b.pickB }}" onMouseEnter="{{ b.overB }}"></div>
 <div style="position:absolute;left:6.5%;top:18.5%;width:36%;height:24%;overflow:hidden"><img data-src="{{ b.cSrc }}" ref="{{ setSrc }}" alt="Roof plate" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oC }};transform:{{ b.tC }};display:block" onMouseDown="{{ b.pickC }}" onMouseEnter="{{ b.overC }}"></div>
@@ -643,12 +670,21 @@ input[type=range]{accent-color:#0a0a08}
 </sc-if>
 
 <sc-if value="{{ b.is38 }}">
-<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/810;background:var(--white);overflow:hidden">
+<div data-om-page="1" style="container-type:inline-size;position:relative;width:100vw;aspect-ratio:2000/810;background:var(--white);overflow:hidden">
 <div style="position:absolute;left:2.5%;top:1.5%;width:47.5%;height:97%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="Sketchbook, tour notes and site" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
 <div style="position:absolute;left:50%;top:1.5%;width:47.5%;height:97%;overflow:hidden"><img data-src="{{ b.bSrc }}" ref="{{ setSrc }}" alt="Sketchbook, composite diagram studies" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oB }};transform:{{ b.tB }};display:block" onMouseDown="{{ b.pickB }}" onMouseEnter="{{ b.overB }}"></div>
 </div>
 </sc-if>
 
+</div>
+<sc-if value="{{ b.hasZoom }}">
+<div style="{{ b.zoomStyle }}">⤢</div>
+</sc-if>
+</div>
+<sc-if value="{{ b.hasFolio }}">
+<div style="{{ b.folioStyle }}"><span style="{{ b.folioNumStyle }}">{{ b.folioNum }}</span><span style="{{ b.folioLabelStyle }}">{{ b.folioLabel }}</span></div>
+</sc-if>
+<div data-read="1" style="{{ b.readStyle }}"></div>
 </div>
 </sc-for>
 
@@ -660,11 +696,31 @@ input[type=range]{accent-color:#0a0a08}
 </div>
 </div>
 </div>
+</div>
 </sc-if>
 
 
+<sc-if value="{{ ix.showTweaks }}">
+<div style="position:fixed;bottom:22px;right:24px;z-index:150;font-family:var(--font-display);font-weight:600;text-transform:uppercase;letter-spacing:.14em;font-size:11px;color:var(--paper);background:var(--black);padding:10px 14px;cursor:pointer;white-space:nowrap" style-hover="opacity:0.82" onClick="{{ ix.toggleTweaks }}">{{ ix.tweaksLabel }}</div>
+<sc-if value="{{ ix.tweaksOpen }}">
+<div style="position:fixed;bottom:66px;right:24px;z-index:150;width:300px;background:var(--black);color:var(--paper);padding:18px 18px 10px;box-sizing:border-box;animation:dcFade .25s ease both">
+<div style="font-family:var(--font-display);font-weight:600;text-transform:uppercase;letter-spacing:.18em;font-size:9px;color:var(--stone);margin-bottom:12px">{{ ix.tweaksTitle }}</div>
+<sc-for list="{{ ix.switcher }}" as="s" hint-placeholder-count="5">
+<div style="{{ s.style }}" style-hover="opacity:1" onClick="{{ s.pick }}">
+<div style="display:flex;align-items:baseline;gap:10px">
+<span style="font-family:var(--font-display);font-weight:600;letter-spacing:.16em;font-size:9px;color:var(--stone)">{{ s.num }}</span>
+<span style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:11px">{{ s.name }}</span>
+</div>
+<div style="font-family:var(--font-serif);font-style:italic;font-size:13px;line-height:1.4;color:var(--ash);margin:4px 0 0 25px">{{ s.note }}</div>
+</div>
+</sc-for>
+<div style="font-family:var(--font-serif);font-style:italic;font-size:12px;line-height:1.4;color:var(--stone);margin:6px 0 4px">{{ ix.hint }}</div>
+</div>
+</sc-if>
+</sc-if>
+
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;loadingScreen&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;rule&quot;,&quot;counter&quot;,&quot;plate&quot;,&quot;stack&quot;,&quot;frame&quot;],&quot;default&quot;:&quot;rule&quot;,&quot;tsType&quot;:&quot;'rule' | 'counter' | 'plate' | 'stack' | 'frame'&quot;,&quot;section&quot;:&quot;Loading screen&quot;},&quot;gateDelay&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;min&quot;:0,&quot;max&quot;:1200,&quot;step&quot;:50,&quot;default&quot;:400,&quot;unit&quot;:&quot;ms&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Loading screen&quot;},&quot;menuStyle&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;pill&quot;,&quot;rule&quot;,&quot;ticks&quot;,&quot;corner&quot;,&quot;wide&quot;],&quot;default&quot;:&quot;wide&quot;,&quot;tsType&quot;:&quot;'pill' | 'rule' | 'ticks' | 'corner' | 'wide'&quot;,&quot;section&quot;:&quot;Menu bar&quot;},&quot;indexLayout&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;scroll&quot;,&quot;tabs&quot;,&quot;accordion&quot;,&quot;split&quot;,&quot;numeral&quot;],&quot;default&quot;:&quot;tabs&quot;,&quot;tsType&quot;:&quot;'scroll' | 'tabs' | 'accordion' | 'split' | 'numeral'&quot;,&quot;section&quot;:&quot;Index&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;loadingScreen&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;rule&quot;,&quot;counter&quot;,&quot;plate&quot;,&quot;stack&quot;,&quot;frame&quot;],&quot;default&quot;:&quot;rule&quot;,&quot;tsType&quot;:&quot;'rule' | 'counter' | 'plate' | 'stack' | 'frame'&quot;,&quot;section&quot;:&quot;Loading screen&quot;},&quot;gateDelay&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;min&quot;:0,&quot;max&quot;:1200,&quot;step&quot;:50,&quot;default&quot;:400,&quot;unit&quot;:&quot;ms&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Loading screen&quot;},&quot;menuStyle&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;pill&quot;,&quot;rule&quot;,&quot;ticks&quot;,&quot;corner&quot;,&quot;wide&quot;],&quot;default&quot;:&quot;wide&quot;,&quot;tsType&quot;:&quot;'pill' | 'rule' | 'ticks' | 'corner' | 'wide'&quot;,&quot;section&quot;:&quot;Menu bar&quot;},&quot;indexLayout&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;scroll&quot;,&quot;tabs&quot;,&quot;accordion&quot;,&quot;split&quot;,&quot;numeral&quot;],&quot;default&quot;:&quot;tabs&quot;,&quot;tsType&quot;:&quot;'scroll' | 'tabs' | 'accordion' | 'split' | 'numeral'&quot;,&quot;section&quot;:&quot;Index&quot;},&quot;phoneLayout&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;columns&quot;,&quot;bands&quot;,&quot;carousel&quot;,&quot;list&quot;,&quot;covers&quot;],&quot;default&quot;:&quot;columns&quot;,&quot;tsType&quot;:&quot;'columns' | 'bands' | 'carousel' | 'list' | 'covers'&quot;,&quot;section&quot;:&quot;Phone&quot;}}">
 const SPLASH = [
   'assets/splash/multigenerational-house-1.jpg',
   'assets/splash/mapmakers-imaginarium.jpg',
@@ -672,6 +728,18 @@ const SPLASH = [
   'assets/splash/multigenerational-house-2.jpg',
   'assets/splash/multigenerational-house-representational.jpg'
 ];
+
+// Point an <img data-src> at its file. A new file hides the image again until it has loaded (see
+// the load listener in componentDidMount), so every arrival fades in.
+const assignSrc = (el, s) => {
+  if (!s || s.indexOf('{{') > -1 || el.getAttribute('src') === s) return;
+  el.removeAttribute('data-ld');
+  el.setAttribute('src', s);
+};
+
+// Phone splash: a portrait screen shows only about a third of each landscape photo's width, so the
+// desktop zoom is dropped and each photo is centred on the most detailed part of its model instead.
+const SPLASH_PHONE_FOCUS = ['26% 50%', '53% 50%', '33% 50%', '50% 50%', '50% 50%'];
 
 const hero = (index, label, note, attr, src) => ({ kind: 'hero', index, label, note, attr, a: src });
 const one = (label, note, a) => ({ kind: 'one', label, note, a });
@@ -696,25 +764,25 @@ const T = (l, t, w, ta, lines) => ({ l, t, w, ta, lines });
 const LN = (kind, txt, mt) => ({ kind, txt, mt: mt || 0 });
 // The six type roles the printed book uses, sized in vw so they track the sheet.
 const ROLE = {
-  h1:   { fam: 'var(--font-display)', wt: 700, fs: '1.485vw', ls: '.055em', tt: 'uppercase', lh: '1.15', col: 'var(--ink)', nw: 1 },
+  h1:   { fam: 'var(--font-display)', wt: 700, fs: '1.485cqw', ls: '.055em', tt: 'uppercase', lh: '1.15', col: 'var(--ink)', nw: 1 },
   // h1w wraps: a long title at the larger size can't hold one line inside its column.
-  h1w:  { fam: 'var(--font-display)', wt: 700, fs: '1.467vw', ls: '.0803em', tt: 'uppercase', lh: '1.15', col: 'var(--ink)' },
-  attr: { fam: 'var(--font-serif)',   wt: 400, fs: '0.627vw',  ls: '.06em',  tt: 'none',      lh: '1.5',  col: 'var(--charcoal)' },
-  h2:   { fam: 'var(--font-display)', wt: 700, fs: '0.99vw',   ls: '.075em', tt: 'uppercase', lh: '1.2',  col: 'var(--ink)' },
-  h3:   { fam: 'var(--font-display)', wt: 700, fs: '0.412vw', ls: '.2704em', tt: 'uppercase', lh: '1.3', col: 'var(--ink)' },
-  sub:  { fam: 'var(--font-display)', wt: 400, fs: '0.69vw', ls: '.18em',  tt: 'uppercase', lh: '1.5',  col: 'var(--charcoal)' },
-  cap:  { fam: 'var(--font-display)', wt: 400, fs: '0.619vw', ls: '.2466em', tt: 'uppercase', lh: '1.5', col: 'var(--ink)' },
+  h1w:  { fam: 'var(--font-display)', wt: 700, fs: '1.467cqw', ls: '.0803em', tt: 'uppercase', lh: '1.15', col: 'var(--ink)' },
+  attr: { fam: 'var(--font-serif)',   wt: 400, fs: '0.627cqw',  ls: '.06em',  tt: 'none',      lh: '1.5',  col: 'var(--charcoal)' },
+  h2:   { fam: 'var(--font-display)', wt: 700, fs: '0.99cqw',   ls: '.075em', tt: 'uppercase', lh: '1.2',  col: 'var(--ink)' },
+  h3:   { fam: 'var(--font-display)', wt: 700, fs: '0.412cqw', ls: '.2704em', tt: 'uppercase', lh: '1.3', col: 'var(--ink)' },
+  sub:  { fam: 'var(--font-display)', wt: 400, fs: '0.69cqw', ls: '.18em',  tt: 'uppercase', lh: '1.5',  col: 'var(--charcoal)' },
+  cap:  { fam: 'var(--font-display)', wt: 400, fs: '0.619cqw', ls: '.2466em', tt: 'uppercase', lh: '1.5', col: 'var(--ink)' },
   // Small tracked sans sitting under a caption (page 16's "Point line plane").
-  sub2: { fam: 'var(--font-display)', wt: 400, fs: '0.412vw', ls: '.2648em', tt: 'uppercase', lh: '1.5', col: 'var(--charcoal)' },
-  tiny: { fam: 'var(--font-display)', wt: 400, fs: '0.484vw',  ls: '.05em',  tt: 'uppercase', lh: '1.5',  col: 'var(--ink)' },
-  sc:   { fam: 'var(--font-serif)',   wt: 400, fs: '0.483vw', ls: '.06em',  tt: 'none',      lh: '1.33', col: 'var(--charcoal)' },
+  sub2: { fam: 'var(--font-display)', wt: 400, fs: '0.412cqw', ls: '.2648em', tt: 'uppercase', lh: '1.5', col: 'var(--charcoal)' },
+  tiny: { fam: 'var(--font-display)', wt: 400, fs: '0.484cqw',  ls: '.05em',  tt: 'uppercase', lh: '1.5',  col: 'var(--ink)' },
+  sc:   { fam: 'var(--font-serif)',   wt: 400, fs: '0.483cqw', ls: '.06em',  tt: 'none',      lh: '1.33', col: 'var(--charcoal)' },
   // The printed scale annotations are the same serif but tracked out wide.
-  scl:  { fam: 'var(--font-serif)',   wt: 400, fs: '0.527vw', ls: '.2075em', tt: 'none',     lh: '1.5',  col: 'var(--charcoal)' },
+  scl:  { fam: 'var(--font-serif)',   wt: 400, fs: '0.527cqw', ls: '.2075em', tt: 'none',     lh: '1.5',  col: 'var(--charcoal)' },
   // Drawing-sheet annotations: the tight all-caps label and its tracked serif scale.
-  lab:  { fam: 'var(--font-display)', wt: 400, fs: '0.763vw', ls: '.115em', tt: 'uppercase', lh: '1.5', col: 'var(--ink)' },
-  scp:  { fam: 'var(--font-serif)',   wt: 400, fs: '0.469vw', ls: '.2075em', tt: 'none',     lh: '1.5', col: 'var(--charcoal)' },
-  body: { fam: 'var(--font-serif)',   wt: 400, fs: '0.604vw', ls: 'normal', tt: 'none',      lh: '1.42', col: 'var(--ink)' },
-  note: { fam: 'var(--font-serif)',   wt: 400, fs: '0.745vw', ls: 'normal', tt: 'none',      lh: '1.138', col: 'var(--ink)' }
+  lab:  { fam: 'var(--font-display)', wt: 400, fs: '0.763cqw', ls: '.115em', tt: 'uppercase', lh: '1.5', col: 'var(--ink)' },
+  scp:  { fam: 'var(--font-serif)',   wt: 400, fs: '0.469cqw', ls: '.2075em', tt: 'none',     lh: '1.5', col: 'var(--charcoal)' },
+  body: { fam: 'var(--font-serif)',   wt: 400, fs: '0.604cqw', ls: 'normal', tt: 'none',      lh: '1.42', col: 'var(--ink)' },
+  note: { fam: 'var(--font-serif)',   wt: 400, fs: '0.745cqw', ls: 'normal', tt: 'none',      lh: '1.138', col: 'var(--ink)' }
 };
 const page = (sheet, frames, texts) => ({ kind: 'page', sheet, label: sheet, frames, texts: texts || [] });
 // One sheet holding every floor plan, cycled in place instead of stacked down the scroll.
@@ -961,6 +1029,29 @@ const INDEX_LAYOUTS = [
   { id: 'split', name: 'Split', note: 'Both courses side by side, divided by a rule.' },
   { id: 'numeral', name: 'Numeral', note: 'One title whose numeral rolls II to III as the cards cross-fade.' }
 ];
+// Five phone versions. Each pairs an index arrangement with a way of presenting the printed sheets,
+// which are landscape pages too small to read at phone width. `proj` names the sheet mode.
+// Chosen by the `phoneLayout` prop; the Tweaks tab (or ?phone=N) switches between them live.
+const PHONE_LAYOUTS = [
+  { id: 'columns', proj: 'fit', name: 'Columns',
+    note: 'Three tall cards, as on desktop. Sheets fill the width; pinch to zoom.' },
+  { id: 'bands', proj: 'reader', name: 'Bands',
+    note: 'Wide cover bands. Each sheet is followed by its text, set large enough to read.' },
+  { id: 'carousel', proj: 'pan', name: 'Carousel',
+    note: 'Swipe through large covers. Each sheet is shown big; swipe sideways across it.' },
+  { id: 'list', proj: 'slides', name: 'List',
+    note: 'A typographic list with thumbnails. One sheet per screen, numbered like pages.' },
+  { id: 'covers', proj: 'turned', name: 'Covers',
+    note: 'Full-screen covers. Sheets are turned sideways; rotate the phone to read them.' }
+];
+const phoneFromQuery = () => {
+  try {
+    const q = new URLSearchParams(location.search).get('phone');
+    if (!q) return null;
+    const byNum = PHONE_LAYOUTS[+q - 1];
+    return byNum ? byNum.id : (PHONE_LAYOUTS.find(l => l.id === q) || {}).id || null;
+  } catch (e) { return null; }
+};
 const layoutFromQuery = () => {
   try {
     const q = new URLSearchParams(location.search).get('index');
@@ -1150,7 +1241,7 @@ class Component extends DCLogic {
       alignOpen: false, alignK: 0, alignRef: 0, alignDiff: false, editMore: false,
       saved: false, tocSaved: false, saveNote: 'Saved defaults are restored on every visit.',
       paused: false, tocHover: null, tocCourse: 0,
-      ixLayout: layoutFromQuery(), tweaks: tweaksAllowed(), tweaksOpen: false,
+      ixLayout: layoutFromQuery(), tweaks: tweaksAllowed(), tweaksOpen: false, phLayout: phoneFromQuery(),
       vw: window.innerWidth,
       crops: Object.assign({}, BAKED_CROPS, migrateCrops(readStore(CROP_KEY))),
       repl: pruneRepl(readStore(REPL_KEY)),
@@ -1304,16 +1395,23 @@ class Component extends DCLogic {
       this.setCourse(this.state.tocCourse + (d > 0 ? 1 : -1));
     };
     window.addEventListener('keydown', this._ixKey);
+    this._imgDone = e => { const t = e.target; if (t && t.tagName === 'IMG' && t.hasAttribute('data-src')) t.setAttribute('data-ld', '1'); };
+    document.addEventListener('load', this._imgDone, true);
+    document.addEventListener('error', this._imgDone, true);
     window.addEventListener('wheel', this._ixWheel, { passive: true });
     this.syncSrcs();
     this.paintPages();
     this.paintPlans();
     this.scanLayout();
+    this.paintReader();
+    this.syncPhoneScroll();
   }
   componentDidUpdate() {
     this.paintPages();
     this.paintPlans();
     this.scanLayout();
+    this.paintReader();
+    this.syncPhoneScroll();
     const iv = this.props.rotateInterval ?? 4500;
     const on = this.rotationOn();
     if (iv !== this._iv || on !== this._on) this.startRotation();
@@ -1332,14 +1430,17 @@ class Component extends DCLogic {
     document.removeEventListener('click', this._plClick, true);
     window.removeEventListener('keydown', this._plKey);
     window.removeEventListener('keydown', this._ixKey);
+    document.removeEventListener('load', this._imgDone, true);
+    document.removeEventListener('error', this._imgDone, true);
     window.removeEventListener('wheel', this._ixWheel);
+    this.closeViewer();
   }
 
   // Deferred images: copy data-src into src once the template has resolved it.
   syncSrcs() {
     document.querySelectorAll('img[data-src]').forEach(el => {
       const s = el.getAttribute('data-src');
-      if (s && s.indexOf('{{') === -1 && el.getAttribute('src') !== s) el.setAttribute('src', s);
+      assignSrc(el, s);
     });
   }
 
@@ -1367,7 +1468,7 @@ class Component extends DCLogic {
     // ref in a template edit still loads instead of silently rendering blank.
     document.querySelectorAll('img[data-src]').forEach(el => {
       const s = el.getAttribute('data-src');
-      if (s && s.indexOf('{{') === -1 && el.getAttribute('src') !== s) el.setAttribute('src', s);
+      assignSrc(el, s);
     });
     document.querySelectorAll('img[data-img]').forEach(el => {
       const p = el.getAttribute('data-img').split('|');
@@ -1389,7 +1490,7 @@ class Component extends DCLogic {
       const s = el.style;
       s.fontFamily = r.fam; s.fontWeight = r.wt; s.fontSize = r.fs; s.letterSpacing = r.ls;
       s.textTransform = r.tt; s.lineHeight = r.lh; s.color = r.col;
-      s.marginTop = (p[1] || 0) + 'vw';
+      s.marginTop = (p[1] || 0) + 'cqw';
       s.whiteSpace = r.nw ? 'nowrap' : '';
       rebase(el);
     });
@@ -1728,6 +1829,7 @@ class Component extends DCLogic {
       if (went) return;
       this._gating = false;
     }
+    this.closeViewer();
     this._lastY = 0;
     // On a project the bar starts tucked away so it never sits on the spread's own title;
     // one upward scroll brings it back.
@@ -2083,6 +2185,14 @@ class Component extends DCLogic {
     this._barHidden = hide;
     if (this._navEl) this._navEl.style.transform = hide ? 'translateY(-100%)' : 'translateY(0)';
     if (this._peekEl) this._peekEl.style.visibility = hide ? 'visible' : 'hidden';
+    this.shiftPage();
+  }
+
+  // The page slides down with the menu bar and back up when it tucks away, in step with it.
+  shiftPage() {
+    if (!this._shiftEl) return;
+    const h = this._barHidden || !this._navEl ? 0 : this._navEl.offsetHeight;
+    this._shiftEl.style.transform = h ? 'translateY(' + h + 'px)' : 'none';
   }
 
   omPages() { return Array.from(document.querySelectorAll('[data-om-page]')); }
@@ -2605,6 +2715,285 @@ class Component extends DCLogic {
     });
   }
 
+  // ---- Phone ---------------------------------------------------------------
+  // A phone is a narrow portrait screen. A phone turned landscape gets the desktop layout, where
+  // the sheets are as wide as the screen and their text is readable.
+  isPhone() {
+    const vw = this.state.vw || window.innerWidth;
+    return vw <= 600 || (vw <= 760 && window.innerHeight > vw);
+  }
+
+  phoneLayout() {
+    if (this.state.phLayout) return this.state.phLayout;
+    const p = this.props.phoneLayout;
+    return PHONE_LAYOUTS.some(l => l.id === p) ? p : 'columns';
+  }
+
+  // How sheets are presented: 'none' on desktop, else the current phone layout's mode.
+  phoneMode() {
+    if (!this.isPhone()) return 'none';
+    return (PHONE_LAYOUTS.find(l => l.id === this.phoneLayout()) || PHONE_LAYOUTS[0]).proj;
+  }
+
+  phoneIndexVals() {
+    const lay = this.phoneLayout();
+    const k = this.state.tocCourse;
+    const n = COURSES.length;
+    const EASE = 'cubic-bezier(.65,0,.35,1)';
+    const D = 'font-family:var(--font-display);text-transform:uppercase;';
+    const NUM = D + 'font-weight:700;letter-spacing:.16em;font-size:10px;color:var(--stone);';
+    const covers = lay === 'covers';
+    const centred = lay === 'columns' || lay === 'carousel';
+    const ph = {
+      screen: covers
+        ? 'width:100vw;height:100svh;overflow:hidden;position:relative;background:var(--black);animation:dcFade .5s ease both;'
+        : 'width:100vw;min-height:100svh;box-sizing:border-box;background:var(--paper);display:flex;flex-direction:column;align-items:center;' +
+          (centred ? 'justify-content:center;' : 'padding:max(12svh,80px) 0 14svh;') + 'animation:dcFade .5s ease both;',
+      tabsStyle: covers
+        ? 'position:absolute;top:calc(30px + env(safe-area-inset-top,0px));left:0;width:100%;z-index:3;display:flex;justify-content:center;gap:26px;'
+        : 'display:flex;justify-content:center;gap:26px;margin-bottom:' + (centred ? '4.5svh' : '5svh') + ';',
+      viewport: 'width:100vw;overflow:hidden;' + (covers ? 'height:100svh;' : ''),
+      track: 'display:flex;width:' + n * 100 + 'vw;' + (covers ? 'height:100%;' : 'align-items:flex-start;') +
+        'transform:translateX(' + -k * 100 + 'vw);transition:transform 800ms ' + EASE + ';',
+      tabs: COURSES.map((c, ci) => ({
+        name: c.name,
+        select: () => this.setCourse(ci),
+        style: D + 'font-weight:700;letter-spacing:.16em;font-size:13px;cursor:pointer;transition:color 400ms ease;color:' +
+          (covers ? (ci === k ? '#fff' : 'rgba(255,255,255,.5)') : (ci === k ? 'var(--ink)' : 'var(--stone)')) + ';'
+      })),
+      // A sideways swipe changes course, except in the carousel, where it moves between covers.
+      touchStart: e => { const t = e.touches[0]; this._tx = t.clientX; this._ty = t.clientY; },
+      touchEnd: e => {
+        if (lay === 'carousel' || this._tx == null) return;
+        const t = e.changedTouches[0];
+        const dx = t.clientX - this._tx, dy = t.clientY - this._ty;
+        this._tx = null;
+        if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) this.setCourse(k + (dx < 0 ? 1 : -1));
+      }
+    };
+    const img = pos => 'width:100%;height:100%;object-fit:cover;display:block;object-position:' + pos + ';';
+    const soon = (bg, col) => 'width:100%;height:100%;background:' + bg + ';display:flex;align-items:center;justify-content:center;' +
+      D + 'font-weight:600;letter-spacing:.24em;font-size:9px;color:' + col + ';';
+    ph.courses = COURSES.map(c => ({
+      style: {
+        columns: 'width:100vw;flex-shrink:0;display:flex;justify-content:center;gap:16px;',
+        bands: 'width:100vw;flex-shrink:0;display:flex;flex-direction:column;gap:26px;padding:0 20px;box-sizing:border-box;',
+        carousel: 'width:100vw;flex-shrink:0;display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 14vw;box-sizing:border-box;scrollbar-width:none;',
+        list: 'width:100vw;flex-shrink:0;display:flex;flex-direction:column;padding:0 22px;box-sizing:border-box;',
+        covers: 'width:100vw;height:100svh;flex-shrink:0;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none;'
+      }[lay],
+      items: c.items.map((it, i) => {
+        const pr = it.pi != null ? PROJECTS[it.pi] : null;
+        const slot = pr ? 'toc:' + it.pi : '';
+        const cursor = 'cursor:' + (pr ? 'pointer' : 'default') + ';';
+        const o = {
+          title: pr ? pr.title : it.title,
+          num: String(i + 1).padStart(2, '0'),
+          hasCover: !!pr, soon: !pr,
+          cover: pr ? this.srcOf(pr.cover) : '',
+          open: () => { if (pr) this.go('project', it.pi); },
+          hasShade: false, shadeStyle: '', numStyle: NUM
+        };
+        if (lay === 'columns') return Object.assign(o, {
+          style: 'flex:0 0 calc((100vw - 56px) * .25);min-width:0;display:flex;flex-direction:column;gap:14px;' + cursor,
+          mediaStyle: 'height:52svh;overflow:hidden;background:var(--fog);',
+          imgStyle: img(pr ? this.op(slot) : '50% 50%') + (pr ? 'transform:' + this.tf(slot) + ';' : ''),
+          soonStyle: soon('var(--fog)', 'var(--stone)') + 'writing-mode:vertical-rl;',
+          capStyle: 'display:flex;flex-direction:column;align-items:center;gap:7px;text-align:center;width:calc(100% + 16px);margin:0 -8px;',
+          titleStyle: D + 'font-weight:700;letter-spacing:.04em;font-size:8px;line-height:1.5;min-height:4.5em;color:var(--ink);'
+        });
+        if (lay === 'bands') return Object.assign(o, {
+          style: 'display:flex;flex-direction:column;gap:11px;' + cursor,
+          mediaStyle: 'height:18svh;overflow:hidden;background:var(--fog);',
+          imgStyle: img('50% 45%'),
+          soonStyle: soon('var(--fog)', 'var(--stone)'),
+          capStyle: 'display:flex;align-items:baseline;gap:12px;',
+          titleStyle: D + 'font-weight:700;letter-spacing:.08em;font-size:11px;line-height:1.35;color:var(--ink);'
+        });
+        if (lay === 'carousel') return Object.assign(o, {
+          style: 'flex:0 0 72vw;scroll-snap-align:center;display:flex;flex-direction:column;gap:16px;' + cursor,
+          mediaStyle: 'height:58svh;overflow:hidden;background:var(--fog);',
+          imgStyle: img('50% 50%'),
+          soonStyle: soon('var(--fog)', 'var(--stone)') + 'writing-mode:vertical-rl;',
+          capStyle: 'display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;',
+          titleStyle: D + 'font-weight:700;letter-spacing:.08em;font-size:11px;line-height:1.4;color:var(--ink);'
+        });
+        if (lay === 'list') return Object.assign(o, {
+          style: 'display:flex;flex-direction:row-reverse;align-items:center;gap:18px;padding:18px 0;border-top:1px solid var(--ash);' +
+            (i === c.items.length - 1 ? 'border-bottom:1px solid var(--ash);' : '') + cursor,
+          mediaStyle: 'flex:0 0 78px;height:100px;overflow:hidden;background:var(--fog);',
+          imgStyle: img('50% 50%'),
+          soonStyle: soon('var(--fog)', 'var(--stone)') + 'writing-mode:vertical-rl;font-size:7px;',
+          capStyle: 'flex:1;min-width:0;display:flex;flex-direction:column;gap:8px;',
+          titleStyle: D + 'font-weight:700;letter-spacing:.06em;font-size:15px;line-height:1.25;color:' + (pr ? 'var(--ink)' : 'var(--stone)') + ';'
+        });
+        return Object.assign(o, {
+          style: 'position:relative;height:100svh;scroll-snap-align:start;overflow:hidden;' + cursor,
+          mediaStyle: 'position:absolute;inset:0;background:var(--charcoal);',
+          imgStyle: img('50% 50%'),
+          soonStyle: soon('var(--charcoal)', 'var(--ash)'),
+          hasShade: true,
+          shadeStyle: 'position:absolute;inset:0;pointer-events:none;background:linear-gradient(to top,rgba(0,0,0,.5) 0%,rgba(0,0,0,0) 46%),rgba(0,0,0,.08);',
+          capStyle: 'position:absolute;left:24px;right:24px;bottom:calc(12svh + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:10px;',
+          numStyle: D + 'font-weight:700;letter-spacing:.16em;font-size:11px;color:rgba(255,255,255,.72);',
+          titleStyle: D + 'font-weight:700;letter-spacing:.08em;font-size:21px;line-height:1.15;color:#fff;'
+        });
+      })
+    }));
+    return ph;
+  }
+
+  // Per-sheet wrapper styles for the current phone mode. A sheet's text is sized in container
+  // units, so a sheet drawn wider than the screen (pan, turned, viewer) keeps its proportions.
+  phoneBlock(b, bi, total) {
+    const mode = this.phoneMode();
+    const R = (b.layout === 'sequential' ? 2600 / 1678 : (b.layout === 'sketchbook' ? 2000 / 810 : 2000 / 1294)).toFixed(4);
+    const D = 'font-family:var(--font-display);text-transform:uppercase;';
+    const label = String(b.label || '').replace(/^\d+\s*[—-]\s*/, '');
+    const o = {
+      bi, frameStyle: '', clipStyle: '', boxStyle: '', tap: null,
+      hasZoom: false, zoomStyle: '', hasFolio: false, readStyle: 'display:none;',
+      folioStyle: 'display:flex;align-items:baseline;gap:12px;padding:12px 20px 30px;',
+      folioNumStyle: D + 'font-weight:600;letter-spacing:.16em;font-size:9px;color:var(--stone);white-space:nowrap;',
+      folioLabelStyle: D + 'font-weight:700;letter-spacing:.08em;font-size:10px;line-height:1.4;color:var(--ink);',
+      folioNum: String(bi + 1).padStart(2, '0') + ' / ' + String(total).padStart(2, '0'),
+      folioLabel: label
+    };
+    if (mode === 'none') return o;
+    const view = () => this.openViewer(bi);
+    if (mode === 'fit') {
+      // Sheets at full width; pinch-zoom does the enlarging, so no button or tap action.
+    } else if (mode === 'reader') {
+      o.frameStyle = 'cursor:zoom-in;';
+      o.tap = view;
+      o.readStyle = 'padding:20px 22px 34px;';
+    } else if (mode === 'pan') {
+      o.clipStyle = 'width:100vw;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;overscroll-behavior-x:contain;';
+      o.boxStyle = 'width:max(100vw, calc(76svh * ' + R + '));';
+      o.hasFolio = true;
+      o.folioLabel = label + '  ⟷';
+    } else if (mode === 'slides') {
+      o.frameStyle = 'min-height:100svh;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;scroll-snap-align:center;cursor:zoom-in;';
+      o.tap = view;
+      o.hasFolio = true;
+    } else if (mode === 'turned') {
+      o.clipStyle = 'position:relative;width:100vw;height:calc(100vw * ' + R + ');overflow:hidden;';
+      o.boxStyle = 'position:absolute;top:0;left:100vw;width:calc(100vw * ' + R + ');transform-origin:0 0;transform:rotate(90deg);';
+      o.hasFolio = true;
+    }
+    return o;
+  }
+
+  // Full-screen sheet viewer: a copy of the sheet, turned to fill a portrait screen. Pinch-zoom
+  // works on it like any page. Built outside React — it's a transient overlay over everything.
+  openViewer(bi) {
+    const frame = document.querySelector('[data-blk="' + bi + '"]');
+    const sheet = frame && frame.querySelector('[data-om-page],[data-plans]');
+    if (!sheet) return;
+    this.closeViewer();
+    const ratio = sheet.offsetWidth / Math.max(1, sheet.offsetHeight);
+    const ov = document.createElement('div');
+    ov.style.cssText = 'position:fixed;inset:0;z-index:400;background:var(--paper);animation:dcFade .3s ease both;overflow:hidden';
+    const copy = sheet.cloneNode(true);
+    copy.removeAttribute('data-om-page');
+    copy.removeAttribute('data-plans');
+    copy.style.position = 'absolute';
+    copy.style.left = '50%';
+    copy.style.top = '50%';
+    const close = document.createElement('div');
+    close.textContent = 'Close';
+    close.style.cssText = 'position:absolute;top:calc(16px + env(safe-area-inset-top,0px));right:16px;z-index:2;cursor:pointer;' +
+      'font-family:var(--font-display);font-weight:600;text-transform:uppercase;letter-spacing:.12em;font-size:11px;' +
+      'color:var(--paper);background:var(--black);padding:10px 14px';
+    const hint = document.createElement('div');
+    hint.textContent = 'Pinch to zoom';
+    hint.style.cssText = 'position:absolute;bottom:calc(18px + env(safe-area-inset-bottom,0px));left:0;width:100%;text-align:center;' +
+      'font-family:var(--font-serif);font-style:italic;font-size:13px;color:var(--stone)';
+    const fit = () => {
+      const W = window.innerWidth, H = window.innerHeight;
+      const turn = H > W;
+      const along = turn ? H - 120 : W - 32;
+      const across = turn ? W - 24 : H - 120;
+      const L = Math.min(along, across * ratio);
+      copy.style.setProperty('width', L + 'px', 'important');
+      copy.style.transform = 'translate(-50%,-50%)' + (turn ? ' rotate(90deg)' : '');
+    };
+    fit();
+    ov.appendChild(copy);
+    ov.appendChild(close);
+    ov.appendChild(hint);
+    ov.addEventListener('click', e => { if (e.target === ov || e.target === close) this.closeViewer(); });
+    window.addEventListener('resize', fit);
+    ov._fit = fit;
+    document.body.appendChild(ov);
+    this._viewer = ov;
+  }
+
+  closeViewer() {
+    if (!this._viewer) return;
+    window.removeEventListener('resize', this._viewer._fit);
+    this._viewer.remove();
+    this._viewer = null;
+  }
+
+  // Reader mode: under each sheet, its words set at a readable size. Read from the rendered sheet
+  // (after layout overrides) in DOM order: display bold → heading, display → label, serif → text.
+  paintReader() {
+    const on = this.state.view === 'project' && this.phoneMode() === 'reader';
+    const esc = t => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const STY = {
+      h: 'font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:13px;line-height:1.35;color:var(--ink);margin:0 0 8px',
+      l: 'font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.14em;font-size:10px;line-height:1.5;color:var(--charcoal);margin:14px 0 8px',
+      p: 'font-family:var(--font-serif);font-size:15.5px;line-height:1.6;color:var(--ink);margin:0 0 12px;text-wrap:pretty'
+    };
+    document.querySelectorAll('[data-blk]').forEach(frame => {
+      const box = frame.querySelector('[data-read]');
+      if (!box) return;
+      if (!on) {
+        if (box.innerHTML) box.innerHTML = '';
+        box.removeAttribute('data-read-key');
+        return;
+      }
+      const key = this.state.pi + ':' + frame.getAttribute('data-blk');
+      if (box.getAttribute('data-read-key') === key) return;
+      // The plan viewer's level ticks and labels are controls, not text worth reading.
+      const sheet = frame.querySelector('[data-om-page]');
+      const groups = [], index = new Map();
+      if (sheet) {
+        const walk = document.createTreeWalker(sheet, NodeFilter.SHOW_TEXT);
+        while (walk.nextNode()) {
+          const t = walk.currentNode;
+          const txt = t.nodeValue.replace(/\s+/g, ' ').trim();
+          if (!txt) continue;
+          let el = t.parentElement;
+          while (el && el !== sheet && getComputedStyle(el).display === 'inline') el = el.parentElement;
+          if (!el || !el.getClientRects().length || getComputedStyle(el).visibility === 'hidden') continue;
+          if (!index.has(el)) { index.set(el, groups.length); groups.push({ el, parts: [] }); }
+          const g = groups[index.get(el)];
+          const br = t.previousSibling && t.previousSibling.nodeName === 'BR';
+          g.parts.push((br ? '\n' : '') + txt);
+        }
+      }
+      const html = groups.map(g => {
+        const cs = getComputedStyle(g.el);
+        const kind = /garamond/i.test(cs.fontFamily) ? 'p' : (+cs.fontWeight >= 600 ? 'h' : 'l');
+        const text = esc(g.parts.join(' ').replace(/ \n/g, '\n')).replace(/\n/g, '<br>');
+        return '<div style="' + STY[kind] + '">' + text + '</div>';
+      }).join('');
+      box.innerHTML = html;
+      box.style.display = html ? '' : 'none';
+      box.setAttribute('data-read-key', key);
+    });
+  }
+
+  // Slides mode snaps the page to one sheet per screen.
+  syncPhoneScroll() {
+    const snap = this.state.view === 'project' && this.phoneMode() === 'slides' ? 'y proximity' : '';
+    [document.documentElement, document.body].forEach(el => {
+      if (el.style.scrollSnapType !== snap) el.style.scrollSnapType = snap;
+    });
+  }
+
   // ---- Index ---------------------------------------------------------------
   indexLayout() {
     if (this.state.ixLayout) return this.state.ixLayout;
@@ -2819,15 +3208,19 @@ class Component extends DCLogic {
     ix.tweaksOpen = !!tweaksOpen;
     ix.tweaksLabel = tweaksOpen ? 'Close tweaks' : 'Tweaks';
     ix.toggleTweaks = () => this.setState(s => ({ tweaksOpen: !s.tweaksOpen }));
-    ix.switcher = INDEX_LAYOUTS.map((l, i) => ({
+    const phone = this.isPhone();
+    const current = phone ? this.phoneLayout() : layout;
+    ix.tweaksTitle = phone ? 'Phone layout' : 'Index layout';
+    if (phone) ix.hint = 'Each version changes the index and the project pages. Open a project to see its sheets.';
+    ix.switcher = (phone ? PHONE_LAYOUTS : INDEX_LAYOUTS).map((l, i) => ({
       num: String(i + 1).padStart(2, '0'),
       name: l.name,
       note: l.note,
-      style: 'cursor:pointer;padding:9px 0 9px 10px;margin-left:-10px;border-left:2px solid ' + (l.id === layout ? 'var(--paper)' : 'transparent') + ';' +
-        'opacity:' + (l.id === layout ? 1 : 0.6) + ';transition:opacity 200ms ease;',
+      style: 'cursor:pointer;padding:9px 0 9px 10px;margin-left:-10px;border-left:2px solid ' + (l.id === current ? 'var(--paper)' : 'transparent') + ';' +
+        'opacity:' + (l.id === current ? 1 : 0.6) + ';transition:opacity 200ms ease;',
       pick: () => {
-        this.setState({ ixLayout: l.id, tocHover: null });
-        try { history.replaceState(null, '', location.pathname + '?index=' + (i + 1)); } catch (e) {}
+        this.setState(phone ? { phLayout: l.id, tocHover: null } : { ixLayout: l.id, tocHover: null });
+        try { history.replaceState(null, '', location.pathname + (phone ? '?phone=' : '?index=') + (i + 1)); } catch (e) {}
       }
     }));
 
@@ -2922,6 +3315,7 @@ class Component extends DCLogic {
       }
       return o;
     });
+    blocks.forEach((o, bi) => Object.assign(o, this.phoneBlock(p.blocks[bi], bi, p.blocks.length)));
 
     const slider = (key, label, min, max, step, unit, get, set) => ({
       label, min, max, step, value: get(), out: get() + unit,
@@ -2957,8 +3351,13 @@ class Component extends DCLogic {
         op: (this.state.loadPct || 0) >= (i + 1) / PROJECTS.length * 88 ? 1 : 0.14
       })),
       isToc: view === 'toc',
+      tocPhone: view === 'toc' && this.isPhone(),
+      tocDesk: view === 'toc' && !this.isPhone(),
+      ph: this.isPhone() ? this.phoneIndexVals() : {},
+      phMode: this.phoneMode(),
       isProject: view === 'project',
       bgLayers: SPLASH.map((photo, i) => {
+        const phone = this.isPhone();
         const slot = 'splash:' + i;
         return React.createElement('img', {
           key: photo,
@@ -2969,9 +3368,9 @@ class Component extends DCLogic {
           style: {
             position: 'absolute', inset: 0, width: '100%', height: '100%',
             objectFit: 'cover',
-            objectPosition: this.op(slot),
+            objectPosition: phone ? SPLASH_PHONE_FOCUS[i] : this.op(slot),
             opacity: freezeSplash ? (slot === sel ? 1 : 0) : (i === bg ? 1 : 0),
-            transform: this.tf(slot),
+            transform: phone ? 'none' : this.tf(slot),
             transition: freezeSplash ? 'none' : 'opacity 1.4s ease'
           }
         });
@@ -3021,6 +3420,7 @@ class Component extends DCLogic {
       tabCorner: theme === 'corner',
       tabWide: theme === 'wide',
       // Invisible hotspot: no visible tab, the menu simply drops when the cursor nears the top.
+      pageShift: el => { this._shiftEl = el; if (el) this.shiftPage(); },
       navPeek: el => { this._peekEl = el; if (el) el.style.visibility = this._barHidden ? 'visible' : 'hidden'; },
       // Hovering the tab slides the bar back without scrolling; leaving the bar re-hides it,
       // but only while the page is scrolled past the point where the bar auto-hides.
@@ -3037,7 +3437,7 @@ class Component extends DCLogic {
       setSrc: el => {
         if (!el) return;
         const s = el.getAttribute('data-src');
-        if (s && s.indexOf('{{') === -1 && el.getAttribute('src') !== s) el.setAttribute('src', s);
+        assignSrc(el, s);
       },
       // Sheet frames read their slot off the node, so one stable handler serves every page.
       pickDom: e => { const s = e.currentTarget.getAttribute('data-slot'); if (s) this.pick(s)(e); },
