@@ -16,7 +16,7 @@
 <script src="_ds/nobuhisa-ishiguro-design-system-d8f33d2f-ba2a-4405-81a0-3f5abb261881/_ds_bundle.js"></script>
 <style>
 html,body{margin:0;padding:0;background:#0a0a08;overflow-x:hidden}
-a{color:var(--ink);text-decoration:none}
+a{color:var(--ink);text-decoration:none;border-bottom:0}
 a:hover{color:var(--black)}
 input[type=range]{accent-color:#0a0a08}
 @keyframes peekFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(3px); } }
@@ -41,27 +41,79 @@ input[type=range]{accent-color:#0a0a08}
 </sc-if>
 
 <sc-if value="{{ isToc }}">
-<div style="width:100vw;height:100vh;overflow:hidden;background:var(--paper);display:flex;flex-direction:column;align-items:center;justify-content:center;animation:dcFade .5s ease both">
-<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.18em;font-size:17px;color:var(--ink);margin-bottom:{{ tocLabelGap }}px">Poiesis II</div>
-<div style="display:flex;justify-content:center;align-items:center;gap:{{ tocGap }}px;height:{{ tocRowH }}vh">
-<sc-for list="{{ projects }}" as="p" hint-placeholder-count="3">
-<div style="height:100%;position:relative;flex-shrink:0;width:{{ tocColW }}px">
+<div ref="{{ tocScroller }}" style="{{ ix.outer }}">
+<sc-if value="{{ ix.isNumeral }}">
+<div style="{{ ix.numTitle }}"><span>Poiesis</span><span style="{{ ix.numBox }}"><span style="{{ ix.numReel }}">
+<sc-for list="{{ ix.numerals }}" as="nm" hint-placeholder-count="2">
+<span style="display:block;height:1.2em">{{ nm.t }}</span>
+</sc-for>
+</span></span></div>
+</sc-if>
+<sc-if value="{{ ix.hasTabs }}">
+<div style="{{ ix.tabsStyle }}">
+<sc-for list="{{ ix.tabs }}" as="t" hint-placeholder-count="2">
+<div style="{{ t.style }}" style-hover="opacity:0.6" onClick="{{ t.select }}">{{ t.name }}</div>
+</sc-for>
+</div>
+</sc-if>
+<div style="{{ ix.viewport }}">
+<div style="{{ ix.track }}">
+<sc-for list="{{ tocRows }}" as="r" hint-placeholder-count="2">
+<div style="{{ r.rowStyle }}">
+<div style="{{ r.titleStyle }}" onClick="{{ r.select }}">{{ r.name }}</div>
+<div style="{{ r.cardsStyle }}">
+<sc-for list="{{ r.cards }}" as="p" hint-placeholder-count="3">
+<div style="{{ p.wrapStyle }}">
 <div style="{{ p.innerStyle }}" tabindex="0" role="link" aria-label="{{ p.title }}" onMouseEnter="{{ p.hoverOn }}" onMouseLeave="{{ p.hoverOff }}" onFocus="{{ p.hoverOn }}" onBlur="{{ p.hoverOff }}" onKeyDown="{{ p.onKey }}" onClick="{{ p.open }}">
+<sc-if value="{{ p.hasCover }}">
 <img data-src="{{ p.cover }}" ref="{{ setSrc }}" alt="{{ p.title }}" style="width:100%;height:100%;min-width:100%;min-height:100%;object-fit:cover;object-position:{{ p.op }};display:block;transform:{{ p.tf }};opacity:{{ p.imgOpacity }};transition:opacity 500ms ease" onMouseDown="{{ p.pick }}" onMouseEnter="{{ p.over }}">
+</sc-if>
+<sc-if value="{{ p.soon }}">
+<div style="{{ p.soonStyle }}">In progress</div>
+</sc-if>
 </div>
 </div>
 </sc-for>
 </div>
-
-<div style="display:flex;justify-content:center;align-items:flex-start;gap:{{ tocGap }}px;margin-top:26px">
-<sc-for list="{{ projects }}" as="p" hint-placeholder-count="3">
-<div style="width:{{ tocColW }}px;flex-shrink:0;display:flex;flex-direction:column;gap:8px;cursor:pointer;text-align:center" onMouseEnter="{{ p.hoverOn }}" onMouseLeave="{{ p.hoverOff }}" onClick="{{ p.open }}">
+<div style="{{ r.labelsStyle }}">
+<sc-for list="{{ r.cards }}" as="p" hint-placeholder-count="3">
+<div style="{{ p.labelStyle }}" onMouseEnter="{{ p.hoverOn }}" onMouseLeave="{{ p.hoverOff }}" onClick="{{ p.open }}">
 <div style="font-family:var(--font-display);font-weight:700;letter-spacing:.16em;font-size:11px;color:{{ p.numColor }};transition:color 400ms ease">{{ p.num }}</div>
 <div style="height:50px;font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:10px;line-height:1.4;color:var(--ink);opacity:{{ p.titleOpacity }};transform:translateY({{ p.titleShift }}px);transition:opacity 380ms ease,transform 380ms ease">{{ p.title }}</div>
 </div>
 </sc-for>
 </div>
+<sc-if value="{{ r.hasCue }}">
+<div style="{{ r.cueStyle }}" onClick="{{ r.next }}"><span style="{{ r.cueInner }}">{{ r.cue }}</span></div>
+</sc-if>
 </div>
+</sc-for>
+</div>
+</div>
+<sc-if value="{{ ix.hasArrows }}">
+<sc-for list="{{ ix.arrows }}" as="a" hint-placeholder-count="2">
+<div style="{{ a.style }}" style-hover="opacity:0.5" onClick="{{ a.go }}">{{ a.label }}</div>
+</sc-for>
+</sc-if>
+</div>
+<sc-if value="{{ ix.showTweaks }}">
+<div style="position:fixed;bottom:22px;right:24px;z-index:150;font-family:var(--font-display);font-weight:600;text-transform:uppercase;letter-spacing:.14em;font-size:11px;color:var(--paper);background:var(--black);padding:10px 14px;cursor:pointer;white-space:nowrap" style-hover="opacity:0.82" onClick="{{ ix.toggleTweaks }}">{{ ix.tweaksLabel }}</div>
+<sc-if value="{{ ix.tweaksOpen }}">
+<div style="position:fixed;bottom:66px;right:24px;z-index:150;width:300px;background:var(--black);color:var(--paper);padding:18px 18px 10px;box-sizing:border-box;animation:dcFade .25s ease both">
+<div style="font-family:var(--font-display);font-weight:600;text-transform:uppercase;letter-spacing:.18em;font-size:9px;color:var(--stone);margin-bottom:12px">Index layout</div>
+<sc-for list="{{ ix.switcher }}" as="s" hint-placeholder-count="5">
+<div style="{{ s.style }}" style-hover="opacity:1" onClick="{{ s.pick }}">
+<div style="display:flex;align-items:baseline;gap:10px">
+<span style="font-family:var(--font-display);font-weight:600;letter-spacing:.16em;font-size:9px;color:var(--stone)">{{ s.num }}</span>
+<span style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:11px">{{ s.name }}</span>
+</div>
+<div style="font-family:var(--font-serif);font-style:italic;font-size:13px;line-height:1.4;color:var(--ash);margin:4px 0 0 25px">{{ s.note }}</div>
+</div>
+</sc-for>
+<div style="font-family:var(--font-serif);font-style:italic;font-size:12px;line-height:1.4;color:var(--stone);margin:6px 0 4px">{{ ix.hint }}</div>
+</div>
+</sc-if>
+</sc-if>
 
 </sc-if>
 
@@ -612,7 +664,7 @@ input[type=range]{accent-color:#0a0a08}
 
 
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;loadingScreen&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;rule&quot;,&quot;counter&quot;,&quot;plate&quot;,&quot;stack&quot;,&quot;frame&quot;],&quot;default&quot;:&quot;rule&quot;,&quot;tsType&quot;:&quot;'rule' | 'counter' | 'plate' | 'stack' | 'frame'&quot;,&quot;section&quot;:&quot;Loading screen&quot;},&quot;gateDelay&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;min&quot;:0,&quot;max&quot;:1200,&quot;step&quot;:50,&quot;default&quot;:400,&quot;unit&quot;:&quot;ms&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Loading screen&quot;},&quot;menuStyle&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;pill&quot;,&quot;rule&quot;,&quot;ticks&quot;,&quot;corner&quot;,&quot;wide&quot;],&quot;default&quot;:&quot;wide&quot;,&quot;tsType&quot;:&quot;'pill' | 'rule' | 'ticks' | 'corner' | 'wide'&quot;,&quot;section&quot;:&quot;Menu bar&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;loadingScreen&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;rule&quot;,&quot;counter&quot;,&quot;plate&quot;,&quot;stack&quot;,&quot;frame&quot;],&quot;default&quot;:&quot;rule&quot;,&quot;tsType&quot;:&quot;'rule' | 'counter' | 'plate' | 'stack' | 'frame'&quot;,&quot;section&quot;:&quot;Loading screen&quot;},&quot;gateDelay&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;min&quot;:0,&quot;max&quot;:1200,&quot;step&quot;:50,&quot;default&quot;:400,&quot;unit&quot;:&quot;ms&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Loading screen&quot;},&quot;menuStyle&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;pill&quot;,&quot;rule&quot;,&quot;ticks&quot;,&quot;corner&quot;,&quot;wide&quot;],&quot;default&quot;:&quot;wide&quot;,&quot;tsType&quot;:&quot;'pill' | 'rule' | 'ticks' | 'corner' | 'wide'&quot;,&quot;section&quot;:&quot;Menu bar&quot;},&quot;indexLayout&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;scroll&quot;,&quot;tabs&quot;,&quot;accordion&quot;,&quot;split&quot;,&quot;numeral&quot;],&quot;default&quot;:&quot;tabs&quot;,&quot;tsType&quot;:&quot;'scroll' | 'tabs' | 'accordion' | 'split' | 'numeral'&quot;,&quot;section&quot;:&quot;Index&quot;}}">
 const SPLASH = [
   'assets/splash/multigenerational-house-1.jpg',
   'assets/splash/mapmakers-imaginarium.jpg',
@@ -894,6 +946,34 @@ const PROJECTS = [
   }
 ];
 
+// The index is grouped by studio course. Each item points into PROJECTS by `pi`; an item with no
+// `pi` is a placeholder card ("In progress") until that project's sheets are added.
+const COURSES = [
+  { name: 'Poiesis II', numeral: 'II', items: [{ pi: 0 }, { pi: 1 }, { pi: 2 }] },
+  { name: 'Poiesis III', numeral: 'III', items: [{ title: 'Project 01' }, { title: 'Project 02' }, { title: 'Project 03' }] }
+];
+// Five ways to move from one course to the next on the index. Chosen by the `indexLayout` prop;
+// the Tweaks tab (local preview, or ?tweaks in the URL) switches between them live.
+const INDEX_LAYOUTS = [
+  { id: 'scroll', name: 'Scroll', note: 'Each course fills the screen; scroll down to snap to the next.' },
+  { id: 'tabs', name: 'Tabs', note: 'Course titles become tabs; the cards slide sideways.' },
+  { id: 'accordion', name: 'Accordion', note: 'Titles stacked; opening one course folds the other away.' },
+  { id: 'split', name: 'Split', note: 'Both courses side by side, divided by a rule.' },
+  { id: 'numeral', name: 'Numeral', note: 'One title whose numeral rolls II to III as the cards cross-fade.' }
+];
+const layoutFromQuery = () => {
+  try {
+    const q = new URLSearchParams(location.search).get('index');
+    if (!q) return null;
+    const byNum = INDEX_LAYOUTS[+q - 1];
+    return byNum ? byNum.id : (INDEX_LAYOUTS.find(l => l.id === q) || {}).id || null;
+  } catch (e) { return null; }
+};
+const tweaksAllowed = () => {
+  try { return /^(localhost|127\.0\.0\.1)$/.test(location.hostname) || new URLSearchParams(location.search).has('tweaks'); }
+  catch (e) { return false; }
+};
+
 const CROP_KEY = 'ni-portfolio-img-crops';
 const REPL_KEY = 'ni-portfolio-img-replacements';
 const TOC_KEY = 'ni-portfolio-toc-layout';
@@ -1069,7 +1149,8 @@ class Component extends DCLogic {
       editing: null, editFit: 'cover', editRatio: 1.5, editBg: '#f7f6f2', backup: null,
       alignOpen: false, alignK: 0, alignRef: 0, alignDiff: false, editMore: false,
       saved: false, tocSaved: false, saveNote: 'Saved defaults are restored on every visit.',
-      paused: false, tocHover: -1,
+      paused: false, tocHover: null, tocCourse: 0,
+      ixLayout: layoutFromQuery(), tweaks: tweaksAllowed(), tweaksOpen: false,
       vw: window.innerWidth,
       crops: Object.assign({}, BAKED_CROPS, migrateCrops(readStore(CROP_KEY))),
       repl: pruneRepl(readStore(REPL_KEY)),
@@ -1199,6 +1280,31 @@ class Component extends DCLogic {
     this._plKey = e => this.plansKey(e);
     document.addEventListener('click', this._plClick, true);
     window.addEventListener('keydown', this._plKey);
+    // Index: arrow keys step between courses; the wheel does too wherever the index doesn't scroll
+    // natively. One gesture moves one course — trackpad inertia keeps re-arming the cooldown.
+    this._ixKey = e => {
+      if (this.state.view !== 'toc' || this.indexLayout() === 'split') return;
+      if (e.target && /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
+      const fwd = ['ArrowRight', 'ArrowDown', 'PageDown'].indexOf(e.key) > -1;
+      const back = ['ArrowLeft', 'ArrowUp', 'PageUp'].indexOf(e.key) > -1;
+      if (!fwd && !back) return;
+      e.preventDefault();
+      this.setCourse(this.state.tocCourse + (fwd ? 1 : -1));
+    };
+    this._ixWheel = e => {
+      if (this.state.view !== 'toc') return;
+      const layout = this.indexLayout();
+      if (layout === 'scroll' || layout === 'split') return;
+      const d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+      const now = Date.now();
+      const cooling = now - (this._ixWheelAt || 0) < 700;
+      if (Math.abs(d) < 4) return;
+      this._ixWheelAt = now;
+      if (cooling || Math.abs(d) < 25) return;
+      this.setCourse(this.state.tocCourse + (d > 0 ? 1 : -1));
+    };
+    window.addEventListener('keydown', this._ixKey);
+    window.addEventListener('wheel', this._ixWheel, { passive: true });
     this.syncSrcs();
     this.paintPages();
     this.paintPlans();
@@ -1225,6 +1331,8 @@ class Component extends DCLogic {
     window.removeEventListener('keydown', this._keys);
     document.removeEventListener('click', this._plClick, true);
     window.removeEventListener('keydown', this._plKey);
+    window.removeEventListener('keydown', this._ixKey);
+    window.removeEventListener('wheel', this._ixWheel);
   }
 
   // Deferred images: copy data-src into src once the template has resolved it.
@@ -2497,6 +2605,254 @@ class Component extends DCLogic {
     });
   }
 
+  // ---- Index ---------------------------------------------------------------
+  indexLayout() {
+    if (this.state.ixLayout) return this.state.ixLayout;
+    const p = this.props.indexLayout;
+    return INDEX_LAYOUTS.some(l => l.id === p) ? p : 'tabs';
+  }
+
+  setCourse(k) {
+    const next = Math.max(0, Math.min(COURSES.length - 1, k));
+    if (next === this.state.tocCourse) return;
+    // The scroll layout moves the page itself; its scroll listener commits the course on arrival.
+    if (this.indexLayout() === 'scroll' && this._ixEl) {
+      this._ixEl.scrollTo({ top: next * this._ixEl.clientHeight, behavior: 'smooth' });
+      return;
+    }
+    this.setState({ tocCourse: next, tocHover: null });
+  }
+
+  // One course's cards, as the original index: a card widens on hover, outer cards open mostly
+  // outward, and neighbours step aside by however much the open card grows toward them.
+  // Placeholder cards don't open. `g` carries the row geometry; `g.fade(i)` adds a per-card entrance.
+  tocCards(ci, g) {
+    const { tocHover } = this.state;
+    const items = COURSES[ci].items;
+    const last = items.length - 1;
+    const hov = tocHover && tocHover.c === ci ? tocHover.i : -1;
+    const openW = it => (it.pi != null ? Math.min(g.hoverW, g.room) : g.colW);
+    const grow = hov > -1 ? openW(items[hov]) - g.colW : 0;
+    const splitOf = k => k === 0 ? { l: 0.85, r: 0.15 } : (k === last ? { l: 0.15, r: 0.85 } : { l: 0.5, r: 0.5 });
+    const trans = ['width', 'right', 'left', 'transform'].map(p => p + ' ' + g.speed + 'ms cubic-bezier(.4,0,.2,1)').join(',');
+    return items.map((it, i) => {
+      const pr = it.pi != null ? PROJECTS[it.pi] : null;
+      const slot = pr ? 'toc:' + it.pi : '';
+      const active = hov === i;
+      const dimmed = !!tocHover && !active;
+      const w = active ? openW(it) : g.colW;
+      let shift = 0;
+      if (hov > -1 && hov !== i) {
+        const os = splitOf(hov);
+        shift = i < hov ? -grow * os.l : grow * os.r;
+      }
+      const sp = splitOf(i);
+      let pos, tx;
+      if (i !== 0 && i !== last) {
+        pos = 'left:50%;';
+        tx = 'translateX(calc(-50% + ' + shift + 'px))';
+      } else if (i === 0) {
+        pos = 'right:' + (active ? -sp.r * (w - g.colW) : 0) + 'px;';
+        tx = 'translateX(' + shift + 'px)';
+      } else {
+        pos = 'left:' + (active ? -sp.l * (w - g.colW) : 0) + 'px;';
+        tx = 'translateX(' + shift + 'px)';
+      }
+      const fade = g.fade ? g.fade(i) : '';
+      const open = () => { if (pr && !this.state.panelOpen) this.go('project', it.pi); };
+      return {
+        title: pr ? pr.title : it.title,
+        num: String(i + 1).padStart(2, '0'),
+        hasCover: !!pr,
+        soon: !pr,
+        cover: pr ? this.srcOf(pr.cover) : '',
+        tf: pr ? this.tf(slot) : 'none',
+        op: pr ? this.op(slot) : '50% 50%',
+        imgOpacity: dimmed ? 0.45 : 1,
+        titleOpacity: active ? 1 : 0,
+        titleShift: active ? 0 : 6,
+        numColor: active ? 'var(--ink)' : 'var(--stone)',
+        wrapStyle: 'height:100%;position:relative;flex-shrink:0;width:' + g.colW + 'px;' + fade,
+        labelStyle: 'width:' + g.colW + 'px;flex-shrink:0;display:flex;flex-direction:column;gap:8px;text-align:center;cursor:' + (pr ? 'pointer' : 'default') + ';' + fade,
+        innerStyle: 'position:absolute;top:0;height:100%;overflow:hidden;outline:none;cursor:' + (pr ? 'pointer' : 'default') +
+          ';background:' + (pr ? 'var(--paper)' : 'var(--fog)') + ';width:' + w + 'px;transition:' + trans + ',opacity 500ms ease;' +
+          pos + 'transform:' + tx + ';' + (active ? 'z-index:5;' : '') + (pr ? '' : 'opacity:' + (dimmed ? 0.45 : 1) + ';'),
+        soonStyle: 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;writing-mode:vertical-rl;' +
+          'font-family:var(--font-display);font-weight:600;text-transform:uppercase;letter-spacing:.24em;font-size:9px;color:var(--stone)',
+        pick: pr ? this.pick(slot) : null,
+        over: pr ? this.hoverImg(slot) : null,
+        hoverOn: () => this.setState({ tocHover: { c: ci, i } }),
+        hoverOff: () => this.setState(s => ({ tocHover: s.tocHover && s.tocHover.c === ci && s.tocHover.i === i ? null : s.tocHover })),
+        onKey: e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } },
+        open
+      };
+    });
+  }
+
+  // Everything the index template reads: the outer frame, the course rows, and each layout's own
+  // navigation (tabs / rail, arrows, rolling numeral), all expressed as computed style strings.
+  indexVals() {
+    const layout = this.indexLayout();
+    const { toc, tocCourse: k, tweaks, tweaksOpen } = this.state;
+    const n = COURSES.length;
+    const vw = this.state.vw || window.innerWidth;
+    const EASE = 'cubic-bezier(.65,0,.35,1)';
+    const TITLE = 'font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.18em;font-size:17px;color:var(--ink);';
+    const SMALL = 'font-family:var(--font-display);font-weight:600;text-transform:uppercase;letter-spacing:.18em;font-size:10px;';
+    const SCREEN = 'width:100vw;height:100vh;overflow:hidden;background:var(--paper);position:relative;animation:dcFade .5s ease both;' +
+      'display:flex;flex-direction:column;align-items:center;justify-content:center;';
+    const split = layout === 'split';
+    const geo = {
+      colW: split ? 112 : toc.colW, gap: split ? 30 : toc.gap, hoverW: split ? 290 : toc.hoverW,
+      room: split ? vw / 2 - 40 : vw - 40, speed: toc.speed, rowH: toc.rowH
+    };
+    const ix = {
+      outer: SCREEN, viewport: '', track: '',
+      isNumeral: false, numTitle: '', numBox: '', numReel: '', numerals: COURSES.map(c => ({ t: c.numeral })),
+      hasTabs: false, tabsStyle: '', tabs: [],
+      hasArrows: false, arrows: [],
+      hint: 'Arrow keys or the scroll wheel also move between courses.'
+    };
+
+    const tocRows = COURSES.map((c, ci) => {
+      const on = ci === k;
+      const row = {
+        name: c.name,
+        select: () => this.setCourse(ci),
+        next: () => this.setCourse(ci + 1),
+        hasCue: false, cue: '', cueStyle: '', cueInner: '',
+        rowStyle: 'display:flex;flex-direction:column;align-items:center;',
+        titleStyle: TITLE + 'margin-bottom:' + toc.labelGap + 'px;',
+        cardsStyle: 'display:flex;justify-content:center;align-items:center;gap:' + geo.gap + 'px;height:' + geo.rowH + 'vh;',
+        labelsStyle: 'display:flex;justify-content:center;align-items:flex-start;gap:' + geo.gap + 'px;margin-top:26px;'
+      };
+      let fade = null;
+
+      if (layout === 'scroll') {
+        row.rowStyle += 'position:relative;width:100vw;height:100vh;flex-shrink:0;justify-content:center;scroll-snap-align:start;';
+        if (ci < n - 1) {
+          row.hasCue = true;
+          row.cue = COURSES[ci + 1].name + ' ↓';
+          row.cueStyle = 'position:absolute;bottom:44px;left:0;width:100%;display:flex;justify-content:center;cursor:pointer;';
+          row.cueInner = SMALL + 'color:var(--stone);display:inline-block;animation:peekFloat 2.4s ease-in-out infinite;';
+        }
+      } else if (layout === 'tabs') {
+        row.rowStyle += 'width:100vw;flex-shrink:0;';
+        row.titleStyle = 'display:none;';
+      } else if (layout === 'accordion') {
+        row.titleStyle = TITLE + 'cursor:' + (on ? 'default' : 'pointer') + ';font-size:' + (on ? 17 : 13) + 'px;' +
+          'color:' + (on ? 'var(--ink)' : 'var(--stone)') + ';margin-top:' + (ci > 0 ? 34 : 0) + 'px;' +
+          'margin-bottom:' + (on ? Math.round(toc.labelGap * 0.6) : 0) + 'px;' +
+          'transition:font-size 600ms ' + EASE + ',color 400ms ease,margin 800ms ' + EASE + ';';
+        row.cardsStyle += 'width:100vw;overflow:hidden;height:' + (on ? geo.rowH : 0) + 'vh;opacity:' + (on ? 1 : 0) + ';' +
+          'transition:height 800ms ' + EASE + ',opacity 500ms ease ' + (on ? 250 : 0) + 'ms;';
+        row.labelsStyle = 'display:flex;justify-content:center;align-items:flex-start;gap:' + geo.gap + 'px;overflow:hidden;' +
+          'margin-top:' + (on ? 26 : 0) + 'px;max-height:' + (on ? 80 : 0) + 'px;opacity:' + (on ? 1 : 0) + ';' +
+          'transition:max-height 800ms ' + EASE + ',margin 800ms ' + EASE + ',opacity 500ms ease ' + (on ? 250 : 0) + 'ms;';
+      } else if (split) {
+        row.rowStyle += 'width:50vw;justify-content:center;padding-block:5vh;' + (ci > 0 ? 'border-left:1px solid var(--ash);' : '');
+      } else if (layout === 'numeral') {
+        row.rowStyle += 'grid-area:1/1;' + (on ? '' : 'pointer-events:none;');
+        row.titleStyle = 'display:none;';
+        fade = i => {
+          const d = on ? 260 + i * 90 : i * 60;
+          return 'opacity:' + (on ? 1 : 0) + ';transform:' + (on ? 'none' : 'translateY(14px)') + ';' +
+            'transition:opacity 450ms ease ' + d + 'ms,transform 600ms ' + EASE + ' ' + d + 'ms;';
+        };
+      }
+      row.cards = this.tocCards(ci, Object.assign({}, geo, { fade }));
+      return row;
+    });
+
+    if (layout === 'scroll') {
+      ix.outer = 'width:100vw;height:100vh;overflow-y:auto;overflow-x:hidden;scroll-snap-type:y mandatory;scrollbar-width:none;' +
+        'background:var(--paper);position:relative;animation:dcFade .5s ease both;';
+      ix.track = 'display:flex;flex-direction:column;';
+      ix.hasTabs = true;
+      ix.tabsStyle = 'position:fixed;right:34px;top:50%;transform:translateY(-50%);z-index:3;display:flex;flex-direction:column;align-items:flex-end;gap:14px;';
+      ix.tabs = COURSES.map((c, ci) => ({
+        name: c.numeral,
+        select: () => this.setCourse(ci),
+        style: SMALL + 'cursor:pointer;padding-right:12px;border-right:1px solid ' + (ci === k ? 'var(--ink)' : 'var(--ash)') + ';' +
+          'color:' + (ci === k ? 'var(--ink)' : 'var(--stone)') + ';transition:color 400ms ease,border-color 400ms ease;'
+      }));
+      ix.hint = 'Scroll, arrow keys or the II / III marks on the right move between courses.';
+    } else if (layout === 'tabs') {
+      ix.hasTabs = true;
+      ix.tabsStyle = 'display:flex;gap:44px;margin-bottom:' + toc.labelGap + 'px;';
+      ix.tabs = COURSES.map((c, ci) => ({
+        name: c.name,
+        select: () => this.setCourse(ci),
+        style: TITLE + 'cursor:pointer;color:' + (ci === k ? 'var(--ink)' : 'var(--stone)') + ';transition:color 400ms ease;'
+      }));
+      ix.viewport = 'width:100vw;overflow:hidden;';
+      ix.track = 'display:flex;width:' + n * 100 + 'vw;transform:translateX(' + -k * 100 + 'vw);transition:transform 900ms ' + EASE + ';';
+    } else if (layout === 'accordion') {
+      ix.track = 'display:flex;flex-direction:column;align-items:center;';
+      ix.hint = 'Click a course title, or use the arrow keys or scroll wheel.';
+    } else if (split) {
+      ix.outer = SCREEN + 'flex-direction:row;';
+      ix.viewport = 'width:100vw;';
+      ix.track = 'display:flex;align-items:stretch;width:100vw;';
+      ix.hint = 'Both courses are always visible; nothing to switch.';
+    } else if (layout === 'numeral') {
+      ix.isNumeral = true;
+      ix.numTitle = TITLE + 'display:flex;gap:.55em;line-height:1.2;margin-bottom:' + toc.labelGap + 'px;';
+      ix.numBox = 'display:inline-block;height:1.2em;overflow:hidden;';
+      ix.numReel = 'display:block;transform:translateY(' + -k * 1.2 + 'em);transition:transform 800ms ' + EASE + ';';
+      ix.viewport = 'position:relative;';
+      ix.track = 'display:grid;';
+      ix.hasArrows = true;
+      const arrow = (side, to, label) => ({
+        label,
+        go: () => this.setCourse(to),
+        style: SMALL + 'position:absolute;top:50%;' + side + ':6vw;color:var(--ink);cursor:pointer;transition:opacity 400ms ease;' +
+          (to < 0 || to >= n ? 'opacity:0;pointer-events:none;' : '')
+      });
+      ix.arrows = [
+        arrow('left', k - 1, '← ' + (COURSES[k - 1] || COURSES[0]).name),
+        arrow('right', k + 1, (COURSES[k + 1] || COURSES[n - 1]).name + ' →')
+      ];
+    }
+
+    ix.showTweaks = !!tweaks;
+    ix.tweaksOpen = !!tweaksOpen;
+    ix.tweaksLabel = tweaksOpen ? 'Close tweaks' : 'Tweaks';
+    ix.toggleTweaks = () => this.setState(s => ({ tweaksOpen: !s.tweaksOpen }));
+    ix.switcher = INDEX_LAYOUTS.map((l, i) => ({
+      num: String(i + 1).padStart(2, '0'),
+      name: l.name,
+      note: l.note,
+      style: 'cursor:pointer;padding:9px 0 9px 10px;margin-left:-10px;border-left:2px solid ' + (l.id === layout ? 'var(--paper)' : 'transparent') + ';' +
+        'opacity:' + (l.id === layout ? 1 : 0.6) + ';transition:opacity 200ms ease;',
+      pick: () => {
+        this.setState({ ixLayout: l.id, tocHover: null });
+        try { history.replaceState(null, '', location.pathname + '?index=' + (i + 1)); } catch (e) {}
+      }
+    }));
+
+    // The scroll layout scrolls its own frame: bind once per element, and land on the current course
+    // whenever this element becomes the scroll layout.
+    const tocScroller = el => {
+      this._ixEl = el;
+      if (!el) return;
+      if (!el._ixBound) {
+        el._ixBound = true;
+        el.addEventListener('scroll', () => {
+          if (this.indexLayout() !== 'scroll') return;
+          const c = Math.round(el.scrollTop / Math.max(1, el.clientHeight));
+          if (c !== this.state.tocCourse) this.setState({ tocCourse: c, tocHover: null });
+        }, { passive: true });
+      }
+      if (el._ixLayout !== layout) {
+        el._ixLayout = layout;
+        if (layout === 'scroll') requestAnimationFrame(() => { el.scrollTop = this.state.tocCourse * el.clientHeight; });
+      }
+    };
+
+    return { ix, tocRows, tocScroller };
+  }
+
   renderVals() {
     // Five paired treatments: each names a hover-tab shape and the menu surface behind it.
     const theme = this.props.menuStyle ?? 'pill';
@@ -2647,62 +3003,7 @@ class Component extends DCLogic {
         this._flash2 = setTimeout(() => this.setState({ tocSaved: false }), 1800);
       },
 
-      projects: PROJECTS.map((pr, i) => {
-        const slot = 'toc:' + i;
-        const active = tocHover === i || editing === slot;
-        const dimmed = tocHover > -1 && tocHover !== i;
-        // An outer card opens past the row edge, so cap it to what the viewport can actually show.
-        const room = Math.max(toc.colW, (this.state.vw || window.innerWidth) - 40);
-        const hoverW = Math.min(toc.hoverW, room);
-        const w = active ? hoverW : toc.colW;
-        const trans = (panelOpen && editing === slot)
-          ? 'none'
-          : ['width', 'right', 'left', 'transform'].map(pr2 => pr2 + ' ' + toc.speed + 'ms cubic-bezier(.4,0,.2,1)').join(',');
-        const last = PROJECTS.length - 1;
-        // Growth split per card: outer cards open mostly outward (85/15), the middle card evenly.
-        const splitOf = k => k === 0 ? { l: 0.85, r: 0.15 } : (k === last ? { l: 0.15, r: 0.85 } : { l: 0.5, r: 0.5 });
-        const grow = hoverW - toc.colW;
-        const sp = splitOf(i);
-        // When another card opens, this one steps aside by however much that card grows toward it.
-        let shift = 0;
-        const openIdx = tocHover > -1 ? tocHover : (editing && editing.indexOf('toc:') === 0 ? +editing.split(':')[1] : -1);
-        if (openIdx > -1 && openIdx !== i) {
-          const os = splitOf(openIdx);
-          shift = i < openIdx ? -grow * os.l : grow * os.r;
-        }
-        const centered = i !== 0 && i !== last;
-        let pos, tx;
-        if (centered) {
-          pos = 'left:50%;';
-          tx = 'translateX(calc(-50% + ' + shift + 'px))';
-        } else if (i === 0) {
-          pos = 'right:' + (active ? -sp.r * grow : 0) + 'px;';
-          tx = 'translateX(' + shift + 'px)';
-        } else {
-          pos = 'left:' + (active ? -sp.l * grow : 0) + 'px;';
-          tx = 'translateX(' + shift + 'px)';
-        }
-        return {
-          title: pr.title,
-          num: String(i + 1).padStart(2, '0'),
-          cover: this.srcOf(pr.cover),
-          tf: this.tf(slot),
-          op: this.op(slot),
-          imgOpacity: dimmed ? 0.45 : 1,
-          titleOpacity: active ? 1 : 0,
-          titleShift: active ? 0 : 6,
-          numColor: active ? 'var(--ink)' : 'var(--stone)',
-          innerStyle: 'position:absolute;top:0;height:100%;overflow:hidden;cursor:pointer;background:var(--paper);outline:none;width:' + w + 'px;transition:' + trans + ';' + pos + 'transform:' + tx + ';' + (active ? 'z-index:5;' : ''),
-          pick: this.pick(slot),
-          over: this.hoverImg(slot),
-          hoverOn: () => this.setState({ tocHover: i }),
-          hoverOff: () => this.setState(s => ({ tocHover: s.tocHover === i ? -1 : s.tocHover })),
-          onKey: e => {
-            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (!this.state.panelOpen) this.go('project', i); }
-          },
-          open: () => { if (!this.state.panelOpen) this.go('project', i); }
-        };
-      }),
+      ...this.indexVals(),
       blocks,
       counter: String(pi + 1).padStart(2, '0') + ' / ' + String(PROJECTS.length).padStart(2, '0'),
 
