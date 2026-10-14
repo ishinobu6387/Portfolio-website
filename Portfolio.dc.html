@@ -230,8 +230,6 @@ img[data-src]:not([data-ld]){opacity:0!important}
 </div>
 </div>
 
-<div style="position:fixed;bottom:22px;left:24px;z-index:130;font-family:var(--font-display);font-weight:600;text-transform:uppercase;letter-spacing:.1em;font-size:11px;cursor:pointer;color:var(--paper);background:var(--black);padding:10px 14px;white-space:nowrap" style-hover="opacity:0.82" onClick="{{ toIndex }}">← Index<span style="opacity:.5;margin-left:10px">{{ counter }}</span></div>
-
 <div ref="{{ pageShift }}" style="transition:transform 460ms cubic-bezier(.22,1,.36,1)">
 <sc-for list="{{ blocks }}" as="b" hint-placeholder-count="0">
 <div data-blk="{{ b.bi }}" style="{{ b.frameStyle }}" onClick="{{ b.tap }}">
@@ -792,6 +790,7 @@ const PROJECTS = [
   {
     title: 'Haus Gables Precedent',
     short: 'Haus Gables',
+    lines: ['Haus', 'Gables', 'Precedent'],
     cover: 'assets/toc/haus-gables-cover.jpg',
     blocks: [
       spread('precedent', 'Precedent study', {
@@ -824,6 +823,7 @@ const PROJECTS = [
   {
     title: "Mapmaker's Imaginarium",
     short: 'Mapmakers Imaginarium',
+    lines: ['Map', "Maker's", 'Imaginarium'],
     cover: 'assets/toc/mapmakers-imaginarium-cover.jpg',
     blocks: [
       page('19 — Map Maker’s Imaginarium', [
@@ -922,6 +922,7 @@ const PROJECTS = [
   {
     title: 'The Working Multigenerational House',
     short: 'Multigenerational House',
+    lines: ['The Working', 'Multigenerational', 'House'],
     cover: 'assets/toc/multigenerational-house-cover.jpg',
     blocks: [
       page('02 — The Working Multigenerational House', [
@@ -2795,12 +2796,13 @@ class Component extends DCLogic {
           hasShade: false, shadeStyle: '', numStyle: NUM
         };
         if (lay === 'columns') return Object.assign(o, {
+          title: pr && pr.lines ? pr.lines.join('\n') : o.title,
           style: 'flex:0 0 calc((100vw - 56px) * .25);min-width:0;display:flex;flex-direction:column;gap:14px;' + cursor,
           mediaStyle: 'height:52svh;overflow:hidden;background:var(--fog);',
           imgStyle: img(pr ? this.op(slot) : '50% 50%') + (pr ? 'transform:' + this.tf(slot) + ';' : ''),
           soonStyle: soon('var(--fog)', 'var(--stone)') + 'writing-mode:vertical-rl;',
           capStyle: 'display:flex;flex-direction:column;align-items:center;gap:7px;text-align:center;width:calc(100% + 16px);margin:0 -8px;',
-          titleStyle: D + 'font-weight:700;letter-spacing:.04em;font-size:8px;line-height:1.5;min-height:4.5em;color:var(--ink);'
+          titleStyle: D + 'font-weight:700;letter-spacing:.04em;font-size:8px;line-height:1.5;min-height:4.5em;white-space:pre-line;color:var(--ink);'
         });
         if (lay === 'bands') return Object.assign(o, {
           style: 'display:flex;flex-direction:column;gap:11px;' + cursor,
