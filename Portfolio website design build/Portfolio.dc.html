@@ -1,0 +1,2807 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/nobuhisa-ishiguro-design-system-d8f33d2f-ba2a-4405-81a0-3f5abb261881/tokens/colors.css">
+<link rel="stylesheet" href="_ds/nobuhisa-ishiguro-design-system-d8f33d2f-ba2a-4405-81a0-3f5abb261881/tokens/typography.css">
+<link rel="stylesheet" href="_ds/nobuhisa-ishiguro-design-system-d8f33d2f-ba2a-4405-81a0-3f5abb261881/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/nobuhisa-ishiguro-design-system-d8f33d2f-ba2a-4405-81a0-3f5abb261881/tokens/base.css">
+<link rel="stylesheet" href="_ds/nobuhisa-ishiguro-design-system-d8f33d2f-ba2a-4405-81a0-3f5abb261881/styles.css">
+<script src="_ds/nobuhisa-ishiguro-design-system-d8f33d2f-ba2a-4405-81a0-3f5abb261881/_ds_bundle.js"></script>
+<style>
+html,body{margin:0;padding:0;background:#0a0a08;overflow-x:hidden}
+a{color:var(--ink);text-decoration:none}
+a:hover{color:var(--black)}
+input[type=range]{accent-color:#0a0a08}
+@keyframes peekFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(3px); } }
+@keyframes dcFade{from{opacity:0}to{opacity:1}}
+</style>
+</helmet>
+
+<sc-if value="{{ isSplash }}" hint-placeholder-val="{{ true }}">
+<div style="width:100vw;height:100vh;background:#0a0a08;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center">
+<div style="position:absolute;inset:0">{{ bgLayers }}</div>
+<div style="position:absolute;inset:0;background:rgba(0,0,0,.28)"></div>
+<div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:20px;color:#fff">
+<div style="font-family:var(--font-display);font-weight:600;text-transform:uppercase;letter-spacing:.14em;font-size:17px;line-height:1;text-align:center;white-space:nowrap;color:#fff">Nobuhisa Ishiguro</div>
+<div style="font-family:var(--font-display);font-weight:300;text-transform:uppercase;letter-spacing:.18em;font-size:12px;opacity:.85;color:#fff">Selected works</div>
+</div>
+<div style="position:absolute;bottom:140px;z-index:2;font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:11px;color:#fff;cursor:pointer" style-hover="opacity:0.55" onClick="{{ enter }}">Enter</div>
+<div style="position:absolute;bottom:56px;left:50%;transform:translateX(-50%);z-index:2;display:flex;gap:18px">
+<a href="https://www.instagram.com/hisart341?igsh=MTN0MjZxZWZ4Ymh6MQ%3D%3D&amp;utm_source=qr" target="_blank" rel="noopener" aria-label="Instagram" style="display:flex;color:#f7f6f2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="width:20px;height:20px"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4.2"></circle><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"></circle></svg></a>
+<a href="https://www.linkedin.com/in/nobuhisa-ishiguro-343b433a9?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_ios" target="_blank" rel="noopener" aria-label="LinkedIn" style="display:flex;color:#f7f6f2"><svg viewBox="0 0 24 24" fill="currentColor" style="width:20px;height:20px"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3.5 9h3v11.5h-3zM9.5 9h2.87v1.57h.04c.4-.75 1.38-1.55 2.84-1.55 3.04 0 3.6 2 3.6 4.6v6.88h-3v-6.1c0-1.46-.03-3.33-2.03-3.33-2.04 0-2.35 1.59-2.35 3.23v6.2h-3z"></path></svg></a>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isToc }}">
+<div style="width:100vw;height:100vh;overflow:hidden;background:var(--paper);display:flex;flex-direction:column;align-items:center;justify-content:center;animation:dcFade .5s ease both">
+<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.18em;font-size:17px;color:var(--ink);margin-bottom:{{ tocLabelGap }}px">Poiesis II</div>
+<div style="display:flex;justify-content:center;align-items:center;gap:{{ tocGap }}px;height:{{ tocRowH }}vh">
+<sc-for list="{{ projects }}" as="p" hint-placeholder-count="3">
+<div style="height:100%;position:relative;flex-shrink:0;width:{{ tocColW }}px">
+<div style="{{ p.innerStyle }}" tabindex="0" role="link" aria-label="{{ p.title }}" onMouseEnter="{{ p.hoverOn }}" onMouseLeave="{{ p.hoverOff }}" onFocus="{{ p.hoverOn }}" onBlur="{{ p.hoverOff }}" onKeyDown="{{ p.onKey }}" onClick="{{ p.open }}">
+<img data-src="{{ p.cover }}" ref="{{ setSrc }}" alt="{{ p.title }}" style="width:100%;height:100%;min-width:100%;min-height:100%;object-fit:cover;object-position:{{ p.op }};display:block;transform:{{ p.tf }};opacity:{{ p.imgOpacity }};transition:opacity 500ms ease" onMouseDown="{{ p.pick }}" onMouseEnter="{{ p.over }}">
+</div>
+</div>
+</sc-for>
+</div>
+
+<div style="display:flex;justify-content:center;align-items:flex-start;gap:{{ tocGap }}px;margin-top:26px">
+<sc-for list="{{ projects }}" as="p" hint-placeholder-count="3">
+<div style="width:{{ tocColW }}px;flex-shrink:0;display:flex;flex-direction:column;gap:8px;cursor:pointer;text-align:center" onMouseEnter="{{ p.hoverOn }}" onMouseLeave="{{ p.hoverOff }}" onClick="{{ p.open }}">
+<div style="font-family:var(--font-display);font-weight:700;letter-spacing:.16em;font-size:11px;color:{{ p.numColor }};transition:color 400ms ease">{{ p.num }}</div>
+<div style="height:50px;font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:10px;line-height:1.4;color:var(--ink);opacity:{{ p.titleOpacity }};transform:translateY({{ p.titleShift }}px);transition:opacity 380ms ease,transform 380ms ease">{{ p.title }}</div>
+</div>
+</sc-for>
+</div>
+</div>
+
+</sc-if>
+
+
+<sc-if value="{{ loadRule }}">
+<div style="width:100vw;height:100vh;background:var(--paper);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px">
+<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.18em;font-size:17px;color:var(--ink)">Poiesis II</div>
+<div style="width:230px;height:1px;background:rgba(22,21,19,.18);position:relative">
+<div style="position:absolute;left:0;top:0;height:100%;background:var(--ink);width:{{ loadPct }}%;transition:width 220ms linear"></div>
+</div>
+<div style="font-family:var(--font-display);font-weight:600;text-transform:uppercase;letter-spacing:.2em;font-size:10px;color:var(--stone)">{{ loadLabel }}</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ loadCounter }}">
+<div style="width:100vw;height:100vh;background:var(--paper);display:flex;align-items:flex-end;justify-content:flex-start;padding:0 0 6vh 6vw;box-sizing:border-box">
+<div style="display:flex;align-items:baseline;gap:18px">
+<div style="font-family:var(--font-display);font-weight:700;font-size:16vw;line-height:.78;letter-spacing:-.02em;color:var(--ink);font-variant-numeric:tabular-nums">{{ loadPct }}</div>
+<div style="font-family:var(--font-display);font-weight:600;text-transform:uppercase;letter-spacing:.2em;font-size:11px;color:var(--stone);padding-bottom:1.2vw">Per cent</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ loadPlate }}">
+<div style="width:100vw;height:100vh;background:#0a0a08;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;position:relative;overflow:hidden">
+<div style="position:absolute;left:0;top:0;height:100%;width:{{ loadPct }}%;background:var(--paper);transition:width 260ms cubic-bezier(.22,1,.36,1)"></div>
+<div style="position:relative;z-index:2;font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.2em;font-size:15px;color:var(--stone);mix-blend-mode:difference">Poiesis II</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ loadStack }}">
+<div style="width:100vw;height:100vh;background:var(--paper);display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:14px;padding-left:8vw;box-sizing:border-box">
+<div style="font-family:var(--font-display);font-weight:600;text-transform:uppercase;letter-spacing:.22em;font-size:10px;color:var(--stone)">Loading the book</div>
+<sc-for list="{{ loadRows }}" as="r" hint-placeholder-count="3">
+<div style="display:flex;align-items:baseline;gap:16px">
+<div style="font-family:var(--font-display);font-weight:700;letter-spacing:.16em;font-size:10px;color:var(--stone);width:22px">{{ r.num }}</div>
+<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:22px;color:var(--ink);opacity:{{ r.op }};transition:opacity 320ms ease">{{ r.title }}</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ loadFrame }}">
+<div style="width:100vw;height:100vh;background:var(--paper);display:flex;align-items:center;justify-content:center">
+<div style="width:38vw;aspect-ratio:2000/1294;border:1px solid var(--ink);position:relative;display:flex;align-items:flex-end;padding:16px;box-sizing:border-box">
+<div style="position:absolute;left:0;bottom:0;width:100%;height:{{ loadPct }}%;background:rgba(22,21,19,.07);transition:height 260ms linear"></div>
+<div style="position:relative;z-index:2;display:flex;justify-content:space-between;width:100%;align-items:baseline">
+<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:11px;color:var(--ink)">Nobuhisa Ishiguro</div>
+<div style="font-family:var(--font-serif);font-size:11px;letter-spacing:.2075em;color:var(--charcoal)">{{ loadPct }}%</div>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isProject }}">
+<div style="width:100vw;background:var(--paper);animation:dcFade .5s ease both">
+<div ref="{{ navPeek }}" onMouseEnter="{{ peekOn }}" style="position:fixed;top:0;left:0;width:100%;height:30px;z-index:139;display:flex;justify-content:center;align-items:flex-start;box-sizing:border-box;opacity:0;visibility:hidden;transition:opacity 340ms cubic-bezier(.22,1,.36,1);pointer-events:auto">
+<sc-if value="{{ tabPill }}">
+<div style="width:96px;height:8px;border-radius:0;background:rgba(255,255,255,.72);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 4px 14px rgba(0,0,0,.07);transition:background 220ms ease,width 260ms cubic-bezier(.22,1,.36,1)" style-hover="background:rgba(255,255,255,.94);width:130px"></div>
+</sc-if>
+<sc-if value="{{ tabRule }}">
+<div style="width:220px;height:2px;background:rgba(22,21,19,.32);transition:background 220ms ease,width 260ms cubic-bezier(.22,1,.36,1)" style-hover="background:rgba(22,21,19,.6);width:300px"></div>
+</sc-if>
+<sc-if value="{{ tabTicks }}">
+<div style="display:flex;gap:5px;padding:7px 12px;background:rgba(255,255,255,.66);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:background 220ms ease" style-hover="background:rgba(255,255,255,.92)">
+<div style="width:16px;height:2px;background:var(--ink);opacity:.45"></div>
+<div style="width:16px;height:2px;background:var(--ink);opacity:.45"></div>
+<div style="width:16px;height:2px;background:var(--ink);opacity:.45"></div>
+</div>
+</sc-if>
+<sc-if value="{{ tabCorner }}">
+<div style="position:absolute;right:26px;top:0;padding:6px 14px 7px;background:rgba(255,255,255,.74);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font-family:var(--font-display);font-weight:600;text-transform:uppercase;letter-spacing:.18em;font-size:8px;color:var(--ink);transition:background 220ms ease" style-hover="background:rgba(255,255,255,.96)">Menu</div>
+</sc-if>
+<sc-if value="{{ tabWide }}">
+<div style="width:100%;height:7px;background:rgba(255,255,255,.62);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);transition:background 220ms ease" style-hover="background:rgba(255,255,255,.9)"></div>
+</sc-if>
+</div>
+<div ref="{{ navRef }}" onMouseLeave="{{ peekOff }}" style="position:fixed;top:0;left:0;width:100%;z-index:140;transition:transform 460ms cubic-bezier(.22,1,.36,1)">
+<div style="width:100%;box-sizing:border-box;background:{{ navBg }};backdrop-filter:{{ navBlur }};-webkit-backdrop-filter:{{ navBlur }};padding:13px 26px;display:flex;align-items:center;justify-content:space-between;gap:28px;flex-wrap:nowrap;overflow:hidden;border-bottom:1px solid {{ navRule }}">
+<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.16em;font-size:11px;color:var(--ink);white-space:nowrap;flex-shrink:0">Nobuhisa Ishiguro</div>
+<div style="display:flex;align-items:baseline;gap:20px;flex-wrap:nowrap;justify-content:center;overflow:hidden;min-width:0">
+<sc-for list="{{ menuProjects }}" as="m" hint-placeholder-count="3">
+<div style="display:flex;align-items:baseline;gap:6px;cursor:pointer;white-space:nowrap;flex-shrink:0" style-hover="opacity:0.5" onClick="{{ m.open }}">
+<span style="font-family:var(--font-display);font-weight:600;letter-spacing:.14em;font-size:8px;color:var(--stone)">{{ m.num }}</span>
+<span style="font-family:var(--font-display);font-weight:600;text-transform:uppercase;letter-spacing:.08em;font-size:10px;color:var(--ink)">{{ m.short }}</span>
+</div>
+</sc-for>
+<div style="font-family:var(--font-display);font-weight:600;text-transform:uppercase;letter-spacing:.14em;font-size:10px;color:var(--ink);cursor:pointer;border-bottom:1px solid var(--ink);padding-bottom:2px" style-hover="opacity:0.5" onClick="{{ toIndex }}">Index</div>
+</div>
+</div>
+</div>
+
+<div style="position:fixed;bottom:22px;left:24px;z-index:130;font-family:var(--font-display);font-weight:600;text-transform:uppercase;letter-spacing:.1em;font-size:11px;cursor:pointer;color:var(--paper);background:var(--black);padding:10px 14px;white-space:nowrap" style-hover="opacity:0.82" onClick="{{ toIndex }}">← Index<span style="opacity:.5;margin-left:10px">{{ counter }}</span></div>
+
+<sc-for list="{{ blocks }}" as="b" hint-placeholder-count="0">
+<div>
+
+<sc-if value="{{ b.isHero }}">
+<div style="position:relative;width:100vw;height:100vh;background:var(--paper);overflow:hidden">
+<img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oA }};display:block;transform:{{ b.tA }}" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}">
+<div style="position:absolute;top:34%;right:56px;max-width:440px;text-align:right;display:flex;flex-direction:column;gap:16px">
+<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:29px;line-height:1.15;color:var(--ink)">{{ b.label }}</div>
+<div style="font-family:var(--font-serif);font-style:italic;font-size:18px;line-height:1.5;color:var(--charcoal)">{{ b.note }}</div>
+<div style="font-family:var(--font-serif);font-size:14px;color:var(--stone)">{{ b.attr }}</div>
+</div>
+<div style="position:absolute;bottom:40px;left:56px;font-family:var(--font-display);font-weight:700;letter-spacing:.14em;font-size:12px;color:var(--charcoal)">{{ b.index }}</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ b.isOne }}">
+<div style="width:100vw;padding:120px 80px;box-sizing:border-box;display:flex;flex-direction:column;gap:28px">
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:12px;color:var(--ink)">{{ b.label }}</div>
+<div style="font-family:var(--font-serif);font-style:italic;font-size:14px;color:var(--stone)">{{ b.note }}</div>
+</div>
+<div style="width:100%;height:72vh;overflow:hidden;background:var(--paper)"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oA }};display:block;transform:{{ b.tA }}" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
+</div>
+</sc-if>
+
+<sc-if value="{{ b.isTwo }}">
+<div style="width:100vw;padding:120px 80px;box-sizing:border-box;display:flex;flex-direction:column;gap:28px">
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:12px;color:var(--ink)">{{ b.label }}</div>
+<div style="font-family:var(--font-serif);font-style:italic;font-size:14px;color:var(--stone)">{{ b.note }}</div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+<div style="width:100%;height:62vh;overflow:hidden;background:var(--paper)"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oA }};display:block;transform:{{ b.tA }}" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
+<div style="width:100%;height:62vh;overflow:hidden;background:var(--paper)"><img data-src="{{ b.bSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oB }};display:block;transform:{{ b.tB }}" onMouseDown="{{ b.pickB }}" onMouseEnter="{{ b.overB }}"></div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ b.isThree }}">
+<div style="width:100vw;padding:120px 80px;box-sizing:border-box;display:flex;flex-direction:column;gap:28px">
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:12px;color:var(--ink)">{{ b.label }}</div>
+<div style="font-family:var(--font-serif);font-style:italic;font-size:14px;color:var(--stone)">{{ b.note }}</div>
+</div>
+<div style="display:grid;grid-template-columns:1.4fr 1fr;grid-template-rows:1fr 1fr;gap:24px;height:74vh">
+<div style="overflow:hidden;grid-row:span 2;background:var(--paper)"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oA }};display:block;transform:{{ b.tA }}" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
+<div style="overflow:hidden;background:var(--paper)"><img data-src="{{ b.bSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oB }};display:block;transform:{{ b.tB }}" onMouseDown="{{ b.pickB }}" onMouseEnter="{{ b.overB }}"></div>
+<div style="overflow:hidden;background:var(--paper)"><img data-src="{{ b.cSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oC }};display:block;transform:{{ b.tC }}" onMouseDown="{{ b.pickC }}" onMouseEnter="{{ b.overC }}"></div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ b.isSheet }}">
+<div style="width:100vw;min-height:100vh;background:var(--white);box-sizing:border-box;padding:96px 80px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
+<img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="max-width:100%;max-height:78vh;object-fit:contain;display:block;transform:{{ b.tA }}" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}">
+<div style="position:absolute;bottom:56px;left:80px;display:flex;flex-direction:column;gap:5px">
+<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:12px;color:var(--ink)">{{ b.label }}</div>
+<div style="font-family:var(--font-serif);font-style:italic;font-size:14px;color:var(--stone)">{{ b.note }}</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ b.isText }}">
+<div style="width:100vw;box-sizing:border-box;padding:140px 80px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:96px;align-items:start">
+<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:12px;color:var(--ink);line-height:1.8">{{ b.label }}</div>
+<div style="display:flex;flex-direction:column;gap:22px;max-width:640px">
+<div style="font-family:var(--font-serif);font-size:19px;line-height:1.75;color:var(--ink);text-wrap:pretty">{{ b.p1 }}</div>
+<div style="font-family:var(--font-serif);font-size:19px;line-height:1.75;color:var(--ink);text-wrap:pretty">{{ b.p2 }}</div>
+<div style="font-family:var(--font-serif);font-style:italic;font-size:14px;color:var(--stone);line-height:1.7">{{ b.note }}</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ b.isPage }}">
+<div data-om-page="1" data-screen-label="{{ b.sheet }}" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<sc-for list="{{ b.frames }}" as="f" hint-placeholder-count="3">
+<div data-geo="{{ f.geo }}" style="position:absolute;overflow:hidden"><img data-src="{{ f.src }}" ref="{{ setSrc }}" data-img="{{ f.img }}" data-slot="{{ f.slotKey }}" alt="{{ f.alt }}" style="width:100%;height:100%;display:block" onMouseDown="{{ pickDom }}" onMouseEnter="{{ overDom }}"></div>
+</sc-for>
+<sc-for list="{{ b.texts }}" as="tb" hint-placeholder-count="1">
+<div data-tgeo="{{ tb.geo }}" style="position:absolute">
+<sc-for list="{{ tb.items }}" as="x" hint-placeholder-count="2">
+<div data-role="{{ x.role }}" style="text-wrap:pretty">{{ x.txt }}</div>
+</sc-for>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ b.isPlans }}">
+<div data-plans="{{ b.plansData }}" data-screen-label="{{ b.sheet }}" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div data-pl="stage" style="position:absolute;left:6%;top:10.5%;width:88%;height:66.9%;overflow:hidden">
+<div data-pl="wrap" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)">
+<img data-pl="img" data-k="0" alt="Level 01" style="position:absolute;left:0;top:0;width:100%;height:100%;object-fit:contain">
+<img data-pl="img" data-k="1" alt="Level 02" style="position:absolute;left:0;top:0;width:100%;height:100%;object-fit:contain">
+<img data-pl="img" data-k="2" alt="Level 03" style="position:absolute;left:0;top:0;width:100%;height:100%;object-fit:contain">
+<img data-pl="img" data-k="3" alt="Level 04" style="position:absolute;left:0;top:0;width:100%;height:100%;object-fit:contain">
+<img data-pl="img" data-k="4" alt="Level 05" style="position:absolute;left:0;top:0;width:100%;height:100%;object-fit:contain">
+</div>
+</div>
+<div style="position:absolute;left:2.93%;top:77.4%;display:flex;flex-direction:column;gap:.34vw;z-index:6">
+<div data-pl="lab" style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;line-height:1.5;color:var(--ink)">Level 01</div>
+</div>
+<div data-pl="ticks" style="position:absolute;right:3.2%;top:0;height:100%;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:20px;z-index:7">
+<div data-pl="tick" data-i="0" style="font-family:var(--font-display);font-weight:600;letter-spacing:.16em;font-size:0.804vw;color:var(--ink);cursor:pointer;padding:.2vw .15vw;transition:opacity 240ms ease">01</div>
+<div data-pl="tick" data-i="1" style="font-family:var(--font-display);font-weight:600;letter-spacing:.16em;font-size:0.804vw;color:var(--ink);cursor:pointer;padding:.2vw .15vw;transition:opacity 240ms ease">02</div>
+<div data-pl="tick" data-i="2" style="font-family:var(--font-display);font-weight:600;letter-spacing:.16em;font-size:0.804vw;color:var(--ink);cursor:pointer;padding:.2vw .15vw;transition:opacity 240ms ease">03</div>
+<div data-pl="tick" data-i="3" style="font-family:var(--font-display);font-weight:600;letter-spacing:.16em;font-size:0.804vw;color:var(--ink);cursor:pointer;padding:.2vw .15vw;transition:opacity 240ms ease">04</div>
+<div data-pl="tick" data-i="4" style="font-family:var(--font-display);font-weight:600;letter-spacing:.16em;font-size:0.804vw;color:var(--ink);cursor:pointer;padding:.2vw .15vw;transition:opacity 240ms ease">05</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ b.isHeroT }}">
+<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:transparent;overflow:hidden">
+<div style="position:absolute;left:-1px;top:-1px;width:calc(100% + 2px);height:calc(100% + 2px);overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
+<div style="position:absolute;left:{{ b.titleL }};top:11.5%;width:41%;display:flex;flex-direction:column;align-items:{{ b.titleAlign }};gap:.8vw;text-align:{{ b.titleText }}">
+<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:1.452vw;line-height:1.1;color:var(--ink)">{{ b.label }}</div>
+<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--charcoal)">{{ b.note }}</div>
+<div style="font-family:var(--font-serif);font-size:0.682vw;line-height:1.6;color:var(--ink);max-width:34vw">{{ b.p1 }}</div>
+<div style="font-family:var(--font-serif);font-size:0.638vw;line-height:1.6;color:var(--charcoal);margin-top:.5vw">{{ b.p2 }}</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ b.isCapR2 }}">
+<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div style="position:absolute;left:0;top:0;width:50.05%;height:100%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
+<div style="position:absolute;left:50%;top:0;width:50%;height:50.05%;overflow:hidden"><img data-src="{{ b.bSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oB }};transform:{{ b.tB }};display:block" onMouseDown="{{ b.pickB }}" onMouseEnter="{{ b.overB }}"></div>
+<div style="position:absolute;left:50%;top:50%;width:50%;height:50%;overflow:hidden"><img data-src="{{ b.cSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oC }};transform:{{ b.tC }};display:block" onMouseDown="{{ b.pickC }}" onMouseEnter="{{ b.overC }}"></div>
+<div style="position:absolute;left:8%;top:25%;width:34%;display:flex;flex-direction:column;align-items:center;gap:.7vw;text-align:center">
+<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:0.792vw;color:var(--ink)">{{ b.label }}</div>
+<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--charcoal)">{{ b.note }}</div>
+<div style="font-family:var(--font-serif);font-size:0.55vw;letter-spacing:.06em;color:var(--charcoal);margin-top:.35vw">{{ b.scale }}</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ b.isCapR3 }}">
+<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div style="position:absolute;left:0;top:0;width:50.05%;height:100%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
+<div style="position:absolute;left:50%;top:0;width:50%;height:33.4%;overflow:hidden"><img data-src="{{ b.bSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oB }};transform:{{ b.tB }};display:block" onMouseDown="{{ b.pickB }}" onMouseEnter="{{ b.overB }}"></div>
+<div style="position:absolute;left:50%;top:33.33%;width:50%;height:33.4%;overflow:hidden"><img data-src="{{ b.cSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oC }};transform:{{ b.tC }};display:block" onMouseDown="{{ b.pickC }}" onMouseEnter="{{ b.overC }}"></div>
+<div style="position:absolute;left:50%;top:66.66%;width:50%;height:33.4%;overflow:hidden"><img data-src="{{ b.dSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oD }};transform:{{ b.tD }};display:block" onMouseDown="{{ b.pickD }}" onMouseEnter="{{ b.overD }}"></div>
+<div style="position:absolute;left:8%;top:20%;width:34%;display:flex;flex-direction:column;align-items:center;gap:.7vw;text-align:center">
+<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:0.792vw;color:var(--ink)">{{ b.label }}</div>
+<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--charcoal)">{{ b.note }}</div>
+<div style="font-family:var(--font-serif);font-size:0.55vw;letter-spacing:.06em;color:var(--charcoal);margin-top:.35vw">{{ b.scale }}</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ b.isGrid4 }}">
+<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div style="position:absolute;left:0;top:0;width:50.05%;height:50.05%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
+<div style="position:absolute;left:50%;top:0;width:50%;height:50.05%;overflow:hidden"><img data-src="{{ b.bSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oB }};transform:{{ b.tB }};display:block" onMouseDown="{{ b.pickB }}" onMouseEnter="{{ b.overB }}"></div>
+<div style="position:absolute;left:0;top:50%;width:50.05%;height:50%;overflow:hidden"><img data-src="{{ b.cSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oC }};transform:{{ b.tC }};display:block" onMouseDown="{{ b.pickC }}" onMouseEnter="{{ b.overC }}"></div>
+<div style="position:absolute;left:50%;top:50%;width:50%;height:50%;overflow:hidden"><img data-src="{{ b.dSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oD }};transform:{{ b.tD }};display:block" onMouseDown="{{ b.pickD }}" onMouseEnter="{{ b.overD }}"></div>
+</div>
+</sc-if>
+
+<sc-if value="{{ b.isDrawPair }}">
+<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div style="position:absolute;left:2%;top:5%;width:46%;height:82%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
+<div style="position:absolute;left:52%;top:5%;width:46%;height:82%;overflow:hidden"><img data-src="{{ b.bSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oB }};transform:{{ b.tB }};display:block" onMouseDown="{{ b.pickB }}" onMouseEnter="{{ b.overB }}"></div>
+<div style="position:absolute;left:2.8%;top:90%;display:flex;flex-direction:column;gap:.35vw">
+<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">{{ b.label }}</div>
+<div style="font-family:var(--font-serif);font-size:0.506vw;letter-spacing:.06em;color:var(--charcoal)">{{ b.scale }}</div>
+</div>
+<div style="position:absolute;left:52.8%;top:90%;display:flex;flex-direction:column;gap:.35vw">
+<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">{{ b.note }}</div>
+<div style="font-family:var(--font-serif);font-size:0.506vw;letter-spacing:.06em;color:var(--charcoal)">{{ b.scale }}</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ b.isDrawQuad }}">
+<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div style="position:absolute;left:3%;top:5%;width:44%;height:30%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="{{ b.l1 }}" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
+<div style="position:absolute;left:3%;top:37.5%;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">{{ b.l1 }}</div>
+<div style="position:absolute;left:3%;top:40.7%;font-family:var(--font-serif);font-size:0.506vw;letter-spacing:.06em;color:var(--charcoal)">{{ b.scale }}</div>
+<div style="position:absolute;left:53%;top:5%;width:44%;height:30%;overflow:hidden"><img data-src="{{ b.bSrc }}" ref="{{ setSrc }}" alt="{{ b.l2 }}" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oB }};transform:{{ b.tB }};display:block" onMouseDown="{{ b.pickB }}" onMouseEnter="{{ b.overB }}"></div>
+<div style="position:absolute;left:53%;top:37.5%;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">{{ b.l2 }}</div>
+<div style="position:absolute;left:53%;top:40.7%;font-family:var(--font-serif);font-size:0.506vw;letter-spacing:.06em;color:var(--charcoal)">{{ b.scale }}</div>
+<div style="position:absolute;left:3%;top:52%;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">{{ b.l3 }}</div>
+<div style="position:absolute;left:3%;top:55.2%;font-family:var(--font-serif);font-size:0.506vw;letter-spacing:.06em;color:var(--charcoal)">{{ b.scale }}</div>
+<div style="position:absolute;left:3%;top:60%;width:44%;height:35%;overflow:hidden"><img data-src="{{ b.cSrc }}" ref="{{ setSrc }}" alt="{{ b.l3 }}" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oC }};transform:{{ b.tC }};display:block" onMouseDown="{{ b.pickC }}" onMouseEnter="{{ b.overC }}"></div>
+<div style="position:absolute;left:53%;top:52%;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">{{ b.l4 }}</div>
+<div style="position:absolute;left:53%;top:55.2%;font-family:var(--font-serif);font-size:0.506vw;letter-spacing:.06em;color:var(--charcoal)">{{ b.scale }}</div>
+<div style="position:absolute;left:53%;top:60%;width:44%;height:35%;overflow:hidden"><img data-src="{{ b.dSrc }}" ref="{{ setSrc }}" alt="{{ b.l4 }}" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oD }};transform:{{ b.tD }};display:block" onMouseDown="{{ b.pickD }}" onMouseEnter="{{ b.overD }}"></div>
+</div>
+</sc-if>
+
+<sc-if value="{{ b.isStack2 }}">
+<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div style="position:absolute;left:1.5%;top:2%;width:97%;height:32%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
+<div style="position:absolute;left:0;top:35.5%;width:100%;text-align:center;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">{{ b.label }}</div>
+<div style="position:absolute;left:1.5%;top:39.5%;width:97%;height:50%;overflow:hidden"><img data-src="{{ b.bSrc }}" ref="{{ setSrc }}" alt="{{ b.note }}" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oB }};transform:{{ b.tB }};display:block" onMouseDown="{{ b.pickB }}" onMouseEnter="{{ b.overB }}"></div>
+<div style="position:absolute;left:0;top:92%;width:100%;text-align:center;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">{{ b.note }}</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ b.isTextImg }}">
+<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div style="position:absolute;left:38%;top:4%;width:60%;height:92%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
+<div style="position:absolute;left:7%;top:14%;width:26%;display:flex;flex-direction:column;gap:1vw">
+<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">{{ b.label }}</div>
+<div style="font-family:var(--font-serif);font-size:0.616vw;line-height:1.62;color:var(--ink);text-align:justify">{{ b.p1 }}</div>
+<div style="font-family:var(--font-serif);font-size:0.616vw;line-height:1.62;color:var(--ink);text-align:justify">{{ b.p2 }}</div>
+<div style="font-family:var(--font-serif);font-size:0.616vw;line-height:1.62;color:var(--ink);text-align:justify">{{ b.p3 }}</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ b.isVerb5 }}">
+<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div style="position:absolute;left:0;top:0;width:50%;height:45%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
+<div style="position:absolute;left:0;top:53%;width:50%;height:47%;overflow:hidden"><img data-src="{{ b.bSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oB }};transform:{{ b.tB }};display:block" onMouseDown="{{ b.pickB }}" onMouseEnter="{{ b.overB }}"></div>
+<div style="position:absolute;left:50%;top:0;width:34.3%;height:33.33%;overflow:hidden"><img data-src="{{ b.cSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oC }};transform:{{ b.tC }};display:block" onMouseDown="{{ b.pickC }}" onMouseEnter="{{ b.overC }}"></div>
+<div style="position:absolute;left:50%;top:33.33%;width:34.3%;height:33.33%;overflow:hidden"><img data-src="{{ b.dSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oD }};transform:{{ b.tD }};display:block" onMouseDown="{{ b.pickD }}" onMouseEnter="{{ b.overD }}"></div>
+<div style="position:absolute;left:50%;top:66.66%;width:34.3%;height:33.34%;overflow:hidden"><img data-src="{{ b.eSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oE }};transform:{{ b.tE }};display:block" onMouseDown="{{ b.pickE }}" onMouseEnter="{{ b.overE }}"></div>
+<div style="position:absolute;left:84.3%;top:1%;width:15.7%;height:98%;overflow:hidden"><img data-src="{{ b.fSrc }}" ref="{{ setSrc }}" alt="Massing sequence" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oF }};transform:{{ b.tF }};display:block" onMouseDown="{{ b.pickF }}" onMouseEnter="{{ b.overF }}"></div>
+<div style="position:absolute;left:6%;top:45.6%;width:38%;display:flex;flex-direction:column;align-items:center;gap:.6vw;text-align:center">
+<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:0.792vw;color:var(--ink)">{{ b.label }}</div>
+<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--charcoal)">{{ b.note }}</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ b.isRep4 }}">
+<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div style="position:absolute;left:50%;top:22%;width:25%;height:28%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
+<div style="position:absolute;left:75%;top:22%;width:25%;height:28%;overflow:hidden"><img data-src="{{ b.bSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oB }};transform:{{ b.tB }};display:block" onMouseDown="{{ b.pickB }}" onMouseEnter="{{ b.overB }}"></div>
+<div style="position:absolute;left:0;top:50%;width:50%;height:50%;overflow:hidden"><img data-src="{{ b.cSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oC }};transform:{{ b.tC }};display:block" onMouseDown="{{ b.pickC }}" onMouseEnter="{{ b.overC }}"></div>
+<div style="position:absolute;left:50%;top:50%;width:50%;height:50%;overflow:hidden"><img data-src="{{ b.dSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oD }};transform:{{ b.tD }};display:block" onMouseDown="{{ b.pickD }}" onMouseEnter="{{ b.overD }}"></div>
+<div style="position:absolute;left:8%;top:21%;width:34%;display:flex;flex-direction:column;align-items:center;gap:.7vw;text-align:center">
+<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:0.792vw;color:var(--ink)">{{ b.label }}</div>
+<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--charcoal)">{{ b.note }}</div>
+<div style="font-family:var(--font-serif);font-size:0.55vw;letter-spacing:.06em;color:var(--charcoal);margin-top:.35vw">{{ b.scale }}</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ b.isGrid5 }}">
+<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div style="position:absolute;left:0;top:0;width:25.05%;height:50.05%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
+<div style="position:absolute;left:25%;top:0;width:25.05%;height:50.05%;overflow:hidden"><img data-src="{{ b.bSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oB }};transform:{{ b.tB }};display:block" onMouseDown="{{ b.pickB }}" onMouseEnter="{{ b.overB }}"></div>
+<div style="position:absolute;left:50%;top:0;width:50%;height:50.05%;overflow:hidden"><img data-src="{{ b.cSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oC }};transform:{{ b.tC }};display:block" onMouseDown="{{ b.pickC }}" onMouseEnter="{{ b.overC }}"></div>
+<div style="position:absolute;left:0;top:50%;width:50.05%;height:50%;overflow:hidden"><img data-src="{{ b.dSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oD }};transform:{{ b.tD }};display:block" onMouseDown="{{ b.pickD }}" onMouseEnter="{{ b.overD }}"></div>
+<div style="position:absolute;left:50%;top:50%;width:50%;height:50%;overflow:hidden"><img data-src="{{ b.eSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oE }};transform:{{ b.tE }};display:block" onMouseDown="{{ b.pickE }}" onMouseEnter="{{ b.overE }}"></div>
+</div>
+</sc-if>
+
+<sc-if value="{{ b.isStripText }}">
+<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div style="position:absolute;left:5%;top:10%;width:90%;height:30%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
+<div style="position:absolute;left:30%;top:61%;width:40%;display:flex;flex-direction:column;align-items:center;gap:.7vw;text-align:center">
+<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">{{ b.label }}</div>
+<div style="font-family:var(--font-serif);font-size:0.55vw;letter-spacing:.06em;color:var(--charcoal)">{{ b.scale }}</div>
+<div style="font-family:var(--font-serif);font-size:0.616vw;line-height:1.62;color:var(--ink);margin-top:1vw;text-wrap:pretty">{{ b.p1 }}</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ b.isImgText }}">
+<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div style="position:absolute;left:1%;top:2%;width:52%;height:96%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
+<div style="position:absolute;left:57%;top:41%;width:36%;display:flex;flex-direction:column;align-items:center;gap:.7vw;text-align:center">
+<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">{{ b.label }}</div>
+<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--charcoal)">{{ b.note }}</div>
+<div style="font-family:var(--font-serif);font-size:0.616vw;line-height:1.62;color:var(--ink);margin-top:1vw;text-align:right;text-wrap:pretty">{{ b.p1 }}</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ b.isPartiSite }}">
+<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div style="position:absolute;left:6%;top:7%;width:41%;height:37%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="Parti diagram" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
+<div style="position:absolute;left:11.5%;top:46.5%;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">Parti diagram</div>
+<div style="position:absolute;left:5%;top:56%;width:41%;height:26%;overflow:hidden"><img data-src="{{ b.bSrc }}" ref="{{ setSrc }}" alt="Program diagram" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oB }};transform:{{ b.tB }};display:block" onMouseDown="{{ b.pickB }}" onMouseEnter="{{ b.overB }}"></div>
+<div style="position:absolute;left:5%;top:84.5%;width:41%;display:grid;grid-template-columns:repeat(3,1fr);font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">
+<div>Public</div>
+<div>Living</div>
+<div>Sleeping</div>
+</div>
+<div style="position:absolute;left:11.5%;top:92%;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">Program diagram</div>
+<div style="position:absolute;left:50%;top:0;width:50%;height:71%;overflow:hidden"><img data-src="{{ b.cSrc }}" ref="{{ setSrc }}" alt="Site plan" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oC }};transform:{{ b.tC }};display:block" onMouseDown="{{ b.pickC }}" onMouseEnter="{{ b.overC }}"></div>
+<div style="position:absolute;left:50%;top:67%;width:50%;height:33%;overflow:hidden"><img data-src="{{ b.dSrc }}" ref="{{ setSrc }}" alt="Site section" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oD }};transform:{{ b.tD }};display:block" onMouseDown="{{ b.pickD }}" onMouseEnter="{{ b.overD }}"></div>
+<div style="position:absolute;right:2.6%;top:4.5%;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">{{ b.label }}</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ b.isFull }}">
+<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:transparent;overflow:hidden">
+<div style="position:absolute;left:-1px;top:-1px;width:calc(100% + 2px);height:calc(100% + 2px);overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
+<div style="position:absolute;left:2.6%;top:7%;display:flex;flex-direction:column;gap:.55vw">
+<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:0.748vw;color:var(--ink)">{{ b.label }}</div>
+<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--charcoal)">{{ b.note }}</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ b.isDuo }}">
+<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div style="position:absolute;left:0;top:0;width:49.75%;height:100%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
+<div style="position:absolute;left:50.25%;top:0;width:49.75%;height:100%;overflow:hidden"><img data-src="{{ b.bSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oB }};transform:{{ b.tB }};display:block" onMouseDown="{{ b.pickB }}" onMouseEnter="{{ b.overB }}"></div>
+<div style="position:absolute;left:2.6%;bottom:4.5%;display:flex;align-items:baseline;gap:1.1vw">
+<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:0.682vw;color:var(--ink)">{{ b.label }}</div>
+<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--charcoal)">{{ b.note }}</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ b.isTrio }}">
+<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div style="position:absolute;left:0;top:0;width:33.1%;height:100%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
+<div style="position:absolute;left:33.45%;top:0;width:33.1%;height:100%;overflow:hidden"><img data-src="{{ b.bSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oB }};transform:{{ b.tB }};display:block" onMouseDown="{{ b.pickB }}" onMouseEnter="{{ b.overB }}"></div>
+<div style="position:absolute;left:66.9%;top:0;width:33.1%;height:100%;overflow:hidden"><img data-src="{{ b.cSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oC }};transform:{{ b.tC }};display:block" onMouseDown="{{ b.pickC }}" onMouseEnter="{{ b.overC }}"></div>
+<div style="position:absolute;left:2.6%;bottom:4.5%;display:flex;align-items:baseline;gap:1.1vw">
+<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:0.682vw;color:var(--ink)">{{ b.label }}</div>
+<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--charcoal)">{{ b.note }}</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ b.isDraw }}">
+<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div style="position:absolute;left:4%;top:7%;width:92%;height:84%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="{{ b.label }}" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
+<div style="position:absolute;left:4%;top:3.4%;display:flex;align-items:baseline;gap:1.1vw">
+<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:0.682vw;color:var(--ink)">{{ b.label }}</div>
+<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--stone)">{{ b.note }}</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ b.isStatement }}">
+<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--paper);overflow:hidden">
+<div style="position:absolute;left:8%;top:16%;width:34%;display:flex;flex-direction:column;gap:1.1vw">
+<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:1.21vw;line-height:1.15;color:var(--ink)">{{ b.label }}</div>
+<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--stone)">{{ b.note }}</div>
+</div>
+<div style="position:absolute;left:50%;top:16%;width:42%;display:flex;flex-direction:column;gap:1.2vw">
+<div style="font-family:var(--font-serif);font-size:0.792vw;line-height:1.75;color:var(--ink);text-align:justify">{{ b.p1 }}</div>
+<div style="font-family:var(--font-serif);font-size:0.792vw;line-height:1.75;color:var(--ink);text-align:justify">{{ b.p2 }}</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ b.is31 }}">
+<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div style="position:absolute;left:0;top:0;width:50%;height:100%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="Haus Gables, south facade" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
+<div style="position:absolute;left:0;top:0;width:19.8%;height:64.6%;background:transparent;box-sizing:border-box;padding:2.3vw 1.1vw 0 2.75vw;display:flex;flex-direction:column;align-items:flex-start">
+<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:1.452vw;line-height:1.1;color:var(--ink)">Precedent Study</div>
+<div style="margin-top:1.15vw;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">Haus Gables</div>
+<div style="margin-top:1vw;font-family:var(--font-serif);font-size:0.616vw;line-height:1.6;color:var(--ink)">Architect: Jennifer Bonner<br>Location: Atlanta, Georgia</div>
+<div style="margin-top:1.5vw;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">Project statement</div>
+<div style="margin-top:.85vw;font-family:var(--font-serif);font-size:0.638vw;line-height:1.55;color:var(--ink);text-align:justify">This study focuses on the spatial relationships within the building to understand how they define the spaces, and how this building adapts to its context. This building stood out to me in particular because of its unique gable roof, which with research of the architect's concept and intentions, which stemmed from her desire to oppose traditional southern architecture. Instead of using stick-frame construction, she utilized CLT to create spaces through planes. Instead of basing the interior walls off of the exterior walls, this building's interior walls are based off of its unique gable roof, resulting in angular walls. After further analysis, I realized how the random, chaotic appearance of the house was done purposefully. The seemingly random intersection of gable roofs created angular walls that defined private and public spaces, and the “random” placement of windows allowed the building to circulate air effectively despite its surroundings.</div>
+<div style="margin-top:1.9vw;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">Precedent analysis</div>
+<div style="margin-top:.95vw;font-family:var(--font-serif);font-size:0.638vw;line-height:1.55;color:var(--ink);text-align:justify">Haus Gables was designed by Jennifer Bonner, director of the architecture studio MALL (Mass Architectural Loopty Loops) in 2018. The practice is known for its experimental, graphic approach to architecture and for challenging traditional tectonic and material conventions.</div>
+<div style="margin-top:.8vw;font-family:var(--font-serif);font-size:0.638vw;line-height:1.55;color:var(--ink);text-align:justify">Haus Gables is located in the Old Fourth Ward neighborhood in Atlanta, Georgia, and was a self initiated development by Jennifer Bonner, designed to serve as a proof of concept for a single family house that makes the most out of the small urban lot.</div>
+</div>
+<div style="position:absolute;left:50.65%;top:.9%;width:24.35%;height:53.2%;overflow:hidden"><img data-src="{{ b.bSrc }}" ref="{{ setSrc }}" alt="Living room under the gables" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oB }};transform:{{ b.tB }};display:block" onMouseDown="{{ b.pickB }}" onMouseEnter="{{ b.overB }}"></div>
+<div style="position:absolute;left:75.6%;top:.9%;width:23.9%;height:53.2%;overflow:hidden"><img data-src="{{ b.cSrc }}" ref="{{ setSrc }}" alt="Upper landing" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oC }};transform:{{ b.tC }};display:block" onMouseDown="{{ b.pickC }}" onMouseEnter="{{ b.overC }}"></div>
+<div style="position:absolute;left:50.65%;top:55%;width:48.85%;height:44.1%;overflow:hidden"><img data-src="{{ b.dSrc }}" ref="{{ setSrc }}" alt="Aerial view at dusk" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oD }};transform:{{ b.tD }};display:block" onMouseDown="{{ b.pickD }}" onMouseEnter="{{ b.overD }}"></div>
+</div>
+</sc-if>
+
+<sc-if value="{{ b.is32 }}">
+<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div style="position:absolute;left:0;top:0;width:100%;height:31.1%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="Haus Gables, north east corner" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
+<div style="position:absolute;left:0;top:32.6%;width:100%;text-align:center;font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.2em;font-size:0.858vw;color:var(--ink)">Orthographic drawings</div>
+<div style="position:absolute;left:2%;top:38.4%;height:58.6%;border-left:1px dashed rgba(22,21,19,.4)"></div>
+<div style="position:absolute;left:25%;top:38.4%;height:58.6%;border-left:1px dashed rgba(22,21,19,.4)"></div>
+<div style="position:absolute;left:2%;top:36.4%;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">Floor 01 / Basement</div>
+<div style="position:absolute;left:2%;top:38.4%;width:23%;height:12.1%;overflow:hidden"><img data-src="{{ b.bSrc }}" ref="{{ setSrc }}" alt="Basement plan" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oB }};transform:{{ b.tB }};display:block" onMouseDown="{{ b.pickB }}" onMouseEnter="{{ b.overB }}"></div>
+<div style="position:absolute;left:2%;top:51.9%;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">Floor 02 / Dining + sleeping</div>
+<div style="position:absolute;left:2%;top:53.9%;width:23%;height:12.1%;overflow:hidden"><img data-src="{{ b.cSrc }}" ref="{{ setSrc }}" alt="Level two plan" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oC }};transform:{{ b.tC }};display:block" onMouseDown="{{ b.pickC }}" onMouseEnter="{{ b.overC }}"></div>
+<div style="position:absolute;left:2%;top:67.4%;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">Floor 03 / Living + sleeping</div>
+<div style="position:absolute;left:2%;top:69.4%;width:23%;height:12.1%;overflow:hidden"><img data-src="{{ b.dSrc }}" ref="{{ setSrc }}" alt="Level three plan" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oD }};transform:{{ b.tD }};display:block" onMouseDown="{{ b.pickD }}" onMouseEnter="{{ b.overD }}"></div>
+<div style="position:absolute;left:2%;top:82.9%;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">Roof plan</div>
+<div style="position:absolute;left:2%;top:84.9%;width:23%;height:12.1%;overflow:hidden"><img data-src="{{ b.eSrc }}" ref="{{ setSrc }}" alt="Roof plan" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oE }};transform:{{ b.tE }};display:block" onMouseDown="{{ b.pickE }}" onMouseEnter="{{ b.overE }}"></div>
+<div style="position:absolute;left:28%;top:36.3%;width:67%;height:26.7%;overflow:hidden"><img data-src="{{ b.fSrc }}" ref="{{ setSrc }}" alt="West elevation and sections" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oF }};transform:{{ b.tF }};display:block" onMouseDown="{{ b.pickF }}" onMouseEnter="{{ b.overF }}"></div>
+<div style="position:absolute;left:31%;top:63%;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">West elevation + sections</div>
+<div style="position:absolute;left:26.8%;top:67.5%;width:68.5%;height:26.7%;overflow:hidden"><img data-src="{{ b.gSrc }}" ref="{{ setSrc }}" alt="North elevation and sections" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oG }};transform:{{ b.tG }};display:block" onMouseDown="{{ b.pickG }}" onMouseEnter="{{ b.overG }}"></div>
+<div style="position:absolute;left:31%;top:94.5%;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">North elevation + sections</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ b.is33 }}">
+<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div style="position:absolute;left:0;top:10%;width:100%;text-align:center;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">Isometric section</div>
+<div style="position:absolute;left:0;top:-5%;width:100%;height:110%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="Isometric section" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
+</div>
+</sc-if>
+
+<sc-if value="{{ b.is34 }}">
+<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div style="position:absolute;left:0;top:0;width:49.5%;height:76.5%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="Ventilation diagram" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
+<div style="position:absolute;left:0;top:78.2%;width:49.5%;text-align:center;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">Ventilation diagram</div>
+<div style="position:absolute;left:7%;top:80.9%;width:35.5%;text-align:center;font-family:var(--font-serif);font-size:0.616vw;line-height:1.55;color:var(--ink)">Since the precedent building was surrounded by structures obstructing the wind, this building recieves little direct wind. However, this diagram shows how the strategic placing of low and high windows allows this building to circulate cool air in and hot air out, effectively circulating and cooling down the building.</div>
+<div style="position:absolute;left:50.5%;top:0;width:49.5%;height:76.5%;overflow:hidden"><img data-src="{{ b.bSrc }}" ref="{{ setSrc }}" alt="Isovist field diagram" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oB }};transform:{{ b.tB }};display:block" onMouseDown="{{ b.pickB }}" onMouseEnter="{{ b.overB }}"></div>
+<div style="position:absolute;left:50.5%;top:78.2%;width:49.5%;text-align:center;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">Isovist field diagram</div>
+<div style="position:absolute;left:57.4%;top:80.9%;width:36%;text-align:center;font-family:var(--font-serif);font-size:0.616vw;line-height:1.55;color:var(--ink)">The private bedroom on the first floor is not physically separated from the public space (dining + kitchen area) by a wall nor a door. However it is still implied to be a private space even without a physical separation from the public space via door/wall. Therefore this diagram aims to show how private places can be separated from public spaces without the presence of a physical border through two dimensional isovist fields.</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ b.is35 }}">
+<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2600/1678;background:var(--white);overflow:hidden">
+<div style="position:absolute;left:0;top:0;width:100%;height:100%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="Composite diagram" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
+<div style="position:absolute;left:3.4%;top:1.5%;width:7.2%;height:97%;overflow:hidden"><img data-src="{{ b.bSrc }}" ref="{{ setSrc }}" alt="Sequential diagram" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oB }};transform:{{ b.tB }};display:block" onMouseDown="{{ b.pickB }}" onMouseEnter="{{ b.overB }}"></div>
+<div style="position:absolute;left:58%;top:7.2%;width:40%;text-align:center;font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--ink)">Sequential + composite diagram</div>
+<div style="position:absolute;left:59.5%;top:10.6%;width:37%;text-align:center;font-family:var(--font-serif);font-size:0.616vw;line-height:1.55;color:var(--ink)">The sequential diagram on the left, paired with the composite diagram on the right focus on the intersecting spaces created by the 6 gable roof construction of Haus Gables.</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ b.is36 }}">
+<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:transparent;overflow:hidden">
+<div style="position:absolute;left:-1px;top:-1px;width:calc(100% + 2px);height:calc(100% + 2px);overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="Physical model" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
+<div style="position:absolute;left:20.7%;top:8.3%;display:flex;flex-direction:column;gap:.6vw">
+<div style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:0.715vw;color:var(--ink)">Physical model</div>
+<div style="font-family:var(--font-display);font-weight:400;text-transform:uppercase;letter-spacing:.115em;font-size:0.763vw;color:var(--charcoal)">Museum board + foam board</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ b.is37 }}">
+<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/1294;background:var(--white);overflow:hidden">
+<div style="position:absolute;left:0;top:0;width:50%;height:100%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="Model, roof removed" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
+<div style="position:absolute;left:6.5%;top:1.5%;width:36%;height:24%;overflow:hidden"><img data-src="{{ b.bSrc }}" ref="{{ setSrc }}" alt="Roof plate" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oB }};transform:{{ b.tB }};display:block" onMouseDown="{{ b.pickB }}" onMouseEnter="{{ b.overB }}"></div>
+<div style="position:absolute;left:6.5%;top:18.5%;width:36%;height:24%;overflow:hidden"><img data-src="{{ b.cSrc }}" ref="{{ setSrc }}" alt="Roof plate" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oC }};transform:{{ b.tC }};display:block" onMouseDown="{{ b.pickC }}" onMouseEnter="{{ b.overC }}"></div>
+<div style="position:absolute;left:50.5%;top:0;width:49.5%;height:48.7%;overflow:hidden"><img data-src="{{ b.dSrc }}" ref="{{ setSrc }}" alt="Model, north facade" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oD }};transform:{{ b.tD }};display:block" onMouseDown="{{ b.pickD }}" onMouseEnter="{{ b.overD }}"></div>
+<div style="position:absolute;left:50.5%;top:49.5%;width:49.5%;height:50.5%;overflow:hidden"><img data-src="{{ b.eSrc }}" ref="{{ setSrc }}" alt="Roof lifted from the model" style="width:100%;height:100%;object-fit:cover;object-position:{{ b.oE }};transform:{{ b.tE }};display:block" onMouseDown="{{ b.pickE }}" onMouseEnter="{{ b.overE }}"></div>
+</div>
+</sc-if>
+
+<sc-if value="{{ b.is38 }}">
+<div data-om-page="1" style="position:relative;width:100vw;aspect-ratio:2000/810;background:var(--white);overflow:hidden">
+<div style="position:absolute;left:2.5%;top:1.5%;width:47.5%;height:97%;overflow:hidden"><img data-src="{{ b.aSrc }}" ref="{{ setSrc }}" alt="Sketchbook, tour notes and site" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oA }};transform:{{ b.tA }};display:block" onMouseDown="{{ b.pickA }}" onMouseEnter="{{ b.overA }}"></div>
+<div style="position:absolute;left:50%;top:1.5%;width:47.5%;height:97%;overflow:hidden"><img data-src="{{ b.bSrc }}" ref="{{ setSrc }}" alt="Sketchbook, composite diagram studies" style="width:100%;height:100%;object-fit:contain;object-position:{{ b.oB }};transform:{{ b.tB }};display:block" onMouseDown="{{ b.pickB }}" onMouseEnter="{{ b.overB }}"></div>
+</div>
+</sc-if>
+
+</div>
+</sc-for>
+
+<div style="width:100vw;box-sizing:border-box;padding:18px 26px;display:flex;justify-content:space-between;align-items:center;gap:24px;border-top:1px solid var(--ash)">
+<div style="font-family:var(--font-serif);font-style:italic;font-size:12px;color:var(--stone)">Nobuhisa Ishiguro · Selected works</div>
+<div style="display:flex;align-items:baseline;gap:9px;cursor:pointer;transition:opacity 220ms ease" onClick="{{ toNext }}" style-hover="opacity:0.5">
+<span style="font-family:var(--font-display);font-weight:600;text-transform:uppercase;letter-spacing:.16em;font-size:8px;color:var(--stone)">Next</span>
+<span style="font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:12px;color:var(--ink)">{{ nextTitle }} →</span>
+</div>
+</div>
+</div>
+</sc-if>
+
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;loadingScreen&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;rule&quot;,&quot;counter&quot;,&quot;plate&quot;,&quot;stack&quot;,&quot;frame&quot;],&quot;default&quot;:&quot;rule&quot;,&quot;tsType&quot;:&quot;'rule' | 'counter' | 'plate' | 'stack' | 'frame'&quot;,&quot;section&quot;:&quot;Loading screen&quot;},&quot;gateDelay&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;min&quot;:0,&quot;max&quot;:1200,&quot;step&quot;:50,&quot;default&quot;:400,&quot;unit&quot;:&quot;ms&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Loading screen&quot;},&quot;menuStyle&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;pill&quot;,&quot;rule&quot;,&quot;ticks&quot;,&quot;corner&quot;,&quot;wide&quot;],&quot;default&quot;:&quot;wide&quot;,&quot;tsType&quot;:&quot;'pill' | 'rule' | 'ticks' | 'corner' | 'wide'&quot;,&quot;section&quot;:&quot;Menu bar&quot;}}">
+const SPLASH = [
+  'assets/splash/multigenerational-house-1.jpg',
+  'assets/splash/mapmakers-imaginarium.jpg',
+  'assets/splash/haus-gables.jpg',
+  'assets/splash/multigenerational-house-2.jpg',
+  'assets/splash/multigenerational-house-representational.jpg'
+];
+
+const hero = (index, label, note, attr, src) => ({ kind: 'hero', index, label, note, attr, a: src });
+const one = (label, note, a) => ({ kind: 'one', label, note, a });
+const two = (label, note, a, b) => ({ kind: 'two', label, note, a, b });
+const three = (label, note, a, b, c) => ({ kind: 'three', label, note, a, b, c });
+const sheet = (label, note, a) => ({ kind: 'sheet', label, note, a });
+// A spread reproduces one printed portfolio page: fixed 2000x1294 proportions with images
+// placed at the same fractions of the page as the PDF. `contain` lists the letters that are
+// line drawings (fit inside their frame) rather than photographs (fill it).
+const spread = (layout, label, imgs, contain) => Object.assign({ kind: 'spread', layout, label, contain: contain || '' }, imgs);
+const text = (label, p1, p2, note) => ({ kind: 'text', label, p1, p2, note });
+
+// ── Printed-page clone ──────────────────────────────────────────────────────────
+// One `page` block reproduces one printed portfolio sheet. The sheet is 2000x1294;
+// every frame and text block is positioned as a percentage of it, read off the PDF,
+// so the web page is the printed page rather than a re-interpretation of it.
+// F(slot, left, top, width, height, src, fit)  — fit: 'cover' photos, 'contain' drawings.
+// Drawing boxes get a height derived from the trimmed artwork's own aspect
+// (h% = w% * 1.5456 / aspect) so contain never letterboxes and the ink lands 1:1.
+const F = (slot, l, t, w, h, src, fit) => ({ slot, l, t, w, h, src, fit: fit || 'cover' });
+const T = (l, t, w, ta, lines) => ({ l, t, w, ta, lines });
+const LN = (kind, txt, mt) => ({ kind, txt, mt: mt || 0 });
+// The six type roles the printed book uses, sized in vw so they track the sheet.
+const ROLE = {
+  h1:   { fam: 'var(--font-display)', wt: 700, fs: '1.485vw', ls: '.055em', tt: 'uppercase', lh: '1.15', col: 'var(--ink)', nw: 1 },
+  // h1w wraps: a long title at the larger size can't hold one line inside its column.
+  h1w:  { fam: 'var(--font-display)', wt: 700, fs: '1.467vw', ls: '.0803em', tt: 'uppercase', lh: '1.15', col: 'var(--ink)' },
+  attr: { fam: 'var(--font-serif)',   wt: 400, fs: '0.627vw',  ls: '.06em',  tt: 'none',      lh: '1.5',  col: 'var(--charcoal)' },
+  h2:   { fam: 'var(--font-display)', wt: 700, fs: '0.99vw',   ls: '.075em', tt: 'uppercase', lh: '1.2',  col: 'var(--ink)' },
+  h3:   { fam: 'var(--font-display)', wt: 700, fs: '0.412vw', ls: '.2704em', tt: 'uppercase', lh: '1.3', col: 'var(--ink)' },
+  sub:  { fam: 'var(--font-display)', wt: 400, fs: '0.69vw', ls: '.18em',  tt: 'uppercase', lh: '1.5',  col: 'var(--charcoal)' },
+  cap:  { fam: 'var(--font-display)', wt: 400, fs: '0.619vw', ls: '.2466em', tt: 'uppercase', lh: '1.5', col: 'var(--ink)' },
+  // Small tracked sans sitting under a caption (page 16's "Point line plane").
+  sub2: { fam: 'var(--font-display)', wt: 400, fs: '0.412vw', ls: '.2648em', tt: 'uppercase', lh: '1.5', col: 'var(--charcoal)' },
+  tiny: { fam: 'var(--font-display)', wt: 400, fs: '0.484vw',  ls: '.05em',  tt: 'uppercase', lh: '1.5',  col: 'var(--ink)' },
+  sc:   { fam: 'var(--font-serif)',   wt: 400, fs: '0.483vw', ls: '.06em',  tt: 'none',      lh: '1.33', col: 'var(--charcoal)' },
+  // The printed scale annotations are the same serif but tracked out wide.
+  scl:  { fam: 'var(--font-serif)',   wt: 400, fs: '0.527vw', ls: '.2075em', tt: 'none',     lh: '1.5',  col: 'var(--charcoal)' },
+  // Drawing-sheet annotations: the tight all-caps label and its tracked serif scale.
+  lab:  { fam: 'var(--font-display)', wt: 400, fs: '0.763vw', ls: '.115em', tt: 'uppercase', lh: '1.5', col: 'var(--ink)' },
+  scp:  { fam: 'var(--font-serif)',   wt: 400, fs: '0.469vw', ls: '.2075em', tt: 'none',     lh: '1.5', col: 'var(--charcoal)' },
+  body: { fam: 'var(--font-serif)',   wt: 400, fs: '0.604vw', ls: 'normal', tt: 'none',      lh: '1.42', col: 'var(--ink)' },
+  note: { fam: 'var(--font-serif)',   wt: 400, fs: '0.745vw', ls: 'normal', tt: 'none',      lh: '1.138', col: 'var(--ink)' }
+};
+const page = (sheet, frames, texts) => ({ kind: 'page', sheet, label: sheet, frames, texts: texts || [] });
+// One sheet holding every floor plan, cycled in place instead of stacked down the scroll.
+const plans = (sheet, levels) => ({ kind: 'plans', sheet, label: sheet, levels });
+
+const PROJECTS = [
+  {
+    title: 'Haus Gables Precedent',
+    short: 'Haus Gables',
+    cover: 'assets/toc/haus-gables-cover.jpg',
+    blocks: [
+      spread('precedent', 'Precedent study', {
+        a: 'assets/hg/precedent-4.jpg', b: 'assets/hg/precedent-1.jpg',
+        c: 'assets/hg/precedent-5.jpg', d: 'assets/hg/precedent-3.jpg'
+      }),
+      spread('ortho', 'Orthographic drawings', {
+        a: 'assets/hg/precedent-2.jpg',
+        b: 'assets/hg/ortho-plan-01.png', c: 'assets/hg/ortho-plan-02.png',
+        d: 'assets/hg/ortho-plan-03.png', e: 'assets/hg/ortho-plan-roof.png',
+        f: 'assets/hg/ortho-west-sections.png', g: 'assets/hg/ortho-north-sections.png'
+      }, 'bcdefg'),
+      spread('isometric', 'Isometric section', { a: 'assets/hg/ortho-isometric.png' }, 'a'),
+      spread('diagrams', 'Ventilation + isovist field diagram', {
+        a: 'assets/hg/air-circulation.jpg', b: 'assets/hg/exploded-axon-circulation.png'
+      }, 'ab'),
+      spread('sequential', 'Sequential + composite diagram', {
+        a: 'assets/hg/composite-trim.png', b: 'assets/hg/sequential-strip.png'
+      }, 'b'),
+      spread('model', 'Physical model', { a: 'assets/hg/final-3.jpg' }),
+      spread('modelgrid', 'Model studies', {
+        a: 'assets/hg/final-2.jpg', b: 'assets/hg/roof-2.png', c: 'assets/hg/roof-1.png',
+        d: 'assets/hg/final-1.jpg', e: 'assets/hg/final-4.jpg'
+      }, 'bc'),
+      spread('sketchbook', 'Sketchbook', {
+        a: 'assets/hg/sketchbook-2-rot.png', b: 'assets/hg/sketchbook-1-rot.png'
+      }, 'ab')
+    ]
+  },
+  {
+    title: "Mapmaker's Imaginarium",
+    short: 'Mapmakers Imaginarium',
+    cover: 'assets/toc/mapmakers-imaginarium-cover.jpg',
+    blocks: [
+      page('19 — Map Maker’s Imaginarium', [
+        F('a', 0, 0, 100, 100, 'assets/mmi/s/p19-a.jpg')
+      ], [
+        T(56, 10.56, 38, 'center', [LN('h1', 'Map Maker’s Imaginarium'), LN('sub', 'Iterative design through the grid system', 1.005)])
+      ]),
+      page('20 — Diagrammatic study models', [
+        F('a', 0, 0, 49.89, 100, 'assets/mmi/s/p20-a.jpg'),
+        F('b', 49.89, 0, 50.11, 49.83, 'assets/mmi/s/p20-b.jpg'),
+        F('c', 49.89, 49.83, 50.11, 50.17, 'assets/mmi/s/p20-c.jpg')
+      ], [
+        T(8, 25.95, 34, 'center', [LN('h2', 'Diagrammatic study models'), LN('sub', 'Museum board + basswood', .579)])
+      ]),
+      page('21 — Representational study model', [
+        F('a', 0, 0, 49.89, 100, 'assets/mmi/s/p21-a.jpg'),
+        F('b', 49.89, 0, 50.11, 30.24, 'assets/mmi/s/p21-b.jpg'),
+        F('c', 49.89, 30.24, 50.11, 32.3, 'assets/mmi/s/p21-c.jpg'),
+        F('d', 49.89, 62.54, 50.11, 37.46, 'assets/mmi/s/p21-d.jpg')
+      ], [
+        T(8, 19.98, 34, 'center', [LN('h2', 'Representational study model'), LN('sub', 'Museum board + basswood + baby’s breath', .644), LN('scl', '1/8” = 1’', .552)])
+      ]),
+      page('22 — Physical model', [
+        F('a', 0, 0, 100, 100, 'assets/mmi/s/p22-a.jpg')
+      ], [
+        T(10, 11.84, 30, 'center', [LN('h2', 'Physical model'), LN('sub', 'Foam board + bristol + basswood + baby’s breath', .579)])
+      ]),
+      page('23 — Model views', [
+        F('a', 0, 0, 50, 50, 'assets/mmi/s/p23-a.jpg'),
+        F('b', 50, 0, 50, 50, 'assets/mmi/s/p23-b.jpg'),
+        F('c', 0, 50, 50, 50, 'assets/mmi/s/p23-c.jpg'),
+        F('d', 50, 50, 50, 50, 'assets/mmi/s/p23-d.jpg')
+      ]),
+      page('24 — Project statement', [
+        F('a', 32.38, 14.84, 58.9, 88.05, 'assets/mmi/t/ortho-1.png', 'contain')
+      ], [
+        T(21.07, 14, 25, 'left', [LN('cap', 'Project statement')]),
+        T(13.27, 18.64, 16.7, 'justify', [
+          LN('body', 'An imaginarium is a space designed to stimulate creativity and imagination. The goal of this design was to create an imaginarium specifically for a cartographer, mimicking the visual hierarchy and compositional coherence used in mapmaking into the plan of the building itself. This was done through a 3 x 5 grid, a constraint we were required to work around.'),
+          LN('body', 'This project originated from the plan: iterating the grid through exploring variations of points, lines, and solids, as well as spatial relationships such as interlocking and adjacent spaces. My plan focused on the interlocking of three forms, wrapping around a central void. I decided to emphasize the central void and overlaps by outlining them with points, a different language from that of the rest of the plan, which was constructed from lines. This plan was then extruded, points forming vertical lines and lines forming planes. Extrusion heights were varied in order to establish hierarchy in the elevation as well.', .55),
+          LN('body', 'Once these key concepts were established the design was adjusted according to the program requirements, which was organized through public and private circulation. Private and public spaces were placed on opposite sides of the plan so that the public could easily access the gallery space without needing to go through any private spaces. Three courtyards were placed within the central void and adjacent overlapping spaces that I wanted to emphasize.', .55),
+          LN('body', 'These courtyard spaces were the central motivation of my project, as I wanted to design to be open and fragile, almost ephemeral in the elevation view to draw attention to the plan. I decided to replace the columns outlining the courtyard spaces with thin slats, which could seemingly disappear if the building is viewed from the west facade. Pivot walls were placed in the gallery, so that it would open up to the outdoors and “disappear” from the West facade view. This concept of openness was further developed through the addition of the L shaped pivot doors to connect the 3 adjacent courtyard spaces. This L shaped pivot door would allow the mapmaker to decide which spaces opened up to a courtyard and which spaces would be enclosed and airtight. Furthermore, furniture such as benches, tables, and shelves were attached to these pivot doors/walls so that the implied program of the space could change depending on the orientation of these pivot doors, allowing the mapmaker to curate their environment with the same precision they use to curate a map. For example, the pivot doors could be rotated in a way in which the work desk and shelves face the central courtyard, transforming the courtyard into an outdoor maker space for the mapmaker.', .55),
+          LN('body', 'Ultimately, this project focuses on designing a space that is freely customizable, open to nature, and quietly precise.', .55)
+        ])
+      ]),
+      plans('25 — Plans', [
+        { name: 'Level 01', src: 'assets/mmi/t/level01-hi.png' },
+        { name: 'Level 02', src: 'assets/mmi/t/level02-hi.png' }
+      ]),
+      page('26 — Elevations + sections', [
+        F('a', 3.5, 12.2, 44.92, 24.56, 'assets/mmi/t/elev-west.png', 'contain'),
+        F('b', 57.04, 12.21, 32.07, 25.19, 'assets/mmi/t/elev-south.png', 'contain'),
+        F('c', 0, 55.63, 49.99, 34.9, 'assets/mmi/t/sect-west.png', 'contain'),
+        F('d', 50, 55.63, 49.99, 34.9, 'assets/mmi/t/sect-south.png', 'contain')
+      ], [
+        T(2.93, 38.2, 22, 'left', [LN('lab', 'West elevation')]),
+        T(52.93, 38.2, 22, 'left', [LN('lab', 'South elevation')]),
+        T(2.93, 51.7, 22, 'left', [LN('lab', 'West section')]),
+        T(52.93, 51.7, 22, 'left', [LN('lab', 'South section')])
+      ]),
+      page('27 — Sun + sequential diagram', [
+        F('a', 0, 0, 98.47, 35.94, 'assets/mmi/t/sun.png'),
+        F('b', 4.13, 39.96, 94.53, 44.9, 'assets/mmi/t/seq-panels.jpg', 'contain')
+      ], [
+        T(35, 35.1, 30, 'center', [LN('cap', 'Sun diagram')]),
+        T(5.5, 88.14, 16, 'center', [LN('h3', 'Overlap'), LN('sc', '3 forms overlapped around central void', .45)]),
+        T(29.5, 88.14, 16, 'center', [LN('h3', 'Corner'), LN('sc', 'Define spaces by capping corners', .45)]),
+        T(54, 88.14, 16, 'center', [LN('h3', 'Adjustments'), LN('sc', 'Emphasize central and overlapping spaces. Adjust walls for programs', .45)]),
+        T(77.5, 88.14, 16, 'center', [LN('h3', 'Open'), LN('sc', 'Addition of pivot walls allow rooms to open to outdoor spaces', .45)]),
+        T(35, 95, 30, 'center', [LN('cap', 'Sequential diagram')])
+      ]),
+      page('28 — Program + public/private + circulation', [
+        F('a', 30, 16.37, 64, 68.69, 'assets/mmi/t/program-circ.jpg', 'contain')
+      ], [
+        T(6.6, 44.99, 25, 'center', [LN('cap', 'Program + public/private + circulation')]),
+        T(7.1, 48.09, 23, 'center', [LN('body', 'This diagram is a combination of 3 diagrams. The programs are shown through various font sizes that reflect the size and hierarchy of the space. This diagram was made in order to showcase how private and public spaces lie on opposite ends of the plan. This allows for private circulation (the mapmaker) to enter through the front entrance and seamlessly circulate to the maker space without going through any public areas. On the other hand, the public enters through the garage, so that they can circulate to the public gallery without interfering with the private spaces.')])
+      ]),
+      page('29 — Grid systems + vignette', [
+        F('a', 2.5, 3, 65, 87.1, 'assets/mmi/t/grid.png', 'contain')
+      ], [
+        T(69.27, 53.85, 21, 'center', [LN('cap', 'Grid systems + vignette')]),
+        T(67.67, 56.84, 24.2, 'center', [LN('body', 'This diagram shows the grid system of the plan, accompanied by vignettes of the various pivot doors featured in the building. Combinations of straight pivot doors show how they can be arranged for various kinds of gallery layouts, while the vignetted L shape pivot door axons show how these pivot doors can be used as furniture and become an integral part of the mapmaker’s lifestyle.')])
+      ]),
+      page('30 — Exposed/enclosed + experiential section', [
+        F('a', 2.93, 12.56, 47, 49.33, 'assets/mmi/t/indoor-outdoor.png', 'contain'),
+        F('b', 50, 12.46, 48, 59.42, 'assets/mmi/t/experiential.png', 'contain')
+      ], [
+        T(36, 67.75, 28, 'center', [LN('cap', 'Exposed/enclosed diagram + experiential section perspective')]),
+        T(37.9, 71.16, 24.2, 'center', [
+          LN('body', 'The exposed/enclosed diagram shows all 16 possible combinations of pivot door orientations and how they influence the exposure of spaces within the building. The light green shade represents spaces that open up to at least one courtyard, while the dark green shades represent airtight, enclosed spaces.'),
+          LN('body', 'One combination is then blown up into an experiential sectional perspective that shows the distribution of people in the building and how they can move around and interact with their surroundings. This combination of pivot doors was particularly interesting out of the 16 because it created a unique environment where the maker space was open to all 3 courtyards, while also being completely closed off from the public gallery and garage space. This could be a situation where the gallery is open to the public but the map maker still wants to work in an open space. The furniture on the pivot doors shows how the map maker can work both indoors and outdoors, showcasing the versatility of these pivot doors and the potential for the mapmaker to curate their environment in the same precision that they curate their maps.', .55)
+        ])
+      ])
+    ]
+  },
+  {
+    title: 'The Working Multigenerational House',
+    short: 'Multigenerational House',
+    cover: 'assets/toc/multigenerational-house-cover.jpg',
+    blocks: [
+      page('02 — The Working Multigenerational House', [
+        F('a', 0, 0, 100, 100, 'assets/mgh/s/mgh-cover.jpg')
+      ], [
+        T(55.4, 16.09, 41.6, 'center', [
+          LN('h1w', 'The Working Multigenerational House'),
+          LN('note', '“Our home is not a house, but a place made of multi-functional spaces waiting to be completed by the community, the village, and also the sky and the Mediterranean Sea. My intention was to make the architecture dissolve into the experience of living.”', .762),
+          LN('attr', 'Susana Torre, 2021', .671)
+        ])
+      ]),
+      page('03 — Operational verb study models', [
+        F('a', 0, 0, 50, 49.5, 'assets/mgh/s/verb-a.jpg'),
+        F('b', 0, 49.5, 50, 50.5, 'assets/mgh/s/verb-b.jpg'),
+        F('c', 50, 0, 50, 33.3, 'assets/mgh/s/verb-c.jpg'),
+        F('d', 50, 33.3, 50, 33.35, 'assets/mgh/s/verb-d.jpg'),
+        F('e', 50, 66.65, 50, 33.35, 'assets/mgh/s/verb-e.jpg'),
+        F('f', 86, 0, 7.76, 100, 'assets/mgh/t/verb-sequential.png', 'contain')
+      ], [
+        T(6, 49.14, 38, 'center', [LN('h2', 'Operational verb study models'), LN('sub', 'Bristol', .4)])
+      ]),
+      page('04 — Representational study model', [
+        F('c', 0, 0, 49.96, 100, 'assets/mgh/s/repr-c.jpg'),
+        F('a', 49.96, 0, 25.06, 50.03, 'assets/mgh/s/repr-a.jpg'),
+        F('b', 75.02, 0, 24.98, 50.03, 'assets/mgh/s/repr-b.jpg'),
+        F('d', 49.96, 50.03, 50.04, 49.97, 'assets/mgh/s/repr-d.jpg')
+      ], [
+        T(8, 21.54, 34, 'center', [LN('h2', 'Representational study model'), LN('sub', 'Museum board + acrylic', .543), LN('scl', '1/16” = 1’', .73)])
+      ]),
+      page('05 — Site model', [
+        F('a', 0, 0, 100, 100, 'assets/mgh/s/site-model.jpg')
+      ], [
+        T(60, 14.39, 30, 'center', [LN('h2', 'Site model'), LN('sub', 'Museum board + bristol', .526), LN('scl', '1/16” = 1’', .728)])
+      ]),
+      page('06 — Final model', [
+        F('a', 0, 0, 50.15, 100, 'assets/mgh/s/detail-2.jpg'),
+        F('b', 50, 0, 50, 49.85, 'assets/mgh/s/final-2.jpg'),
+        F('c', 50, 49.7, 50, 50.3, 'assets/mgh/s/final-3.jpg')
+      ], [
+        T(8, 17.3, 34, 'center', [LN('h2', 'Final model'), LN('sub', 'Bass wood + museum board + acrylic', .5), LN('sc', '1/4" = 1\'', .6)])
+      ]),
+      page('07 — Model details', [
+        F('a', 0, 0, 24.96, 50, 'assets/mgh/s/mdet-a.jpg'),
+        F('b', 24.96, 0, 25.04, 50, 'assets/mgh/s/mdet-b.jpg'),
+        F('c', 50, 0, 50, 50, 'assets/mgh/s/mdet-c.jpg'),
+        F('d', 0, 50, 50, 50, 'assets/mgh/s/mdet-d.jpg'),
+        F('e', 50, 50, 50, 50, 'assets/mgh/s/mdet-e.jpg')
+      ]),
+      plans('08 — Plans', [
+        { name: 'Level 01', src: 'assets/mgh/t/level01-hi.png' },
+        { name: 'Level 02', src: 'assets/mgh/t/level02-hi.png' },
+        { name: 'Level 03', src: 'assets/mgh/t/level03-hi.png' },
+        { name: 'Level 04', src: 'assets/mgh/t/level04-hi.png' },
+        { name: 'Level 05', src: 'assets/mgh/t/level05-hi.png' }
+      ]),
+      page('13 — Sections', [F('a', 0, 17.5, 100, 65, 'assets/mgh/t/sections-sheet.jpg', 'contain')],
+        [T(2.96, 12.2, 22, 'left', [LN('lab', 'Sections')])]),
+      page('14 — Elevations', [F('a', 0, 17.5, 100, 65, 'assets/mgh/t/elevations-sheet.jpg', 'contain')],
+        [T(2.96, 12.2, 22, 'left', [LN('lab', 'Elevations')])]),
+      page('15 — Unfolded interior section', [
+        F('a', 7.35, 10.57, 85, 35.34, 'assets/mgh/t/unfolded.png', 'contain')
+      ], [
+        T(9.78, 31.61, 16, 'center', [LN('h3', 'Year 1'), LN('sc', 'Number of family members: 1', .365), LN('sc', 'Number of books: 1')]),
+        T(25.84, 31.61, 16, 'center', [LN('h3', 'Year 5'), LN('sc', 'Number of family members: 2', .365), LN('sc', 'Number of books: 243')]),
+        T(41.9, 31.61, 16, 'center', [LN('h3', 'Year 9'), LN('sc', 'Number of family members: 4', .365), LN('sc', 'Number of books: 762')]),
+        T(57.96, 31.61, 16, 'center', [LN('h3', 'Year 27'), LN('sc', 'Number of family members: 4', .365), LN('sc', 'Number of books: 5,462')]),
+        T(73.94, 31.61, 16, 'center', [LN('h3', 'Year 49'), LN('sc', 'Number of family members: 6', .365), LN('sc', 'Number of books: 13,824')]),
+        T(37.63, 67.31, 24.5, 'center', [LN('cap', 'Unfolded interior section'), LN('body', 'Formed by exposed bookshelves, the house is initially a skeleton of shelves, open. A lone man moves in, and collects books to store on these barren bookshelves. He transforms the translucent plane of shelves into a living tapestry of opacity. As his collection grows along with his family, the man feels the need to open his collection to the world. What was once a private collection of one man, is now a communal and multigenerational, ever changing archive.', .785)])
+      ]),
+      page('16 — Exploded isometric', [
+        F('a', 7.69, 4.23, 34.29, 95.54, 'assets/mgh/t/exploded.png', 'contain')
+      ], [
+        T(62.67, 44.32, 24.6, 'center', [LN('cap', 'Exploded isometric'), LN('sub2', 'Point line plane', .474), LN('body', 'This diagram shows how this house is constructed from point, lines, plans and volumes. Just like bricks serve as building cells, books serve the same purpose. A point (book) in a row forms a line (bookshelf), extruding into a plane (wall of books), and arranges into a volume (room of books). This house is formed from books.', .869)])
+      ]),
+      page('17 — Site plan + section', [
+        F('a', 8.25, 4.31, 33.8, 30.7, 'assets/mgh/t/parti.png', 'contain'),
+        F('b', 7.12, 63.49, 35.4, 11.03, 'assets/mgh/t/program.png', 'contain'),
+        F('c', 50, 0, 50, 74.87, 'assets/mgh/t/site-iso.png'),
+        F('d', 50, 71.9, 50, 27.2, 'assets/mgh/t/section-persp.png', 'contain')
+      ], [
+        T(15, 35.11, 20, 'center', [LN('cap', 'Parti diagram')]),
+        T(5.07, 78.4, 12, 'center', [LN('tiny', 'Public')]),
+        T(19, 78.4, 12, 'center', [LN('tiny', 'Living')]),
+        T(32.87, 78.4, 12, 'center', [LN('tiny', 'Sleeping')]),
+        T(15, 81.18, 20, 'center', [LN('cap', 'Program diagram')]),
+        T(71.93, 4.31, 25, 'right', [LN('cap', 'Site plan + section')])
+      ]),
+      page('18 — Composite', [F('a', -0.1, -0.1, 100.2, 100.2, 'assets/mgh/s/composite.jpg')])
+    ]
+  }
+];
+
+const CROP_KEY = 'ni-portfolio-img-crops';
+const REPL_KEY = 'ni-portfolio-img-replacements';
+const TOC_KEY = 'ni-portfolio-toc-layout';
+// px/py are object-position (%): they pan inside the slack a cover-fit frame already hides.
+// x/y are transform-translate (% of frame): only the extra room a zoom above 100% creates.
+const ZERO = { scale: 100, x: 0, y: 0, rot: 0, px: 50, py: 50 };
+const CROP_V = 'ni-portfolio-crop-version';
+const TOC_DEFAULTS = { colW: 130, hoverW: 619, rowH: 54, gap: 64, speed: 713, labelGap: 48 };
+const pretty = src => src.split('/').pop().replace(/\.[a-z]+$/i, '').replace(/[-_]/g, ' ');
+// Saved framing, shipped with the file rather than left in browser storage: replaced images are now
+// real assets, and these are the crops/placements they were framed with. Stored edits still win, so
+// the panels keep working — "Save as default" writes over the baked value for that session onward.
+const BAKED_CROPS = {
+  "splash:0": { scale: 132, x: 12.3, y: -12.25, rot: 1, px: 0, py: 50 },
+  "splash:1": { scale: 117, x: -0.17, y: 0, rot: -0.5, px: 100, py: 50 },
+  "splash:2": { scale: 100, x: 0, y: 0, rot: 0 },
+  "splash:3": { scale: 112, x: 0, y: 0, rot: 0 },
+  "splash:4": { scale: 116, x: -1.75, y: -2.48, rot: 0, px: 50, py: 100 },
+  "toc:0": { scale: 100, x: 0, y: 0, rot: 0, px: 7.65, py: 50 },
+  "toc:2": { scale: 100, x: 0, y: 0, rot: 0, px: 9.22, py: 50 },
+  "proj:0:0:a": { scale: 100, x: 0, y: 0, rot: 0, px: 50, py: 18.11 },
+  "proj:0:1:b": { scale: 142, x: 0, y: -23.6, rot: 0, px: 50, py: 100, ins: [5, 2.8, 0, 0] },
+  "proj:0:2:a": { scale: 100, x: 0, y: 4.86, rot: 0, px: 50, py: 50 },
+  "proj:1:10:a": { scale: 140, x: -7.13, y: -0.18, rot: 0, px: 50, py: 50 },
+  "proj:1:11:b": { scale: 110, x: 0, y: 0, rot: 0, px: 50, py: 50 },
+  "planlv:1:0": { scale: 100, x: 0, y: 1.95, rot: 0, px: 50, py: 50 },
+  "proj:0:1:g": { scale: 100, x: 0, y: 0, rot: 0, px: 50, py: 50, ins: [0, 1.5, 0, 0] },
+  "proj:0:3:a": { scale: 226, x: -5.04, y: -2.19, rot: 0, px: 50, py: 50, ins: [4.5, 9.5, 0, 13] },
+  "proj:2:2:c": { scale: 100, x: 0, y: 0, rot: 0, px: 48.56, py: 50 },
+  "proj:2:3:a": { scale: 129, x: 3.74, y: 0.4, rot: 0, px: 50, py: 0 },
+  "proj:2:4:a": { scale: 100, x: 0, y: 0, rot: 0, px: 8.8, py: 50 },
+  "proj:2:7:a": { scale: 190, x: 0.94, y: 45, rot: 0, px: 50, py: 50 },
+  "proj:2:8:a": { scale: 190, x: 0.09, y: -39.11, rot: 0, px: 50, py: 50, ins: [8, 0, 0, 0] },
+  "proj:2:9:a": { scale: 104, x: 0, y: 0, rot: 0, px: 50, py: 50 },
+  "proj:2:10:a": { scale: 139, x: 3.66, y: 0.31, rot: 0, px: 50, py: 50 },
+  "proj:2:11:b": { scale: 151, x: 0.51, y: 0, rot: 0, px: 50, py: 50 },
+  "proj:2:11:c": { scale: 109, x: 0, y: -4.5, rot: 0, px: 40.58, py: 50 },
+  "proj:2:11:d": { scale: 199, x: 2.97, y: -10.17, rot: 0, px: 50, py: 50 },
+  // Levels 02–05 are the portrait originals, turned a quarter and scaled to the landscape frame.
+  "planlv:2:0": { scale: 100, x: 0.15, y: 0, rot: 0, px: 50, py: 50 },
+  "planlv:2:1": { scale: 239.25, x: 1.15, y: -3.95, rot: -90, px: 50, py: 50 },
+  "planlv:2:2": { scale: 238.75, x: 0.5, y: -2.15, rot: -90, px: 50, py: 50 },
+  "planlv:2:3": { scale: 238.5, x: -0.6, y: -1.45, rot: -90, px: 50, py: 50 },
+  "planlv:2:4": { scale: 237.55, x: 0.05, y: -1.95, rot: -90, px: 50, py: 50 }
+};
+const BAKED_LAYOUT = {
+  "0:0:1": { l: 0, t: 3.3 },
+  "0:1:5": { l: 0.12, t: 27.14, w: 98.88, h: 70.63 },
+  "0:1:2": { del: true }, "0:1:3": { del: true }, "0:1:6": { del: true },
+  "0:1:7": { del: true }, "0:1:8": { del: true }, "0:1:9": { del: true },
+  "0:1:10": { del: true }, "0:1:11": { l: 2.05, t: 84.9, del: true },
+  "0:1:12": { del: true }, "0:1:13": { del: true }, "0:1:14": { del: true },
+  "0:1:15": { del: true },
+  "1:5:0": { l: -0.3, t: -0.04, w: 99.97, h: 106.97 },
+  "1:5:1": { del: true }, "1:5:2": { del: true },
+  "1:7:0": { l: 0, t: -0.22 }, "1:7:1": { l: 2.77, t: 43.7 }, "1:7:2": { l: 35, t: 36.86 },
+  "1:7:3": { l: 8.48, t: 91.88 }, "1:7:4": { l: 30.95, t: 91.88 },
+  "1:7:5": { l: 52.99, t: 91.66 }, "1:7:6": { l: 75.03, t: 91.88 }, "1:7:7": { l: 35, t: 98.74 },
+  "1:8:1": { l: 2.94, t: 43.7 }, "1:8:2": { l: 3.89, t: 47.14 },
+  "1:8:3": { l: 8.65, t: 91.88 }, "1:8:4": { l: 30.83, t: 91.88 },
+  "1:8:5": { l: 52.94, t: 91.88 }, "1:8:6": { l: 75.12, t: 91.88 }, "1:8:7": { l: 35, t: 98.74 },
+  "1:6:2": { l: 0, t: 65.09 }, "1:6:3": { l: 50, t: 65.09 },
+  "1:6:6": { l: 2.93, t: 61.16 }, "1:6:7": { l: 52.93, t: 61.16 },
+  "1:10:0": { del: true }, "1:10:1": { l: 0.39, t: 5.72, w: 99.49, h: 91.35 },
+  "1:10:2": { l: 35.95, t: 67.75, del: true }, "1:10:3": { del: true },
+  "1:11:0": { del: true }, "1:11:1": { l: 0.1, t: -0.47, w: 99.54, h: 95.45 },
+  "1:11:2": { del: true }, "1:11:3": { del: true },
+  "2:3:0": { w: null, l: -0.2, t: null, h: null },
+  "2:7:0": { w: null, l: null, t: null, h: null },
+  "2:8:0": { l: 7.3, t: 1.02, w: 85, h: 52.87 },
+  "2:8:2": { l: 25.54, t: 31.61 },
+  "2:8:4": { l: 59.64, t: 31.61 },
+  "2:9:0": { l: 7.69, t: 1.17 },
+  "2:10:2": { l: 50, t: 0, w: 50, h: 97.47 },
+  "2:10:3": { l: 50.05, t: 64.12, w: 50, h: 45.4 },
+  "2:10:4": { l: 15.36, t: 37.09 }
+};
+// Replacements that are now real files in assets/. Their data URLs are dead weight in localStorage —
+// several megabytes each — and a full store silently drops the NEXT replacement you make. Stripped
+// on load and on every write so the quota stays available for work in progress.
+const BAKED_REPL = [
+  'assets/mgh/t/level02-hi.png', 'assets/mgh/t/level03-hi.png', 'assets/mgh/t/level04-hi.png',
+  'assets/mgh/t/level05-hi.png', 'assets/mgh/t/site-iso.png', 'assets/mgh/t/section-persp.png',
+  'assets/mgh/t/unfolded.png', 'assets/mgh/t/elevations-sheet.jpg', 'assets/mgh/t/sections-sheet.jpg',
+  'assets/mgh/t/exploded.png', 'assets/mgh/t/program.png', 'assets/mgh/s/site-model.jpg',
+  'assets/mgh/s/repr-c.jpg', 'assets/mmi/t/ortho-1.png', 'assets/mmi/t/experiential.png',
+  'assets/mmi/t/grid.png', 'assets/mmi/t/sun.png', 'assets/hg/ortho-plan-01.png'
+];
+const pruneRepl = r => {
+  const out = {};
+  Object.keys(r || {}).forEach(k => { if (BAKED_REPL.indexOf(k) === -1) out[k] = r[k]; });
+  return out;
+};
+const BAKED_TOC = { colW: 135, hoverW: 407, rowH: 47, gap: 37, speed: 713, labelGap: 48 };
+// v2: the printed-sheet clones replaced the improvised spread layouts, so element-level
+// position overrides saved against the old markup no longer describe anything real.
+const LAYOUT_KEY = 'ni-portfolio-layout-v2';
+const ADD_KEY = 'ni-portfolio-added-v1';
+const r2 = v => Math.round(v * 100) / 100;
+const readStore = key => { try { return JSON.parse(localStorage.getItem(key) || '{}'); } catch (e) { return {}; } };
+// Crops saved before object-position panning existed hold zoom that was only ever a way to
+// buy pan room — the index cards in particular. Drop that zoom once, keep the framing.
+function migrateCrops(crops) {
+  try {
+    const v = localStorage.getItem(CROP_V);
+    if (v === '5') return crops;
+    Object.keys(crops).forEach(k => {
+      if (v !== '3' && k.indexOf('toc:') === 0) { crops[k].scale = 100; crops[k].x = 0; crops[k].y = 0; }
+      // The two studio projects were re-cut as exact clones of the printed sheets, so every
+      // frame changed shape: crops tuned against the old frames would mis-frame the new ones.
+      if (v !== '3' && (k.indexOf('proj:1:') === 0 || k.indexOf('proj:2:') === 0)) delete crops[k];
+      // v4: the operational-verb sheet was re-cut full-bleed, so its five photo frames changed shape.
+      if (k.indexOf('proj:2:1:') === 0) delete crops[k];
+      // v5: the Mapmaker's levels were swapped and re-cut, so a registration saved against
+      // whichever drawing used to sit at that index no longer describes anything real.
+      if (k.indexOf('planlv:1:') === 0) delete crops[k];
+    });
+    localStorage.setItem(CROP_V, '5');
+    localStorage.setItem(CROP_KEY, JSON.stringify(crops));
+  } catch (e) {}
+  return crops;
+}
+
+// A "slot" identifies one placement of a photo on the page (splash:i / toc:i / proj:pi:bi:letter).
+// Crops are stored per slot so the same photo can be framed differently in each spot it appears;
+// replacements (swapping the file) are stored per underlying photo path, so they apply everywhere.
+const PLAN_ACTIVE = {}, PLAN_LABEL = {};
+function photoOf(slot) {
+  const parts = slot.split(':');
+  // A plan stack shares one crop across all five levels so they stay registered to each other;
+  // the file the editor works on is whichever level is currently showing.
+  if (parts[0] === 'plan') return PLAN_ACTIVE[slot] || null;
+  if (parts[0] === 'planlv') return PLAN_ACTIVE[slot] || null;
+  if (parts[0] === 'splash') return SPLASH[+parts[1]];
+  if (parts[0] === 'toc') return (PROJECTS[+parts[1]] || {}).cover;
+  if (parts[0] === 'proj') {
+    const b = (PROJECTS[+parts[1]] || {}).blocks[+parts[2]];
+    if (!b) return null;
+    if (b.kind === 'page') {
+      const f = (b.frames || []).find(fr => fr.slot === parts[3]);
+      return f ? f.src : null;
+    }
+    return b[parts[3]];
+  }
+  return null;
+}
+function buildRegistry() {
+  const out = [];
+  SPLASH.forEach((s, i) => out.push({ slot: 'splash:' + i, label: 'Splash · ' + pretty(s) }));
+  PROJECTS.forEach((p, pi) => {
+    const n = String(pi + 1).padStart(2, '0');
+    out.push({ slot: 'toc:' + pi, label: 'Index · ' + p.title });
+    p.blocks.forEach((b, bi) => {
+      'abcdefgh'.split('').forEach((letter, k) => {
+        if (b[letter]) out.push({ slot: 'proj:' + pi + ':' + bi + ':' + letter, label: n + ' · ' + b.label + (k > 0 ? ' (' + (k + 1) + ')' : '') });
+      });
+    });
+  });
+  return out;
+}
+const REGISTRY = buildRegistry();
+
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this._splashEls = {};
+    this.state = {
+      view: 'splash', pi: 0, bg: 0, barHidden: false,
+      panelOpen: false, tocPanelOpen: false,
+      layoutMode: false, lsel: null, lsels: [], layout: Object.assign({}, BAKED_LAYOUT, readStore(LAYOUT_KEY)), layoutSaved: false, tick: 0, crop: null,
+      added: (readStore(ADD_KEY).list || []),
+      sel: 'splash:0', hover: null,
+      editing: null, editFit: 'cover', editRatio: 1.5, editBg: '#f7f6f2', backup: null,
+      alignOpen: false, alignK: 0, alignRef: 0, alignDiff: false, editMore: false,
+      saved: false, tocSaved: false, saveNote: 'Saved defaults are restored on every visit.',
+      paused: false, tocHover: -1,
+      vw: window.innerWidth,
+      crops: Object.assign({}, BAKED_CROPS, migrateCrops(readStore(CROP_KEY))),
+      repl: pruneRepl(readStore(REPL_KEY)),
+      toc: Object.assign({}, TOC_DEFAULTS, BAKED_TOC, readStore(TOC_KEY))
+    };
+  }
+
+  componentDidMount() {
+    this.startRotation();
+    // The top bar retreats while reading down the spreads and returns on any upward scroll.
+    // Drive the bar straight off the node: scroll events coalesce, and going through React
+    // state loses the reveal because each read lags a render behind the gesture.
+    this._lastY = 0;
+    this._barHidden = false;
+    this._barTick = 0;
+    this.scrollY = () => Math.max(
+      document.body.scrollTop || 0,
+      document.documentElement.scrollTop || 0,
+      window.scrollY || 0
+    );
+    this._bar = () => {
+      if (this._barTick) return;
+      this._barTick = requestAnimationFrame(() => {
+        this._barTick = 0;
+        const y = this.scrollY();
+        const dy = y - this._lastY;
+        this._lastY = y;
+        if (Math.abs(dy) < 3) return;
+        this.showBar(dy > 0 && y > 90);
+      });
+    };
+    window.addEventListener('scroll', this._bar, true);
+    this._lpd = e => {
+      if (!this.state.layoutMode || this.state.editing) return;
+      if (e.target.closest('[data-om-ui]')) return;
+      if (this._textEl && this._textEl.contains(e.target)) return;
+      if (this._textEl) this._textEl.blur();
+      if (this.state.crop) {
+        if (this._cropEl && this._cropEl.contains(e.target)) { this.startCropPan(e); return; }
+        this.exitCrop();
+      }
+      const frame = e.target.closest('[data-om-page] > *');
+      if (!frame) { if (this.state.lsel) this.setState({ lsel: null, lsels: [] }); return; }
+      const key = frame.getAttribute('data-omk');
+      const add = e.ctrlKey || e.metaKey || e.shiftKey;
+      const cur = this.state.lsels || [];
+      let next;
+      if (add) {
+        if (cur.indexOf(key) > -1) {
+          next = cur.filter(k => k !== key);
+          this.setState({ lsels: next, lsel: next.length ? next[next.length - 1] : null });
+          return;
+        }
+        next = cur.concat([key]);
+      } else {
+        next = cur.indexOf(key) > -1 && cur.length > 1 ? cur : [key];
+      }
+      this.setState({ lsels: next, lsel: key });
+      this.startFrame(e, next.map(k => document.querySelector('[data-omk="' + k + '"]')), 'move');
+    };
+    this._ldbl = e => {
+      if (!this.state.layoutMode) return;
+      if (e.target.closest('[data-om-ui]')) return;
+      if (e.target.tagName === 'IMG' && e.target.getAttribute('data-omslot')) { this.enterCrop(e.target); return; }
+      this.editText(e.target);
+    };
+    // Wheel-zoom is deliberately NOT bound: scrolling over a frame must scroll the page.
+    // Zoom lives on the Cropping panel slider only.
+    this._cropWheel = null;
+    this._lkeys = e => {
+      if (!this.state.layoutMode || !this.state.lsel || this._textEl) return;
+      const map = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] };
+      if (e.key === 'Escape') { if (this.state.crop) { this.exitCrop(); return; } this.setState({ lsel: null, lsels: [] }); return; }
+      if ((e.key === 'z' || e.key === 'Z') && (e.metaKey || e.ctrlKey)) { e.preventDefault(); this.undo(); return; }
+      if (e.key === 'Backspace' || e.key === 'Delete') { e.preventDefault(); this.deleteSel(); return; }
+      const d = map[e.key];
+      if (!d) return;
+      e.preventDefault();
+      const step = e.shiftKey ? 10 : 2;
+      this.snap('nudge');
+      this.selEls().forEach(el => {
+        const page = el.closest('[data-om-page]');
+        if (!page) return;
+        const pr = page.getBoundingClientRect();
+        const r = el.getBoundingClientRect();
+        const l = r2((r.left - pr.left + d[0] * step) / pr.width * 100);
+        const t = r2((r.top - pr.top + d[1] * step) / pr.height * 100);
+        el.style.left = l + '%';
+        el.style.top = t + '%';
+        this.setLayout(el.getAttribute('data-omk'), { l, t }, true);
+      });
+      this.syncOverlay();
+    };
+    document.addEventListener('pointerdown', this._lpd, true);
+    document.addEventListener('dblclick', this._ldbl, true);
+    window.addEventListener('keydown', this._lkeys);
+    document.body.addEventListener('scroll', this._bar, { passive: true });
+    this._sync = () => {
+      const vw = window.innerWidth;
+      if (vw !== this.state.vw) this.setState({ vw });
+      else if (this.state.panelOpen) this.forceUpdate();
+      else if (this.state.lsel) this.syncOverlay();
+    };
+    window.addEventListener('scroll', this._sync, true);
+    window.addEventListener('resize', this._sync);
+    this._wheel = e => {
+      if (!this.state.editing) return;
+      e.preventDefault();
+      this.zoom(e.deltaY < 0 ? 1.06 : 1 / 1.06);
+    };
+    this._keys = e => {
+      const src = this.state.editing;
+      if (!src) return;
+      const step = (e.shiftKey ? 24 : 6);
+      const k = e.key;
+      if (k === 'Escape') { e.preventDefault(); this.closeEditor(false); }
+      else if (k === 'Enter') { e.preventDefault(); this.closeEditor(true); }
+      else if (k === 'ArrowLeft') { e.preventDefault(); this.drag(-step, 0); }
+      else if (k === 'ArrowRight') { e.preventDefault(); this.drag(step, 0); }
+      else if (k === 'ArrowUp') { e.preventDefault(); this.drag(0, -step); }
+      else if (k === 'ArrowDown') { e.preventDefault(); this.drag(0, step); }
+      else if (k === '+' || k === '=') { e.preventDefault(); this.zoom(1.06); }
+      else if (k === '-' || k === '_') { e.preventDefault(); this.zoom(1 / 1.06); }
+    };
+    window.addEventListener('keydown', this._keys);
+    this._plClick = e => this.plansClick(e);
+    this._plKey = e => this.plansKey(e);
+    document.addEventListener('click', this._plClick, true);
+    window.addEventListener('keydown', this._plKey);
+    this.syncSrcs();
+    this.paintPages();
+    this.paintPlans();
+    this.scanLayout();
+  }
+  componentDidUpdate() {
+    this.paintPages();
+    this.paintPlans();
+    this.scanLayout();
+    const iv = this.props.rotateInterval ?? 4500;
+    const on = this.rotationOn();
+    if (iv !== this._iv || on !== this._on) this.startRotation();
+    this.syncSrcs();
+  }
+  componentWillUnmount() {
+    clearInterval(this._timer); clearTimeout(this._flash); clearTimeout(this._flash2);
+    window.removeEventListener('scroll', this._sync, true);
+    window.removeEventListener('scroll', this._bar, true);
+    document.removeEventListener('pointerdown', this._lpd, true);
+    document.removeEventListener('dblclick', this._ldbl, true);
+    window.removeEventListener('keydown', this._lkeys);
+
+    window.removeEventListener('resize', this._sync);
+    window.removeEventListener('keydown', this._keys);
+    document.removeEventListener('click', this._plClick, true);
+    window.removeEventListener('keydown', this._plKey);
+  }
+
+  // Printed-sheet clones: read the geometry/crop/type written into data-attributes and set the
+  // matching inline styles. Runs after every render, before layout overrides are re-applied.
+  paintPages() {
+    // scanLayout() remembers each element's untouched geometry once and restores it on every pass,
+    // so a repainted frame has to hand it the new numbers as the fresh baseline.
+    const rebase = el => {
+      if (!this._orig || !this._orig.has(el)) return;
+      const rec = this._orig.get(el);
+      rec.base.left = el.style.left; rec.base.top = el.style.top;
+      rec.base.width = el.style.width; rec.base.height = el.style.height;
+      rec.base.fontSize = el.style.fontSize;
+      rec.style = el.getAttribute('style') || '';
+    };
+    document.querySelectorAll('[data-geo]').forEach(el => {
+      const p = el.getAttribute('data-geo').split('|');
+      if (p.length !== 4) return;
+      el.style.left = p[0] + '%'; el.style.top = p[1] + '%';
+      el.style.width = p[2] + '%'; el.style.height = p[3] + '%';
+      rebase(el);
+    });
+    // Safety net: every deferred image gets its src here too, so an <img data-src> that loses its
+    // ref in a template edit still loads instead of silently rendering blank.
+    document.querySelectorAll('img[data-src]').forEach(el => {
+      const s = el.getAttribute('data-src');
+      if (s && s.indexOf('{{') === -1 && el.getAttribute('src') !== s) el.setAttribute('src', s);
+    });
+    document.querySelectorAll('img[data-img]').forEach(el => {
+      const p = el.getAttribute('data-img').split('|');
+      if (p.length !== 3) return;
+      el.style.objectFit = p[0]; el.style.objectPosition = p[1]; el.style.transform = p[2];
+    });
+    document.querySelectorAll('[data-tgeo]').forEach(el => {
+      const p = el.getAttribute('data-tgeo').split('|');
+      if (p.length !== 4) return;
+      el.style.left = p[0] + '%'; el.style.top = p[1] + '%';
+      el.style.width = p[2] + '%'; el.style.textAlign = p[3];
+      el.style.height = '';
+      rebase(el);
+    });
+    document.querySelectorAll('[data-role]').forEach(el => {
+      const p = el.getAttribute('data-role').split('|');
+      const r = ROLE[p[0]];
+      if (!r) return;
+      const s = el.style;
+      s.fontFamily = r.fam; s.fontWeight = r.wt; s.fontSize = r.fs; s.letterSpacing = r.ls;
+      s.textTransform = r.tt; s.lineHeight = r.lh; s.color = r.col;
+      s.marginTop = (p[1] || 0) + 'vw';
+      s.whiteSpace = r.nw ? 'nowrap' : '';
+      rebase(el);
+    });
+  }
+
+  // ---- Plan viewer -------------------------------------------------------
+  // Five registered floor plans on one sheet. Everything below runs against the DOM rather than
+  // through render values: the level index and loupe follow the pointer, and re-rendering the whole
+  // project on every mousemove would stall the page.
+  paintPlans() {
+    document.querySelectorAll('[data-plans]').forEach(root => {
+      const data = root.getAttribute('data-plans') || '';
+      if (!data || data.indexOf('{{') !== -1) return;
+      if (root._data !== data) {
+        root._data = data;
+        const parts = data.split('~');
+        root._srcList = parts[0] ? parts[0].split('|') : [];
+        root._labs = (parts[1] || '').split('|');
+        root._slot = parts[2] || 'plan:0';
+        root._files = (parts[3] || '').split('|');
+        root._n = root._srcList.length;
+        root.querySelectorAll('img[data-pl="img"]').forEach(im => {
+          const k = +im.getAttribute('data-k'), s = root._srcList[k];
+          if (s) {
+            if (im.getAttribute('src') !== s) im.setAttribute('src', s);
+            im.alt = root._labs[k] || '';
+            im.style.display = 'block';
+            if (k === 0) im.onload = () => this.plansSize(root);
+          } else im.style.display = 'none';
+        });
+        if (root._i == null || root._i >= root._n) root._i = 0;
+      }
+      this.plansApply(root);
+    });
+  }
+
+  // Every level contain-fits the SAME box, so levels of any aspect stay registered and never jump
+  // size. The box is the largest rectangle of the first level's own aspect that fits the stage —
+  // sized in percent so it survives resize, and centred, so a drawing of any proportion reads as
+  // one plate. Stage aspect is fixed by the sheet: 88% wide × 66.9% of a 2000/1294 sheet.
+  plansSize(root) {
+    const wrap = root.querySelector('[data-pl="wrap"]');
+    const im = root.querySelector('img[data-pl="img"][data-k="0"]');
+    if (!wrap || !im || !im.naturalWidth) return;
+    const STAGE_AR = 0.88 / (0.669 / (2000 / 1294));
+    const ar = im.naturalWidth / im.naturalHeight;
+    wrap.style.width = (ar >= STAGE_AR ? 100 : ar / STAGE_AR * 100).toFixed(3) + '%';
+    wrap.style.height = (ar >= STAGE_AR ? STAGE_AR / ar * 100 : 100).toFixed(3) + '%';
+  }
+
+  plansApply(root) {
+    const n = root._n || 1, i = root._i || 0;
+    const labs = root._labs || [];
+    const slot = root._slot || 'plan:0';
+    PLAN_ACTIVE[slot] = (root._files || [])[i] || (root._srcList || [])[i];
+    PLAN_LABEL[slot] = labs[i] || '';
+    // Every level also carries its own registration crop (planlv:…), which is what the align
+    // editor nudges; the shared plan:… crop frames the whole stack on the sheet.
+    (root._files || []).forEach((f, k) => { PLAN_ACTIVE[this.lvSlot(root, k)] = f; });
+    const crop = this.tf(slot), cr = this.cropOf(slot);
+    const wrap = root.querySelector('[data-pl="wrap"]');
+    if (wrap) {
+      wrap.setAttribute('data-omslot', slot);
+      wrap.style.clipPath = cr.ins ? 'inset(' + cr.ins[0] + '% ' + cr.ins[1] + '% ' + cr.ins[2] + '% ' + cr.ins[3] + '%)' : '';
+      const live = this.state.panelOpen && !this.state.layoutMode;
+      wrap.style.outline = live ? '1px solid rgba(22,21,19,.28)' : '';
+      wrap.style.outlineOffset = live ? '6px' : '';
+    }
+    root.querySelectorAll('img[data-pl="img"]').forEach(im => {
+      const k = +im.getAttribute('data-k'), on = k === i;
+      // Levels cross-fade in place — no slide, no drift.
+      im.style.transition = 'opacity 190ms ease';
+      im.style.zIndex = on ? 2 : 1;
+      im.style.transformOrigin = '50% 50%';
+      im.style.transform = (crop + ' ' + this.tf(this.lvSlot(root, k))).trim() || 'none';
+      im.style.opacity = on ? 1 : 0;
+    });
+    const lab = root.querySelector('[data-pl="lab"]');
+    if (lab) lab.textContent = labs[i] || '';
+    // Only undeclared properties are written here — anything the template declares gets reverted
+    // by the next render, so position/layout of the numeral column lives in the template.
+    this.plansSize(root);
+    root.querySelectorAll('[data-pl="tick"]').forEach(tk => {
+      const k = +tk.dataset.i, on = k === i;
+      tk.style.visibility = k < n ? 'visible' : 'hidden';
+      tk.style.opacity = on ? 1 : .32;
+      tk.style.fontWeight = on ? 700 : 400;
+    });
+  }
+
+  lvSlot(root, k) { return 'planlv:' + (root._slot || 'plan:0').split(':')[1] + ':' + k; }
+
+  plansGo(root, i, d) {
+    const n = root._n || 1;
+    let next = i;
+    if (next < 0 || next > n - 1) next = (next + n) % n;
+    if (next === root._i) return;
+    root._prev = root._i; root._i = next; root._dir = d || (next > root._prev ? 1 : -1);
+    this.plansApply(root);
+  }
+
+  // Click-to-edit for the plan stack: the five levels share one crop, so framing one frames all.
+  openPlanEditor(root) {
+    const wrap = root.querySelector('[data-pl="wrap"]');
+    if (!wrap) return;
+    const r = wrap.getBoundingClientRect();
+    const slot = root._slot || 'plan:0';
+    this.setState({
+      editing: slot, editFit: 'contain', sel: slot, hover: null, paused: true,
+      editBg: '#ffffff', editRatio: (r.width && r.height) ? r.width / r.height : 2.2,
+      backup: this.state.crops[slot] ? Object.assign({}, this.state.crops[slot]) : null,
+      lbackup: null
+    });
+  }
+
+  plansClick(e) {
+    const t = e.target;
+    const root = t && t.closest ? t.closest('[data-plans]') : null;
+    if (!root) return;
+    const tick = t.closest('[data-pl="tick"]');
+    if (tick) { e.preventDefault(); e.stopPropagation(); this.plansGo(root, +tick.dataset.i, 0); return; }
+    if (this.state.panelOpen && !this.state.layoutMode && !this.state.editing && !this.state.alignOpen && t.closest('[data-pl="wrap"]')) {
+      e.preventDefault(); e.stopPropagation();
+      const wrap = root.querySelector('[data-pl="wrap"]');
+      const r = wrap.getBoundingClientRect();
+      this._alignRoot = root;
+      this._alignRatio = (r.width && r.height) ? r.width / r.height : 2.2;
+      this._alignBackup = JSON.parse(JSON.stringify(this.state.crops));
+      const k0 = root._i || 0;
+      this.setState({ alignOpen: true, alignK: k0, alignRef: k0 === 0 ? 1 : 0, alignDiff: false, paused: true });
+      return;
+    }
+  }
+
+  plansKey(e) {
+    if (this.state.alignOpen) { this.alignKey(e); return; }
+    if (this.state.editing || this.state.view !== 'project') return;
+    const k = e.key;
+    if (k !== 'ArrowLeft' && k !== 'ArrowRight' && k !== 'Escape') return;
+    const roots = Array.from(document.querySelectorAll('[data-plans]')).filter(r => {
+      const b = r.getBoundingClientRect();
+      return b.top < window.innerHeight * .75 && b.bottom > window.innerHeight * .25;
+    });
+    if (!roots.length) return;
+    const root = roots[0];
+    if (k === 'Escape') return;
+    e.preventDefault();
+    this.plansGo(root, (root._i || 0) + (k === 'ArrowLeft' ? -1 : 1), k === 'ArrowLeft' ? -1 : 1);
+  }
+
+  // Registration editor: one plan level laid over a reference level, nudged until the two agree.
+
+  // ---- Authoring UI ------------------------------------------------------
+  // Kept out of the visitor's way: nothing below renders unless an edit mode is switched on.
+  uiCaps(size, color, weight) {
+    return { fontFamily: 'var(--font-display)', fontWeight: weight || 600, textTransform: 'uppercase', letterSpacing: '.12em', fontSize: size, color: color };
+  }
+
+  uiBtn(txt, on, primary) {
+    return React.createElement('div', {
+      key: txt, onClick: on,
+      style: Object.assign({}, this.uiCaps('10px', primary ? '#f7f6f2' : '#161513', 700), {
+        padding: '10px 13px', cursor: 'pointer', whiteSpace: 'nowrap', userSelect: 'none', textAlign: 'center',
+        background: primary ? '#0a0a08' : 'transparent',
+        border: '1px solid ' + (primary ? '#0a0a08' : 'rgba(22,21,19,.3)')
+      })
+    }, txt);
+  }
+
+  uiSlider(label, val, min, max, step, unit, on) {
+    const E = React.createElement;
+    return E('div', { key: label, style: { display: 'flex', alignItems: 'center', gap: '12px' } }, [
+      E('div', { key: 'l', style: Object.assign({}, this.uiCaps('9px', '#7a756c'), { width: '76px' }) }, label),
+      E('input', {
+        key: 'r', type: 'range', min: min, max: max, step: step, value: val,
+        onChange: e => on(parseFloat(e.target.value)),
+        style: { flex: 1, accentColor: '#0a0a08' }
+      }),
+      E('div', { key: 'v', style: Object.assign({}, this.uiCaps('10px', '#161513'), { width: '58px', textAlign: 'right' }) },
+        (Math.round(val * 100) / 100) + unit)
+    ]);
+  }
+
+
+  // Full-screen crop editor. The stage is a replica of the real frame at the same aspect and
+  // background, so framing is judged against what the sheet actually shows.
+
+
+
+  // ---- Splash rotation ---------------------------------------------------
+  // The cross-fade runs only while the splash is the visible view and nothing has taken hold of a
+  // background: pausing, opening an editor, or stepping manually all stop it, so a chosen frame
+  // stays put. componentDidUpdate compares _iv/_on against these and restarts on any change.
+  rotationOn() {
+    const s = this.state;
+    if (s.view !== 'splash' || s.paused || s.editing || s.alignOpen) return false;
+    return !(s.panelOpen && String(s.sel).indexOf('splash:') === 0);
+  }
+
+  startRotation() {
+    clearInterval(this._timer);
+    const iv = this.props.rotateInterval ?? 4500;
+    this._iv = iv;
+    this._on = this.rotationOn();
+    if (!this._on) return;
+    this._timer = setInterval(() => {
+      if (!this.rotationOn()) return;
+      this.setState(s => ({ bg: (s.bg + 1) % SPLASH.length }));
+    }, iv);
+  }
+
+  // ---- Preload -----------------------------------------------------------
+  // Two-stage, so the visible wait is short. ENTER gates on the three index covers only — a fraction
+  // of the book — then the rest of the imagery warms quietly in the background while the visitor
+  // reads the index. Opening a project gates on just that project, and only on what hasn't warmed
+  // yet, which after a few seconds on the index is usually nothing.
+  //
+  // Both gates are DEFERRED: the loading screen is only revealed if the wait is still unresolved
+  // after GATE_DELAY ms, so a warm or fast load shows no loading screen at all.
+  imgList(scope) {
+    const seen = {}, out = [];
+    const add = p => { if (p && !seen[p]) { seen[p] = 1; out.push(this.srcOf(p)); } };
+    const sweep = p => {
+      add(p.cover);
+      (p.blocks || []).forEach(b => {
+        // Blocks carry imagery three ways: plans keep a level list, pages a frame array, and
+        // spreads hold bare letter keys (a, b, c…) — so sweep any value that reads as an asset path.
+        if (b.levels) b.levels.forEach(l => add(l.src));
+        (b.frames || []).forEach(f => add(f.src));
+        Object.keys(b).forEach(k => {
+          const v = b[k];
+          if (typeof v === 'string' && v.indexOf('assets/') === 0) add(v);
+        });
+      });
+    };
+    if (scope === 'covers') { SPLASH.forEach(add); PROJECTS.forEach(p => add(p.cover)); return out; }
+    if (typeof scope === 'number') { sweep(PROJECTS[scope] || {}); return out; }
+    SPLASH.forEach(add);
+    PROJECTS.forEach(sweep);
+    return out;
+  }
+
+  // A URL already fetched and decoded never needs a second wait.
+  isWarm(u) { return !!(this._warmSet && this._warmSet[u]); }
+
+  // Generic wave loader. Small waves keep full-resolution decodes off the frame the progress bar
+  // needs; onProgress fires 0..1, onDone once.
+  warmList(list, wave, onProgress, onDone) {
+    this._warmSet = this._warmSet || {};
+    this._warm = this._warm || [];
+    const todo = list.filter(u => !this.isWarm(u));
+    if (!todo.length) { if (onDone) onDone(); return () => {}; }
+    let done = 0, next = 0, cancelled = false;
+    const pump = () => {
+      while (!cancelled && next < todo.length && next - done < wave) {
+        const im = new Image();
+        im.decoding = 'async';
+        const u = todo[next++];
+        const tick = () => {
+          this._warmSet[u] = 1;
+          done++;
+          if (cancelled) return;
+          if (onProgress) onProgress(done / todo.length);
+          if (done >= todo.length) { if (onDone) onDone(); } else pump();
+        };
+        im.onload = tick; im.onerror = tick;
+        im.src = u;
+        this._warm.push(im);
+      }
+    };
+    pump();
+    return () => { cancelled = true; };
+  }
+
+  // Show the loading screen only for waits long enough to notice.
+  gate(list, wave, after) {
+    const DELAY = this.props.gateDelay ?? 400;
+    let shown = false, settled = false;
+    const reveal = setTimeout(() => {
+      if (settled) return;
+      shown = true;
+      this.setState({ view: 'loading', loadPct: Math.round((this._gatePct || 0) * 100) });
+    }, DELAY);
+    const finish = () => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(reveal);
+      clearTimeout(cap);
+      if (shown) { this.setState({ loadPct: 100 }); setTimeout(after, 220); }
+      else after();
+    };
+    const cancel = this.warmList(list, wave, f => {
+      this._gatePct = f;
+      if (shown) this.setState({ loadPct: Math.min(99, Math.round(f * 100)) });
+    }, finish);
+    // Never trap a visitor behind a stalled asset.
+    const cap = setTimeout(() => { cancel(); finish(); }, 15000);
+  }
+
+  // ENTER: covers only, then let the book load itself in the background.
+  enterSite() {
+    if (this._entered) { this.go('toc'); return; }
+    this._entered = true;
+    this.gate(this.imgList('covers'), 6, () => {
+      this.go('toc');
+      this.warmRest();
+    });
+  }
+
+  // Background warming, biggest-first project order, at a gentle concurrency so scrolling the index
+  // stays smooth. Never blocks anything; a gate that needs one of these files simply waits on it.
+  warmRest() {
+    if (this._restStarted) return;
+    this._restStarted = true;
+    const idle = window.requestIdleCallback || (fn => setTimeout(fn, 300));
+    idle(() => this.warmList(this.imgList('all'), 3));
+  }
+
+  // Called from go(): a project that isn't warm yet gets its own short gate. Returning false means
+  // "nothing to wait for" — the caller falls straight through and `after` is never invoked, because
+  // invoking it here would re-enter go() on top of its own fall-through.
+  gateProject(pi, after) {
+    const list = this.imgList(pi);
+    if (!list.some(u => !this.isWarm(u))) return false;
+    this.gate(list, 5, after);
+    return true;
+  }
+
+  go(view, pi) {
+    // Opening a project waits only on that project's own imagery, and only if it hasn't warmed yet.
+    // The gate reveals a loading screen solely when the wait outlasts gateDelay.
+    if (view === 'project' && !this._gating) {
+      const target = pi ?? this.state.pi;
+      this._gating = true;
+      const went = this.gateProject(target, () => { this._gating = false; this.go(view, target); });
+      if (went) return;
+      this._gating = false;
+    }
+    this._lastY = 0;
+    // On a project the bar starts tucked away so it never sits on the spread's own title;
+    // one upward scroll brings it back.
+    // The bar greets you on arrival, then gets out of the way on the first scroll down.
+    this._barHidden = null;
+    this.showBar(false);
+    this.setState({ view, pi: pi ?? this.state.pi, editing: null, hover: null });
+    const reset = () => {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    };
+    reset();
+    requestAnimationFrame(reset);
+  }
+
+  srcOf(src) { return (src && this.state.repl[src]) || src; }
+  // Sheet blocks (drawings) render object-fit:contain and may legitimately sit smaller than their frame;
+  // everything else is cover-fit and must always fill it.
+  isContainSlot(slot) {
+    const parts = String(slot).split(':');
+    if (parts[0] === 'plan' || parts[0] === 'planlv') return true;
+    if (parts[0] !== 'proj') return false;
+    const b = ((PROJECTS[+parts[1]] || {}).blocks || [])[+parts[2]];
+    if (!b) return false;
+    if (b.kind === 'sheet') return true;
+    return !!b.contain && b.contain.indexOf(parts[3]) > -1;
+  }
+  cropOf(slot) {
+    const c = Object.assign({}, ZERO, this.state.crops[slot] || {});
+    if (this.isContainSlot(slot)) return c;
+    // Cover-fit frames can never show an edge: clamp stray values to what the scale allows.
+    c.scale = Math.max(100, c.scale);
+    const lim = Math.max(0, (c.scale / 100 - 1) * 50);
+    c.x = Math.max(-lim, Math.min(lim, c.x));
+    c.y = Math.max(-lim, Math.min(lim, c.y));
+    c.px = Math.max(0, Math.min(100, c.px));
+    c.py = Math.max(0, Math.min(100, c.py));
+    return c;
+  }
+  tf(src) {
+    const c = this.cropOf(src);
+    return 'translate(' + c.x + '%,' + c.y + '%) rotate(' + (c.rot || 0) + 'deg) scale(' + (c.scale / 100) + ')';
+  }
+
+  op(slot) {
+    if (!slot || this.isContainSlot(slot)) return '50% 50%';
+    const c = this.cropOf(slot);
+    return c.px + '% ' + c.py + '%';
+  }
+
+  // Geometry of the image currently open in the editor, in px, plus the cover slack:
+  // how much of the photo object-fit:cover is already hiding outside the frame.
+  // Defaults to the fullscreen editor's stage; pass el/im to work against any other live frame
+  // (e.g. a splash background panel slider that reads the real page directly, no modal needed).
+  geom(el, im) {
+    const box = el || this._stageEl;
+    if (!box) return null;
+    const bw = box.clientWidth, bh = box.clientHeight;
+    if (!bw || !bh) return null;
+    const image = im || this._stageImg;
+    const nw = (image && image.naturalWidth) || 0, nh = (image && image.naturalHeight) || 0;
+    let coverW = bw, coverH = bh;
+    if (nw && nh) { coverW = Math.max(bw, bh * nw / nh); coverH = Math.max(bh, bw * nh / nw); }
+    return { bw, bh, slackX: coverW - bw, slackY: coverH - bh };
+  }
+  // Zoom/pan a slot in place (no editor open) against a live img element already on the page.
+  setZoomFor(slot, value, el) {
+    if (!el) return;
+    const c = this.cropOf(slot);
+    const scale = Math.max(100, Math.min(400, value));
+    const g = this.geom(el.parentElement, el);
+    if (!g) { this.commit(slot, { scale }); return; }
+    const v = this.visualPan(c, g);
+    this.commit(slot, Object.assign({ scale }, this.panPatch(v.vx, v.vy, scale, g)));
+  }
+  nudgeFor(slot, dx, dy, el) {
+    if (!el) return;
+    const g = this.geom(el.parentElement, el);
+    if (!g) return;
+    const c = this.cropOf(slot);
+    const v = this.visualPan(c, g);
+    this.commit(slot, this.panPatch(v.vx + dx, v.vy + dy, c.scale, g));
+  }
+  // Total reachable pan (cover slack + zoom overflow + the slider's own floor allowance), in px per axis.
+  PAN_SLIDER_FLOOR = 35;
+  panRange(c, g) {
+    const s = c.scale / 100;
+    const zoomLim = Math.max(Math.max(0, (s - 1) * 50), this.PAN_SLIDER_FLOOR);
+    const maxX = Math.max(0, g.slackX) * s / 2 + zoomLim * g.bw / 100;
+    const maxY = Math.max(0, g.slackY) * s / 2 + zoomLim * g.bh / 100;
+    return { maxX, maxY };
+  }
+  panPct(slot, el) {
+    if (!el) return { x: 50, y: 50 };
+    const g = this.geom(el.parentElement, el);
+    if (!g) return { x: 50, y: 50 };
+    const c = this.cropOf(slot);
+    const v = this.visualPan(c, g);
+    const r = this.panRange(c, g);
+    return {
+      x: r.maxX ? 50 + (v.vx / r.maxX) * 50 : 50,
+      y: r.maxY ? 50 + (v.vy / r.maxY) * 50 : 50
+    };
+  }
+  setPanFor(slot, xPct, yPct, el) {
+    if (!el) return;
+    const g = this.geom(el.parentElement, el);
+    if (!g) return;
+    const c = this.cropOf(slot);
+    const r = this.panRange(c, g);
+    const vx = ((xPct - 50) / 50) * r.maxX, vy = ((yPct - 50) / 50) * r.maxY;
+    this.commit(slot, this.panPatch(vx, vy, c.scale, g, this.PAN_SLIDER_FLOOR));
+  }
+  setRotFor(slot, deg) {
+    this.commit(slot, { rot: deg });
+  }
+
+  // Pan is stored in two parts; work in one visual-pixel space and re-split on every change.
+  visualPan(c, g) {
+    const s = c.scale / 100;
+    const ox = g.slackX ? (50 - c.px) / 100 * g.slackX * s : 0;
+    const oy = g.slackY ? (50 - c.py) / 100 * g.slackY * s : 0;
+    return { vx: ox + c.x / 100 * g.bw, vy: oy + c.y / 100 * g.bh };
+  }
+  // Spend the free cover slack first (it never exposes the frame background), then the zoom overflow.
+  // floor: a minimum translate allowance (% of frame) usable even at 100% zoom — plain dragging/zooming
+  // leaves it at 0 (no gaps at rest), but the position sliders pass one so they have real travel.
+  panPatch(vx, vy, scale, g, floor) {
+    const s = scale / 100;
+    const fl = floor || 0;
+    const axis = (v, slack, box) => {
+      const om = Math.max(0, slack) * s / 2;
+      const o = Math.max(-om, Math.min(om, v));
+      const p = slack > 0 ? 50 - 100 * o / (s * slack) : 50;
+      const tl = Math.max(Math.max(0, (s - 1) * 50), fl);
+      const t = Math.max(-tl, Math.min(tl, (v - o) / box * 100));
+      return { p: p, t: t };
+    };
+    const X = axis(vx, g.slackX, g.bw), Y = axis(vy, g.slackY, g.bh);
+    return { px: X.p, py: Y.p, x: X.t, y: Y.t };
+  }
+
+  // object-fit:cover always fills its box exactly at scale 1 (no gap). A CSS scale() transform then
+  // overflows the box by (scale-1) on each side, split evenly — that overflow is the only real pan room.
+  maxPan(scale) {
+    if (this.state.editFit === 'contain') return { x: 50, y: 50 };
+    const over = Math.max(0, (scale / 100 - 1) * 50);
+    return { x: over, y: over };
+  }
+  fitOf(imgEl) { return getComputedStyle(imgEl).objectFit === 'contain' ? 'contain' : 'cover'; }
+  // Walk up for the first painted background, so the editor stage matches the real frame behind the photo.
+  bgOf(el) {
+    let n = el;
+    while (n && n !== document.documentElement) {
+      const c = getComputedStyle(n).backgroundColor;
+      if (c && c !== 'rgba(0, 0, 0, 0)' && c !== 'transparent') return c;
+      n = n.parentElement;
+    }
+    return '#f7f6f2';
+  }
+  // A spread image is absolutely placed, so it IS its own frame — using its parent would hand the
+  // editor the whole 2000x1294 page and the crop would be computed against the wrong box.
+  frameOf(imgEl) {
+    if (imgEl.parentElement && imgEl.parentElement.hasAttribute('data-omslot')) return imgEl.parentElement;
+    return this.fitOf(imgEl) === 'contain' ? imgEl : (imgEl.parentElement || imgEl);
+  }
+
+  hoverImg(slot) {
+    return e => {
+      if (!this.state.panelOpen || this.state.editing) return;
+      this._hoverEl = e.currentTarget;
+      if (this.state.hover !== slot) this.setState({ hover: slot });
+    };
+  }
+
+  openEditor(slot, imgEl) {
+    const fit = this.fitOf(imgEl);
+    const r = this.frameOf(imgEl).getBoundingClientRect();
+    const st = {
+      editing: slot, editFit: fit, sel: slot, hover: null, paused: true,
+      editBg: this.bgOf(this.frameOf(imgEl)),
+      editRatio: (r.width && r.height) ? r.width / r.height : 1.5,
+      backup: this.state.crops[slot] ? Object.assign({}, this.state.crops[slot]) : null,
+      // Frame size/position live in the layout store, so cancel has to be able to put those back too.
+      lbackup: (() => {
+        const fr = this.frameOf(imgEl);
+        const k = fr && fr.getAttribute('data-omk');
+        if (!k) return null;
+        return { k: k, v: this.state.layout[k] ? Object.assign({}, this.state.layout[k]) : null };
+      })()
+    };
+    if (slot.indexOf('splash:') === 0) st.bg = +slot.split(':')[1];
+    this.setState(st);
+  }
+
+  closeEditor(keep) {
+    const slot = this.state.editing;
+    if (!keep && slot) {
+      const b = this.state.backup;
+      const lb = this.state.lbackup;
+      this.setState(s => {
+        const crops = Object.assign({}, s.crops);
+        if (b) crops[slot] = b; else delete crops[slot];
+        const out = { crops, editing: null, hover: null, backup: null, lbackup: null };
+        if (lb) {
+          const layout = Object.assign({}, s.layout);
+          if (lb.v) layout[lb.k] = lb.v; else delete layout[lb.k];
+          out.layout = layout;
+        }
+        return out;
+      }, () => { this.persist(); this.queuePersist(); });
+      return;
+    }
+    this.persist();
+    this.queuePersist();
+    this.setState({ editing: null, hover: null, backup: null, lbackup: null });
+  }
+
+  persist() {
+    let note = 'Saved. This crop is restored on every visit.';
+    const live = pruneRepl(this.state.repl);
+    try {
+      localStorage.setItem(CROP_KEY, JSON.stringify(this.state.crops));
+      localStorage.setItem(REPL_KEY, JSON.stringify(live));
+    } catch (e) {
+      note = 'Crop saved. The replaced image was too large to store, so it stays for this session only.';
+      try { localStorage.setItem(CROP_KEY, JSON.stringify(this.state.crops)); } catch (e2) {}
+    }
+    this.setState({ saved: true, saveNote: note });
+    clearTimeout(this._flash);
+    this._flash = setTimeout(() => this.setState({ saved: false }), 1800);
+  }
+
+  resetCrop(slot) {
+    this.setState(s => {
+      const crops = Object.assign({}, s.crops);
+      delete crops[slot];
+      return { crops, saved: false, saveNote: 'Crop reset to the original framing.' };
+    });
+  }
+
+  pick(slot) {
+    return e => {
+      // Layout mode arranges several elements at once; the panel's editor handles one image
+      // completely — crop, trim, resize, reposition, replace.
+      if (this.state.layoutMode) return;
+      if (!this.state.panelOpen) return;
+      e.preventDefault();
+      e.stopPropagation();
+      this.openEditor(slot, e.currentTarget);
+    };
+  }
+
+  replace(src) {
+    const inp = document.createElement('input');
+    inp.type = 'file';
+    inp.accept = 'image/*';
+    inp.onchange = () => {
+      const f = inp.files && inp.files[0];
+      if (!f) return;
+      const rd = new FileReader();
+      rd.onload = () => {
+        this.setState(s => {
+          const next = Object.assign({}, s.repl);
+          next[src] = rd.result;
+          return { repl: next, saved: false, saveNote: 'Replaced ' + f.name + '. Save as default to keep it.' };
+        });
+      };
+      rd.readAsDataURL(f);
+    };
+    inp.click();
+  }
+
+  commit(src, patch) {
+    // The align editor writes to plan slots without opening the generic editor, so containment
+    // has to come from the slot itself rather than the editor's current fit mode.
+    const contain = this.state.editFit === 'contain' || this.isContainSlot(src);
+    this.setState(s => {
+      const next = Object.assign({}, s.crops);
+      const c = Object.assign({}, ZERO, next[src] || {}, patch);
+      c.scale = r2(Math.max(contain ? 25 : 100, Math.min(400, c.scale)));
+      const lim = (s.editing === src || s.crop === src) ? this.maxPan(c.scale) : { x: 50, y: 50 };
+      c.x = r2(Math.max(-lim.x, Math.min(lim.x, c.x)));
+      c.y = r2(Math.max(-lim.y, Math.min(lim.y, c.y)));
+      c.px = r2(Math.max(0, Math.min(100, c.px)));
+      c.py = r2(Math.max(0, Math.min(100, c.py)));
+      // Contain-fit drawings (plans, sheets) turn freely; cover frames keep the ±45° straightening cap.
+      const rot = c.rot || 0;
+      c.rot = r2(contain ? (((rot + 180) % 360 + 360) % 360) - 180 : Math.max(-45, Math.min(45, rot)));
+      next[src] = c;
+      return { crops: next, saved: false };
+    }, () => this.queuePersist());
+  }
+
+  drag(dx, dy, base) {
+    const src = this.state.editing;
+    if (!src) return;
+    const g = this.geom();
+    if (!g) return;
+    const c = base || this.cropOf(src);
+    if (this.state.editFit === 'contain') {
+      this.commit(src, { x: c.x + (dx / g.bw) * 100, y: c.y + (dy / g.bh) * 100 });
+      return;
+    }
+    const v = this.visualPan(c, g);
+    this.commit(src, this.panPatch(v.vx + dx, v.vy + dy, c.scale, g));
+  }
+
+  zoom(mult) {
+    const src = this.state.editing;
+    if (src) this.setZoom(this.cropOf(src).scale * mult);
+  }
+  // Zooming keeps the picture where it was: re-split the same visual pan against the new scale.
+  setZoom(value) {
+    const src = this.state.editing;
+    if (!src) return;
+    const contain = this.state.editFit === 'contain';
+    const c = this.cropOf(src);
+    const scale = Math.max(contain ? 25 : 100, Math.min(400, value));
+    const g = this.geom();
+    if (contain || !g) { this.commit(src, { scale: scale }); return; }
+    const v = this.visualPan(c, g);
+    this.commit(src, Object.assign({ scale: scale }, this.panPatch(v.vx, v.vy, scale, g)));
+  }
+
+  startDrag(e) {
+    const src = this.state.editing;
+    if (!src) return;
+    e.preventDefault();
+    const base = this.cropOf(src);
+    const sx = e.clientX, sy = e.clientY;
+    this._dragging = true;
+    this.forceUpdate();
+    const move = ev => this.drag(ev.clientX - sx, ev.clientY - sy, base);
+    const up = () => {
+      this._dragging = false;
+      this.forceUpdate();
+      window.removeEventListener('mousemove', move);
+      window.removeEventListener('mouseup', up);
+    };
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', up);
+  }
+
+
+  // ---- InDesign-style layout mode -------------------------------------------------
+  // Frames on a spread are the direct children of [data-om-page]; each gets a stable key
+  // (project : page-in-project : child-index) so moves, resizes and copy edits survive
+  // re-render and reload. Originals are captured once so Reset can put everything back.
+  showBar(hide) {
+    if (hide === this._barHidden) return;
+    this._barHidden = hide;
+    if (this._navEl) this._navEl.style.transform = hide ? 'translateY(-100%)' : 'translateY(0)';
+    if (this._peekEl) this._peekEl.style.visibility = hide ? 'visible' : 'hidden';
+  }
+
+  omPages() { return Array.from(document.querySelectorAll('[data-om-page]')); }
+
+  // Images added by the user live outside React: their records are kept in state.added and the
+  // nodes are created once per page, then treated as ordinary frames (move/resize/crop/delete).
+  addImage() {
+    const inp = document.createElement('input');
+    inp.type = 'file';
+    inp.accept = 'image/*';
+    inp.onchange = () => {
+      const f = inp.files && inp.files[0];
+      if (!f) return;
+      const fr = new FileReader();
+      fr.onload = () => {
+        const pages = this.omPages();
+        const mid = window.innerHeight / 2;
+        let pgi = 0, best = Infinity;
+        pages.forEach((pg, i) => {
+          const r = pg.getBoundingClientRect();
+          const d = Math.abs((r.top + r.bottom) / 2 - mid);
+          if (d < best) { best = d; pgi = i; }
+        });
+        const rec = { id: 'a' + Date.now(), pgi: pgi, pi: this.state.pi, src: fr.result, l: 30, t: 30, w: 30, h: 30 };
+        this.snap('add image');
+        this.setState(s => ({ added: (s.added || []).concat([rec]), layoutSaved: false }), () => this.persistAll());
+      };
+      fr.readAsDataURL(f);
+    };
+    inp.click();
+  }
+
+  syncAdded() {
+    const pages = this.omPages();
+    (this.state.added || []).filter(a => a.pi === this.state.pi).forEach(a => {
+      const pg = pages[a.pgi];
+      if (!pg) return;
+      const key = this.state.pi + ':' + a.pgi + ':' + a.id;
+      let frame = pg.querySelector('[data-omadd="' + a.id + '"]');
+      if (!frame) {
+        frame = document.createElement('div');
+        frame.setAttribute('data-omadd', a.id);
+        frame.style.cssText = 'position:absolute;left:' + a.l + '%;top:' + a.t + '%;width:' + a.w + '%;height:' + a.h + '%;overflow:hidden';
+        const im = document.createElement('img');
+        im.src = a.src;
+        im.alt = 'Added image';
+        im.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block';
+        frame.appendChild(im);
+        pg.appendChild(frame);
+      }
+      frame.setAttribute('data-omk', key);
+      frame.setAttribute('data-omslot', 'add:' + a.id);
+      const im = frame.querySelector('img');
+      const c = this.cropOf('add:' + a.id);
+      im.style.transform = 'translate(' + c.x + '%,' + c.y + '%) rotate(' + (c.rot || 0) + 'deg) scale(' + (c.scale / 100) + ')';
+      im.style.objectPosition = this.op('add:' + a.id);
+      if (!this._orig.has(frame)) this._orig.set(frame, {
+        style: frame.getAttribute('style') || '', html: frame.innerHTML,
+        base: { left: a.l + '%', top: a.t + '%', width: a.w + '%', height: a.h + '%', fontSize: '', display: '' }
+      });
+      const o = this.state.layout[key] || {};
+      frame.style.left = o.l != null ? o.l + '%' : a.l + '%';
+      frame.style.top = o.t != null ? o.t + '%' : a.t + '%';
+      frame.style.width = o.w != null ? o.w + '%' : a.w + '%';
+      frame.style.height = o.h != null ? o.h + '%' : a.h + '%';
+      frame.style.display = o.del ? 'none' : '';
+      frame.style.cursor = this.state.layoutMode ? (this.state.crop === 'add:' + a.id ? 'grab' : 'move') : '';
+      const ins = c.ins;
+      frame.style.clipPath = ins ? 'inset(' + ins[0] + '% ' + ins[1] + '% ' + ins[2] + '% ' + ins[3] + '%)' : '';
+    });
+  }
+
+  scanLayout() {
+    if (!this._orig) this._orig = new WeakMap();
+    this.syncAdded();
+    // Images inside a spread appear in the same order as their prop letters (a, b, c …),
+    // which is how a frame recovers the crop slot the image editor works with.
+    const spreadIdx = [];
+    (PROJECTS[this.state.pi].blocks || []).forEach((b, bi) => { if (b.kind === 'spread' || b.kind === 'page') spreadIdx.push(bi); });
+    this.omPages().forEach((pg, pgi) => {
+      let imgN = 0;
+      Array.from(pg.children).forEach((el, ci) => {
+        const im = el.tagName === 'IMG' ? el : el.querySelector('img');
+        if (im) {
+          const bi = spreadIdx[pgi];
+          if (bi != null) {
+            const s = 'proj:' + this.state.pi + ':' + bi + ':' + 'abcdefgh'[imgN];
+            el.setAttribute('data-omslot', s);
+            im.setAttribute('data-omslot', s);
+            // Printed-sheet frames come straight from the template with no React handlers, so the
+            // panel's click-to-edit is attached here instead.
+            const live = this.state.panelOpen && !this.state.layoutMode;
+            el.onclick = live ? (ev => { ev.preventDefault(); ev.stopPropagation(); this.openEditor(s, im); }) : null;
+            el.onmouseenter = live ? (ev => this.hoverImg(s)(ev)) : null;
+          }
+          imgN++;
+        }
+        const key = this.state.pi + ':' + pgi + ':' + ci;
+        el.setAttribute('data-omk', key);
+        if (!this._orig.has(el)) this._orig.set(el, {
+          style: el.getAttribute('style') || '', html: el.innerHTML,
+          base: { left: el.style.left, top: el.style.top, width: el.style.width, height: el.style.height, fontSize: el.style.fontSize, display: el.style.display }
+        });
+        const base = this._orig.get(el).base;
+        const o = this.state.layout[key] || {};
+        // Every override is re-applied from the captured base each pass, so undo/reset can drop
+        // a key and the frame springs back without touching React's own style output.
+        el.style.left = o.l != null ? o.l + '%' : base.left;
+        el.style.top = o.t != null ? o.t + '%' : base.top;
+        el.style.width = o.w != null ? o.w + '%' : base.width;
+        el.style.height = o.h != null ? o.h + '%' : base.height;
+        el.style.fontSize = o.fs != null ? o.fs + 'px' : base.fontSize;
+        el.style.display = o.del ? 'none' : (base.display || '');
+        if (o.text) Object.keys(o.text).forEach(path => {
+          const n = this.nodeAt(pg, path);
+          if (n && n !== this._textEl && n.innerHTML !== o.text[path]) n.innerHTML = o.text[path];
+        });
+        if (im) {
+          const cr = this.state.crops[el.getAttribute('data-omslot')];
+          const ins = cr && cr.ins;
+          el.style.clipPath = ins ? 'inset(' + ins[0] + '% ' + ins[1] + '% ' + ins[2] + '% ' + ins[3] + '%)' : '';
+        }
+        el.style.cursor = this.state.layoutMode
+          ? (this.state.crop && el === this._cropEl ? 'grab' : 'move')
+          : (this.state.panelOpen && el.getAttribute('data-omslot') ? 'pointer' : '');
+      });
+    });
+  }
+
+  pathOf(el, page) {
+    const p = [];
+    let n = el;
+    while (n && n !== page && n.parentNode) {
+      p.unshift(Array.prototype.indexOf.call(n.parentNode.children, n));
+      n = n.parentNode;
+    }
+    return p.join('.');
+  }
+
+  nodeAt(page, path) {
+    let n = page;
+    const parts = String(path).split('.');
+    for (let i = 0; i < parts.length; i++) { if (!n) return null; n = n.children[+parts[i]]; }
+    return n;
+  }
+
+  // One shared undo stack for frame moves/resizes, copy edits, deletions and edge crops.
+  snap(label) {
+    this._hist = (this._hist || []).concat([{ label, layout: this.state.layout, crops: this.state.crops }]).slice(-40);
+  }
+
+  undo() {
+    const h = this._hist || [];
+    if (!h.length) return;
+    const last = h[h.length - 1];
+    this._hist = h.slice(0, -1);
+    this.setState({ layout: last.layout, crops: last.crops, layoutSaved: false }, () => this.persistAll());
+  }
+
+  setIns(slot, ins) {
+    this.snap('crop edges');
+    this.setState(s => {
+      const crops = Object.assign({}, s.crops);
+      crops[slot] = Object.assign({}, ZERO, crops[slot], { ins: ins });
+      if (!ins) delete crops[slot].ins;
+      return { crops, saved: false };
+    }, () => this.queuePersist());
+  }
+
+  deleteSel() {
+    const els = this.selEls();
+    if (!els.length) return;
+    this.snap('delete');
+    this.setState(s => {
+      const layout = Object.assign({}, s.layout);
+      els.forEach(el => {
+        const k = el.getAttribute('data-omk');
+        layout[k] = Object.assign({}, layout[k], { del: true });
+      });
+      return { layout, lsel: null, lsels: [], layoutSaved: false };
+    }, () => this.persistAll());
+  }
+
+  setLayout(key, patch, quiet) {
+    if (!quiet) this.snap('move');
+    this.setState(s => {
+      const layout = Object.assign({}, s.layout);
+      layout[key] = Object.assign({}, layout[key], patch);
+      return { layout, layoutSaved: false };
+    }, () => this.queuePersist());
+  }
+
+  setLayoutText(key, path, html) {
+    this.snap('text');
+    this.setState(s => {
+      const layout = Object.assign({}, s.layout);
+      const entry = Object.assign({}, layout[key]);
+      entry.text = Object.assign({}, entry.text);
+      entry.text[path] = html;
+      layout[key] = entry;
+      return { layout, layoutSaved: false };
+    }, () => this.queuePersist());
+  }
+
+  selEl() { return this.state.lsel ? document.querySelector('[data-omk="' + this.state.lsel + '"]') : null; }
+
+  selEls() {
+    return (this.state.lsels || []).map(k => document.querySelector('[data-omk="' + k + '"]')).filter(Boolean);
+  }
+
+  bump() { this.setState(s => ({ tick: s.tick + 1 })); }
+
+  // ---- In-place cropping ----------------------------------------------------------
+  // No modal: the picture is cropped where it lives. Drag inside the frame to reposition,
+  // wheel or the panel slider to zoom, the frame's own handles to trim its edges.
+  enterCrop(node) {
+    const frame = node && node.tagName === 'IMG' ? node.parentElement : node;
+    const slot = frame && frame.getAttribute('data-omslot');
+    const im = frame && frame.querySelector('img');
+    if (!slot || !im) return;
+    this._cropEl = frame;
+    this._cropImg = im;
+    const k = frame.getAttribute('data-omk');
+    this.setState({ crop: slot, editFit: this.fitOf(im), lsel: k, lsels: [k], editing: null });
+  }
+
+  // Layout-mode edits persist themselves: "Done" is an exit, not a save prompt.
+  persistAll() {
+    try {
+      localStorage.setItem(CROP_KEY, JSON.stringify(this.state.crops));
+      localStorage.setItem(LAYOUT_KEY, JSON.stringify(this.state.layout));
+      localStorage.setItem(ADD_KEY, JSON.stringify({ list: this.state.added || [] }));
+    } catch (e) {}
+  }
+
+  queuePersist() {
+    clearTimeout(this._persistT);
+    this._persistT = setTimeout(() => this.persistAll(), 350);
+  }
+
+  exitCrop() {
+    this._cropEl = null;
+    this._cropImg = null;
+    this.setState({ crop: null }, () => this.persistAll());
+  }
+
+  // The picture's width at scale 100 inside this box — cover fills it, contain fits inside it.
+  // Holding this x scale constant is what makes a resize read as a crop rather than a re-fit.
+  baseWidth(box, im) {
+    const bw = box.clientWidth, bh = box.clientHeight;
+    const nw = im.naturalWidth, nh = im.naturalHeight;
+    if (!bw || !bh || !nw || !nh) return 0;
+    const f = this.fitOf(im) === 'contain' ? Math.min(bw / nw, bh / nh) : Math.max(bw / nw, bh / nh);
+    return nw * f;
+  }
+
+  cropGeomOf() {
+    return this._cropEl ? this.geom(this._cropEl, this._cropImg) : null;
+  }
+
+  startCropPan(e) {
+    const slot = this.state.crop;
+    const g = this.cropGeomOf();
+    if (!slot || !g) return;
+    e.preventDefault();
+    const base = this.cropOf(slot);
+    const sx = e.clientX, sy = e.clientY;
+    this.snap('crop');
+    let moved = false;
+    const move = ev => {
+      const dx = ev.clientX - sx, dy = ev.clientY - sy;
+      if (!moved && Math.abs(dx) + Math.abs(dy) < 2) return;
+      moved = true;
+      if (this.state.editFit === 'contain') {
+        this.commit(slot, { x: base.x + (dx / g.bw) * 100, y: base.y + (dy / g.bh) * 100 });
+        return;
+      }
+      const v = this.visualPan(base, g);
+      this.commit(slot, this.panPatch(v.vx + dx, v.vy + dy, base.scale, g));
+    };
+    const up = () => {
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  }
+
+  cropSetZoom(value, gesture) {
+    const slot = this.state.crop;
+    if (!slot) return;
+    // A continuous wheel spin or slider drag collapses into a single undo step: snapshot on the
+    // first tick of the gesture, then stay quiet until it has been idle for a beat.
+    const now = Date.now();
+    if (!gesture || !this._zoomAt || now - this._zoomAt > 400) this.snap('zoom');
+    this._zoomAt = now;
+    const contain = this.state.editFit === 'contain';
+    const c = this.cropOf(slot);
+    const scale = Math.max(contain ? 25 : 100, Math.min(400, value));
+    const g = this.cropGeomOf();
+    if (contain || !g) { this.commit(slot, { scale: scale }); return; }
+    const v = this.visualPan(c, g);
+    this.commit(slot, Object.assign({ scale: scale }, this.panPatch(v.vx, v.vy, scale, g)));
+  }
+
+  // A move drags every selected frame; a resize handle only ever acts on the primary one.
+  startFrame(e, els, mode) {
+    const list = (Array.isArray(els) ? els : [els]).filter(Boolean);
+    if (!list.length) return;
+    const page = list[0].closest('[data-om-page]');
+    if (!page) return;
+    e.preventDefault();
+    const pr = page.getBoundingClientRect();
+    const starts = list.map(el => {
+      const r = el.getBoundingClientRect();
+      const p = el.closest('[data-om-page]').getBoundingClientRect();
+      return {
+        el,
+        l: (r.left - p.left) / p.width * 100, t: (r.top - p.top) / p.height * 100,
+        w: r.width / p.width * 100, h: r.height / p.height * 100
+      };
+    });
+    const ox = e.clientX, oy = e.clientY;
+    let out = null;
+    // Resizing while cropping behaves like a crop window: the picture holds its rendered size and
+    // the frame trims it, instead of the picture re-fitting to whatever the new box is.
+    const cs = this.state.crop;
+    let hold = null;
+    if (cs && mode !== 'move' && list.length === 1 && list[0].getAttribute('data-omslot') === cs) {
+      const im = list[0].querySelector('img');
+      const c0 = this.cropOf(cs);
+      const base0 = im && this.baseWidth(list[0], im);
+      if (base0) hold = { im, c0, renderedW: base0 * c0.scale / 100, min: this.state.editFit === 'contain' ? 25 : 100 };
+    }
+    const move = ev => {
+      const dx = (ev.clientX - ox) / pr.width * 100;
+      const dy = (ev.clientY - oy) / pr.height * 100;
+      out = starts.map(st => {
+        const o = { el: st.el, l: st.l, t: st.t, w: st.w, h: st.h };
+        if (mode === 'move') { o.l += dx; o.t += dy; }
+        else {
+          if (mode.indexOf('e') > -1) o.w = Math.max(1, st.w + dx);
+          if (mode.indexOf('s') > -1) o.h = Math.max(1, st.h + dy);
+          if (mode.indexOf('w') > -1) { o.w = Math.max(1, st.w - dx); o.l = st.l + (st.w - o.w); }
+          if (mode.indexOf('n') > -1) { o.h = Math.max(1, st.h - dy); o.t = st.t + (st.h - o.h); }
+        }
+        o.el.style.left = r2(o.l) + '%';
+        o.el.style.top = r2(o.t) + '%';
+        if (mode !== 'move') { o.el.style.width = r2(o.w) + '%'; o.el.style.height = r2(o.h) + '%'; }
+        return o;
+      });
+      if (hold) {
+        const base1 = this.baseWidth(list[0], hold.im);
+        if (base1) {
+          hold.s1 = Math.max(hold.min, Math.min(400, hold.renderedW / base1 * 100));
+          hold.im.style.transform = 'translate(' + hold.c0.x + '%,' + hold.c0.y + '%) rotate(' +
+            (hold.c0.rot || 0) + 'deg) scale(' + (hold.s1 / 100) + ')';
+        }
+      }
+      this.syncOverlay();
+    };
+    const up = () => {
+      document.removeEventListener('pointermove', move);
+      document.removeEventListener('pointerup', up);
+      if (!out) return;
+      this.snap(mode === 'move' ? 'move' : 'resize');
+      out.forEach(o => {
+        const patch = (mode === 'move')
+          ? { l: r2(o.l), t: r2(o.t) }
+          : { l: r2(o.l), t: r2(o.t), w: r2(o.w), h: r2(o.h) };
+        this.setLayout(o.el.getAttribute('data-omk'), patch, true);
+      });
+      if (hold && hold.s1) this.commit(cs, { scale: r2(hold.s1) });
+    };
+    document.addEventListener('pointermove', move);
+    document.addEventListener('pointerup', up);
+  }
+
+  syncOverlay() {
+    (this._ovEls || []).forEach(rec => {
+      if (!rec.node || !rec.el) return;
+      const r = rec.el.getBoundingClientRect();
+      const s = rec.node.style;
+      s.left = r.left + 'px'; s.top = r.top + 'px';
+      s.width = r.width + 'px'; s.height = r.height + 'px';
+    });
+  }
+
+  editText(target) {
+    const page = target.closest && target.closest('[data-om-page]');
+    if (!page) return;
+    const frame = target.closest('[data-om-page] > *');
+    if (!frame || frame.tagName === 'IMG' || target.tagName === 'IMG') return;
+    const el = (target === frame && frame.children.length) ? frame : target;
+    const key = frame.getAttribute('data-omk');
+    const path = this.pathOf(el, page);
+    this._textEl = el;
+    el.contentEditable = 'true';
+    el.style.outline = '1px solid #111';
+    el.style.cursor = 'text';
+    el.focus();
+    const done = () => {
+      el.contentEditable = 'false';
+      el.style.outline = '';
+      el.style.cursor = '';
+      this._textEl = null;
+      this.setLayoutText(key, path, el.innerHTML);
+    };
+    el.addEventListener('blur', done, { once: true });
+  }
+
+  resetLayout() {
+    const keep = {};
+    Object.keys(this.state.layout).forEach(k => {
+      if (k.split(':')[0] !== String(this.state.pi)) keep[k] = this.state.layout[k];
+    });
+    this.omPages().forEach(pg => Array.from(pg.children).forEach(el => {
+      const o = this._orig && this._orig.get(el);
+      if (o) { el.setAttribute('style', o.style); el.innerHTML = o.html; }
+    }));
+    this.setState({ layout: keep, lsel: null, lsels: [], layoutSaved: false });
+    try { localStorage.setItem(LAYOUT_KEY, JSON.stringify(keep)); } catch (e) {}
+  }
+
+
+  chromeRef(key) {
+    return el => {
+      this['_' + key] = el;
+      const h = (this._headEl ? this._headEl.offsetHeight : 0) + (this._barEl ? this._barEl.offsetHeight : 0);
+      if (h && h !== this._chromeH) {
+        this._chromeH = h;
+        requestAnimationFrame(() => { if (this.state.editing) this.forceUpdate(); });
+      }
+    };
+  }
+
+  // ---- Align plans -------------------------------------------------------
+  // Registration editor: one level on top of a reference level, nudged until the two agree.
+  alignSlot(k) { return 'planlv:' + this.state.pi + ':' + k; }
+
+  alignFit() { return 100; }
+
+  alignSet(patch) {
+    const slot = this.alignSlot(this.state.alignK);
+    const c = this.cropOf(slot);
+    const n = Object.assign({}, c, patch);
+    this.commit(slot, {
+      rot: Math.max(-180, Math.min(180, n.rot || 0)),
+      scale: Math.max(25, Math.min(400, n.scale)),
+      x: Math.max(-25, Math.min(25, n.x)),
+      y: Math.max(-25, Math.min(25, n.y))
+    });
+  }
+
+
+
+  alignNudge(dx, dy) { const c = this.cropOf(this.alignSlot(this.state.alignK)); this.alignSet({ x: c.x + dx, y: c.y + dy }); }
+
+  // commit() writes through to storage on every tick, so abandoning has to write the snapshot back.
+  alignCancel() {
+    const back = this._alignBackup;
+    this._alignBackup = null;
+    this.setState(back ? { crops: back, alignOpen: false, paused: false } : { alignOpen: false, paused: false },
+      () => { this.persist(); this.queuePersist(); });
+  }
+
+  alignKey(e) {
+    if (!this.state.alignOpen) return;
+    const k = e.key;
+    if (k === 'Escape') { e.preventDefault(); this.alignCancel(); return; }
+    if (k === 'Enter') { e.preventDefault(); this.alignDone(); return; }
+    const step = e.shiftKey ? 0.5 : 0.05;
+    const map = { ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, -step], ArrowDown: [0, step] };
+    if (map[k]) { e.preventDefault(); e.stopPropagation(); this.alignNudge(map[k][0], map[k][1]); }
+  }
+
+  alignDone() {
+    this._alignBackup = null;
+    this.persist(); this.queuePersist();
+    this.setState({ alignOpen: false, paused: false });
+  }
+
+
+  alignDrag(e, w, h) {
+    e.preventDefault();
+    const base = this.cropOf(this.alignSlot(this.state.alignK));
+    const sx = e.clientX, sy = e.clientY;
+    this._alignDragging = true;
+    const move = ev => this.alignSet({ x: base.x + (ev.clientX - sx) / w * 100, y: base.y + (ev.clientY - sy) / h * 100 });
+    const up = () => {
+      this._alignDragging = false;
+      window.removeEventListener('mousemove', move);
+      window.removeEventListener('mouseup', up);
+      this.forceUpdate();
+    };
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', up);
+  }
+
+
+  setToc(key, val) {
+    // Width/height sliders reshape the card frames, so any zoom saved against the old shape
+    // would surface as a different crop. Drop the zoom, keep the framing.
+    const reshapes = key === 'colW' || key === 'hoverW' || key === 'rowH';
+    this.setState(s => {
+      const next = { toc: Object.assign({}, s.toc, { [key]: val }), tocSaved: false };
+      if (reshapes) {
+        const crops = Object.assign({}, s.crops);
+        let touched = false;
+        PROJECTS.forEach((pr, i) => {
+          const c = crops['toc:' + i];
+          if (c && (c.scale !== 100 || c.x || c.y)) {
+            crops['toc:' + i] = Object.assign({}, c, { scale: 100, x: 0, y: 0 });
+            touched = true;
+          }
+        });
+        if (touched) next.crops = crops;
+      }
+      return next;
+    });
+  }
+
+  renderVals() {
+    // Five paired treatments: each names a hover-tab shape and the menu surface behind it.
+    const theme = this.props.menuStyle ?? 'pill';
+    const NAV = {
+      pill:   { bg: 'rgba(255,255,255,.78)', blur: 'blur(16px) saturate(1.3)', rule: 'rgba(22,21,19,.1)' },
+      rule:   { bg: '#fff',                  blur: 'none',                     rule: 'var(--ash)' },
+      ticks:  { bg: 'rgba(255,255,255,.7)',  blur: 'blur(18px) saturate(1.2)', rule: 'rgba(22,21,19,.08)' },
+      corner: { bg: 'rgba(247,246,242,.9)',  blur: 'blur(12px)',               rule: 'rgba(22,21,19,.12)' },
+      wide:   { bg: 'rgba(255,255,255,.62)', blur: 'blur(20px) saturate(1.4)', rule: 'rgba(22,21,19,.07)' }
+    };
+    const nav = NAV[theme] || NAV.pill;
+    const { view, pi, bg, sel, panelOpen, tocPanelOpen, saved, tocSaved, paused, toc, tocHover, editing } = this.state;
+    const p = PROJECTS[pi];
+    const freezeSplash = panelOpen && sel.indexOf('splash:') === 0;
+
+    const blocks = p.blocks.map((b, bi) => {
+      const o = {
+        ...b,
+        isHero: b.kind === 'hero', isOne: b.kind === 'one', isTwo: b.kind === 'two',
+        isThree: b.kind === 'three', isSheet: b.kind === 'sheet', isText: b.kind === 'text',
+        is31: b.layout === 'precedent', is32: b.layout === 'ortho', is33: b.layout === 'isometric',
+        is34: b.layout === 'diagrams', is35: b.layout === 'sequential', is36: b.layout === 'model',
+        is37: b.layout === 'modelgrid', is38: b.layout === 'sketchbook',
+        isFull: b.layout === 'full', isDuo: b.layout === 'duo', isTrio: b.layout === 'trio',
+        isDraw: b.layout === 'draw', isStatement: b.layout === 'statement',
+        isHeroT: b.layout === 'heroT', isCapR2: b.layout === 'capR2', isCapR3: b.layout === 'capR3',
+        isGrid4: b.layout === 'grid4', isDrawPair: b.layout === 'drawPair', isDrawQuad: b.layout === 'drawQuad',
+        isStack2: b.layout === 'stack2', isTextImg: b.layout === 'textImg',
+        isVerb5: b.layout === 'verb5', isRep4: b.layout === 'rep4', isGrid5: b.layout === 'grid5',
+        isStripText: b.layout === 'stripText', isImgText: b.layout === 'imgText',
+        isPartiSite: b.layout === 'partiSite',
+        titleL: b.titleRight ? '56%' : '5%',
+        titleAlign: b.titleRight ? 'flex-end' : 'flex-start',
+        titleText: b.titleRight ? 'right' : 'left'
+      };
+      'abcdefgh'.split('').forEach(L => {
+        const slot = 'proj:' + pi + ':' + bi + ':' + L, U = L.toUpperCase();
+        o[L + 'Src'] = this.srcOf(b[L]);
+        o['t' + U] = this.tf(slot);
+        o['o' + U] = this.op(slot);
+        o['pick' + U] = this.pick(slot);
+        o['over' + U] = this.hoverImg(slot);
+      });
+      if (b.kind === 'plans') {
+        o.isPlans = true;
+        o.plansData = b.levels.map(l => this.srcOf(l.src)).join('|') + '~' + b.levels.map(l => l.name).join('|')
+          + '~plan:' + this.state.pi + '~' + b.levels.map(l => l.src).join('|');
+      }
+      if (b.kind === 'page') {
+        // Geometry, crop and type ride on string data-attributes rather than style / ref / handler
+        // holes. Those "whole value" holes bind once per template node, and one node is reused for
+        // every project's block at the same index — so a style hole would keep serving the first
+        // sheet's numbers. paintPages() reads the data-attributes back out after each render.
+        o.isPage = true;
+        o.frames = b.frames.map(f => {
+          const slot = 'proj:' + pi + ':' + bi + ':' + f.slot;
+          return {
+            src: this.srcOf(f.src), alt: b.sheet, slotKey: slot,
+            geo: [f.l, f.t, f.w, f.h].join('|'),
+            img: [f.fit, this.op(slot), this.tf(slot)].join('|')
+          };
+        });
+        o.texts = b.texts.map(tb => ({
+          geo: [tb.l, tb.t, tb.w, tb.ta].join('|'),
+          items: tb.lines.map(ln => ({ txt: ln.txt, role: ln.kind + '|' + ln.mt }))
+        }));
+      }
+      return o;
+    });
+
+    const slider = (key, label, min, max, step, unit, get, set) => ({
+      label, min, max, step, value: get(), out: get() + unit,
+      onChange: e => set(parseInt(e.target.value, 10))
+    });
+
+    const tocSliders = [
+      slider('colW', 'Width before hover', 60, 260, 1, 'px', () => toc.colW, v => this.setToc('colW', v)),
+      slider('hoverW', 'Width after hover', 260, 900, 1, 'px', () => toc.hoverW, v => this.setToc('hoverW', v)),
+      slider('rowH', 'Rectangle height', 35, 85, 1, 'vh', () => toc.rowH, v => this.setToc('rowH', v)),
+      slider('gap', 'Spacing between', 0, 160, 1, 'px', () => toc.gap, v => this.setToc('gap', v)),
+      slider('speed', 'Hover transition', 150, 1200, 10, 'ms', () => toc.speed, v => this.setToc('speed', v)),
+      slider('labelGap', 'Title spacing', 0, 160, 1, 'px', () => toc.labelGap, v => this.setToc('labelGap', v))
+    ];
+
+    return {
+      isSplash: view === 'splash',
+      // Edit images stays reachable on the index too: it gates the cover crops, so hiding its
+      // toggle there would strand anyone who left edit mode on and navigated back.
+      isEditable: view === 'toc' || view === 'project',
+      isLoading: view === 'loading',
+      loadRule: view === 'loading' && (this.props.loadingScreen || 'rule') === 'rule',
+      loadCounter: view === 'loading' && this.props.loadingScreen === 'counter',
+      loadPlate: view === 'loading' && this.props.loadingScreen === 'plate',
+      loadStack: view === 'loading' && this.props.loadingScreen === 'stack',
+      loadFrame: view === 'loading' && this.props.loadingScreen === 'frame',
+      loadPct: this.state.loadPct || 0,
+      loadLabel: (this.state.loadPct || 0) + '% loaded',
+      // The stack variant reveals the three project titles as the bar advances.
+      loadRows: PROJECTS.map((p, i) => ({
+        num: String(i + 1).padStart(2, '0'),
+        title: p.short || p.title,
+        op: (this.state.loadPct || 0) >= (i + 1) / PROJECTS.length * 88 ? 1 : 0.14
+      })),
+      isToc: view === 'toc',
+      isProject: view === 'project',
+      bgLayers: SPLASH.map((photo, i) => {
+        const slot = 'splash:' + i;
+        return React.createElement('img', {
+          key: photo,
+          src: this.srcOf(photo),
+          onMouseDown: this.pick(slot),
+          onMouseEnter: this.hoverImg(slot),
+          ref: el => { if (el) this._splashEls[i] = el; },
+          style: {
+            position: 'absolute', inset: 0, width: '100%', height: '100%',
+            objectFit: 'cover',
+            objectPosition: this.op(slot),
+            opacity: freezeSplash ? (slot === sel ? 1 : 0) : (i === bg ? 1 : 0),
+            transform: this.tf(slot),
+            transition: freezeSplash ? 'none' : 'opacity 1.4s ease'
+          }
+        });
+      }),
+      enter: () => this.enterSite(),
+      toIndex: () => this.go('toc'),
+      toNext: () => this.go('project', (pi + 1) % PROJECTS.length),
+
+      tocLabelGap: toc.labelGap,
+      tocGap: toc.gap,
+      tocRowH: toc.rowH,
+      tocColW: toc.colW,
+      tocSliders,
+      tocPanelOpen,
+      tocToggleLabel: tocPanelOpen ? 'Close layout' : 'Index layout',
+      toggleToc: () => this.setState(s => ({ tocPanelOpen: !s.tocPanelOpen })),
+      resetToc: () => this.setState(s => {
+        // Layout changes reshape the frames, so a zoom saved against an old shape reads as a new crop.
+        // Resetting the layout also returns the three index cards to their fit-to-frame framing.
+        const crops = Object.assign({}, s.crops);
+        PROJECTS.forEach((pr, i) => { delete crops['toc:' + i]; });
+        return { toc: Object.assign({}, TOC_DEFAULTS, BAKED_TOC), crops, tocSaved: false };
+      }),
+      tocSaveLabel: tocSaved ? 'Saved' : 'Save as default',
+      saveToc: () => {
+        try { localStorage.setItem(TOC_KEY, JSON.stringify(this.state.toc)); } catch (e) {}
+        this.setState({ tocSaved: true });
+        clearTimeout(this._flash2);
+        this._flash2 = setTimeout(() => this.setState({ tocSaved: false }), 1800);
+      },
+
+      projects: PROJECTS.map((pr, i) => {
+        const slot = 'toc:' + i;
+        const active = tocHover === i || editing === slot;
+        const dimmed = tocHover > -1 && tocHover !== i;
+        // An outer card opens past the row edge, so cap it to what the viewport can actually show.
+        const room = Math.max(toc.colW, (this.state.vw || window.innerWidth) - 40);
+        const hoverW = Math.min(toc.hoverW, room);
+        const w = active ? hoverW : toc.colW;
+        const trans = (panelOpen && editing === slot)
+          ? 'none'
+          : ['width', 'right', 'left', 'transform'].map(pr2 => pr2 + ' ' + toc.speed + 'ms cubic-bezier(.4,0,.2,1)').join(',');
+        const last = PROJECTS.length - 1;
+        // Growth split per card: outer cards open mostly outward (85/15), the middle card evenly.
+        const splitOf = k => k === 0 ? { l: 0.85, r: 0.15 } : (k === last ? { l: 0.15, r: 0.85 } : { l: 0.5, r: 0.5 });
+        const grow = hoverW - toc.colW;
+        const sp = splitOf(i);
+        // When another card opens, this one steps aside by however much that card grows toward it.
+        let shift = 0;
+        const openIdx = tocHover > -1 ? tocHover : (editing && editing.indexOf('toc:') === 0 ? +editing.split(':')[1] : -1);
+        if (openIdx > -1 && openIdx !== i) {
+          const os = splitOf(openIdx);
+          shift = i < openIdx ? -grow * os.l : grow * os.r;
+        }
+        const centered = i !== 0 && i !== last;
+        let pos, tx;
+        if (centered) {
+          pos = 'left:50%;';
+          tx = 'translateX(calc(-50% + ' + shift + 'px))';
+        } else if (i === 0) {
+          pos = 'right:' + (active ? -sp.r * grow : 0) + 'px;';
+          tx = 'translateX(' + shift + 'px)';
+        } else {
+          pos = 'left:' + (active ? -sp.l * grow : 0) + 'px;';
+          tx = 'translateX(' + shift + 'px)';
+        }
+        return {
+          title: pr.title,
+          num: String(i + 1).padStart(2, '0'),
+          cover: this.srcOf(pr.cover),
+          tf: this.tf(slot),
+          op: this.op(slot),
+          imgOpacity: dimmed ? 0.45 : 1,
+          titleOpacity: active ? 1 : 0,
+          titleShift: active ? 0 : 6,
+          numColor: active ? 'var(--ink)' : 'var(--stone)',
+          innerStyle: 'position:absolute;top:0;height:100%;overflow:hidden;cursor:pointer;background:var(--paper);outline:none;width:' + w + 'px;transition:' + trans + ';' + pos + 'transform:' + tx + ';' + (active ? 'z-index:5;' : ''),
+          pick: this.pick(slot),
+          over: this.hoverImg(slot),
+          hoverOn: () => this.setState({ tocHover: i }),
+          hoverOff: () => this.setState(s => ({ tocHover: s.tocHover === i ? -1 : s.tocHover })),
+          onKey: e => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (!this.state.panelOpen) this.go('project', i); }
+          },
+          open: () => { if (!this.state.panelOpen) this.go('project', i); }
+        };
+      }),
+      blocks,
+      counter: String(pi + 1).padStart(2, '0') + ' / ' + String(PROJECTS.length).padStart(2, '0'),
+
+      // Two menu treatments: solid paper, or a semi-transparent pane the spreads read through.
+      navRef: el => {
+        this._navEl = el;
+        if (el) el.style.transform = this._barHidden ? 'translateY(-100%)' : 'translateY(0)';
+      },
+      navBg: nav.bg,
+      navBlur: nav.blur,
+      navRule: nav.rule,
+      tabPill: theme === 'pill',
+      tabRule: theme === 'rule',
+      tabTicks: theme === 'ticks',
+      tabCorner: theme === 'corner',
+      tabWide: theme === 'wide',
+      // Invisible hotspot: no visible tab, the menu simply drops when the cursor nears the top.
+      navPeek: el => { this._peekEl = el; if (el) el.style.visibility = this._barHidden ? 'visible' : 'hidden'; },
+      // Hovering the tab slides the bar back without scrolling; leaving the bar re-hides it,
+      // but only while the page is scrolled past the point where the bar auto-hides.
+      peekOn: () => this.showBar(false),
+      peekOff: () => { if (this.scrollY() > 90) this.showBar(true); },
+      menuProjects: PROJECTS.map((pr, i) => ({
+        title: pr.title,
+        short: pr.short || pr.title,
+        num: String(i + 1).padStart(2, '0'),
+        open: () => this.go('project', i)
+      })),
+      nextTitle: PROJECTS[(pi + 1) % PROJECTS.length].title,
+
+      setSrc: el => {
+        if (!el) return;
+        const s = el.getAttribute('data-src');
+        if (s && s.indexOf('{{') === -1 && el.getAttribute('src') !== s) el.setAttribute('src', s);
+      },
+      // Sheet frames read their slot off the node, so one stable handler serves every page.
+      pickDom: e => { const s = e.currentTarget.getAttribute('data-slot'); if (s) this.pick(s)(e); },
+      overDom: e => { const s = e.currentTarget.getAttribute('data-slot'); if (s) this.hoverImg(s)(e); },
+
+      panelOpen,
+      cropToggleLabel: panelOpen ? 'Done editing' : 'Edit images',
+      planAlign: () => {
+        const root = document.querySelector('[data-plans]');
+        if (!root) return;
+        const wr = root.querySelector('[data-pl="wrap"]'), r = wr.getBoundingClientRect();
+        this._alignRoot = root;
+        this._alignRatio = (r.width && r.height) ? r.width / r.height : 2.2;
+        this._alignBackup = JSON.parse(JSON.stringify(this.state.crops));
+        const k0 = root._i || 0;
+        this.setState({ alignOpen: true, alignK: k0, alignRef: k0 === 0 ? 1 : 0, alignDiff: false, paused: true });
+      },
+      togglePanel: () => this.setState(s => ({ panelOpen: !s.panelOpen, editing: null, hover: null, paused: false })),
+      activeLabel: (REGISTRY.find(r => r.slot === sel) || {}).label || '—',
+      layoutOpen: this.state.layoutMode,
+      layoutToggleLabel: this.state.layoutMode ? 'Done layout' : 'Layout',
+      toggleLayout: () => this.setState(s => ({ layoutMode: !s.layoutMode, editing: null, hover: null, lsel: null, lsels: [] })),
+      resetOne: () => this.setState(s => {
+        const crops = Object.assign({}, s.crops);
+        const repl = Object.assign({}, s.repl);
+        delete crops[sel];
+        const photo = photoOf(sel);
+        if (photo) delete repl[photo];
+        return { crops, repl, saved: false, saveNote: 'Reset to the original image.' };
+      }),
+      saveLabel: saved ? 'Saved' : 'Save as default',
+      saveNote: this.state.saveNote,
+      saveDefaults: () => {
+        let note = 'Saved. Crops and replacements are restored on every visit.';
+        try {
+          localStorage.setItem(CROP_KEY, JSON.stringify(this.state.crops));
+          localStorage.setItem(REPL_KEY, JSON.stringify(this.state.repl));
+        } catch (e) {
+          note = 'Crops saved, but the replaced images were too large to store. They stay for this session.';
+          try { localStorage.setItem(CROP_KEY, JSON.stringify(this.state.crops)); } catch (e2) {}
+        }
+        this.setState({ saved: true, saveNote: note });
+        clearTimeout(this._flash);
+        this._flash = setTimeout(() => this.setState({ saved: false }), 1800);
+      },
+
+      paused,
+      rotationLabel: this.rotationOn() ? 'Rotating' : 'Paused',
+      togglePause: () => this.setState(s => ({ paused: !s.paused })),
+      pauseAction: paused ? 'Resume' : 'Pause',
+      splashCounter: (sel.indexOf('splash:') === 0 ? +sel.split(':')[1] + 1 : bg + 1) + ' / ' + SPLASH.length,
+      splashPrev: () => this.setState(s => {
+        const i = (s.bg - 1 + SPLASH.length) % SPLASH.length;
+        return { paused: true, bg: i, sel: 'splash:' + i, editing: null };
+      }),
+      splashNext: () => this.setState(s => {
+        const i = (s.bg + 1) % SPLASH.length;
+        return { paused: true, bg: i, sel: 'splash:' + i, editing: null };
+      }),
+      splashZoom: this.cropOf('splash:' + bg).scale,
+      splashZoomLabel: Math.round(this.cropOf('splash:' + bg).scale) + '%',
+      splashZoomChange: e => this.setZoomFor('splash:' + bg, parseInt(e.target.value, 10), this._splashEls[bg]),
+      splashPanX: this.panPct('splash:' + bg, this._splashEls[bg]).x,
+      splashPanY: this.panPct('splash:' + bg, this._splashEls[bg]).y,
+      splashPanXChange: e => this.setPanFor('splash:' + bg, parseFloat(e.target.value), this.panPct('splash:' + bg, this._splashEls[bg]).y, this._splashEls[bg]),
+      splashPanYChange: e => this.setPanFor('splash:' + bg, this.panPct('splash:' + bg, this._splashEls[bg]).x, parseFloat(e.target.value), this._splashEls[bg]),
+      splashRot: this.cropOf('splash:' + bg).rot || 0,
+      splashRotLabel: Math.round(this.cropOf('splash:' + bg).rot || 0) + '°',
+      splashRotChange: e => this.setRotFor('splash:' + bg, parseFloat(e.target.value)),
+      splashResetCrop: () => this.resetCrop('splash:' + bg)
+    };
+  }
+}
+</script>
+</body>
+</html>
