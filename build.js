@@ -61,6 +61,11 @@ const HEAD = [
   '<meta name="twitter:card" content="summary_large_image">',
   '<link rel="icon" href="favicon.svg" type="image/svg+xml">',
   '<link rel="stylesheet" href="https://use.typekit.net/vfx5fqd.css">',
+  // React from this site, not unpkg.com (which some school, office and parental-control networks
+  // block). support.js only fetches React from the CDN when it isn't already loaded. These are
+  // react@18.3.1 / react-dom@18.3.1, byte-identical to the SRI hashes pinned in support.js.
+  '<script src="vendor/react.production.min.js"></script>',
+  '<script src="vendor/react-dom.production.min.js"></script>',
   `<script type="application/ld+json">
 ${STRUCTURED}
 </script>`,
